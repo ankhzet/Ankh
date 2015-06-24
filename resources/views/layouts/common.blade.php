@@ -10,16 +10,18 @@
 	</head>
 	<body class="{{Request::segments(0)[0]}}-page">
 
-		@if (isset($content))
-			{{$content}}
-		@else
-			@yield('content')
-		@endif
+		<div id="main-container">
+			@if (isset($content))
+				{{$content}}
+			@else
+				@yield('content')
+			@endif
 
-		<footer>
-			<ul>
-				<li><a href="{!!URL::to('/')!!}">Ankhzet</a> &copy; 2014 All rights reserved.</li>
-			</ul>
-		</footer>
+			<footer>
+				<ul>
+					<li><a href="{!!URL::to('/')!!}">Ankhzet</a> &copy; 2014 All rights reserved.</li>
+				</ul>
+			</footer>
+		</div>
 	</body>
 </html>

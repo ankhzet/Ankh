@@ -4,14 +4,15 @@
 
 	use Ankh\Author;
 
-	class AuthorsTableSeeder extends Seeder {
+	class AuthorsTableSeeder extends CommonSeeder {
+		protected $locales = ['ru_RU', 'en_US', 'de_DE'];
+		const AUTHORS_TO_SEED = 200;
 
 		public function run() {
-
-			$faker = Faker\Factory::create();
-
-			for ($i = 0; $i < $faker->numberBetween(1, 100); $i++)
-				$this->createAuthor($faker->name(), '/' . str_replace('-', '_', $faker->slug()));
+			$this->iterate(self::AUTHORS_TO_SEED / 2, self::AUTHORS_TO_SEED, function () {
+				$faker = $this->faker();
+				$this->createAuthor($faker->boolean(30) ? mb_strtolower($faker->name()) : $faker->name(), '/' . str_replace('-', '_', $faker->slug()));
+			});
 
 		}
 

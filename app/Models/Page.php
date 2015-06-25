@@ -5,16 +5,16 @@
 	use Illuminate\Database\Eloquent\Model;
 
 	use Ankh\Author;
-	use Ankh\Page;
+	use Ankh\Group;
 
-	class Group extends Model {
+	class Page extends Model {
 
 		public function author() {
 			return $this->belongsTo('Ankh\Author');
 		}
 
-		public function pages() {
-			return $this->hasMany('Ankh\Page');
+		public function group() {
+			return $this->belongsTo('Ankh\Group');
 		}
 
 	}

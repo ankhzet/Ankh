@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Ankh\Http\Controllers\Auth;
 
 use User;
 use Validator;
-use App\Http\Controllers\Controller;
+use Ankh\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller

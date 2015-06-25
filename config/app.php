@@ -141,9 +141,9 @@ return [
          * Application Service Providers...
          */
         Barryvdh\Debugbar\ServiceProvider::class,
-        App\Providers\AppServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Ankh\Providers\AppServiceProvider::class,
+        Ankh\Providers\EventServiceProvider::class,
+        Ankh\Providers\RouteServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 

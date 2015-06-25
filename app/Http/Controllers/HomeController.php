@@ -1,6 +1,6 @@
 <?php
 
-	namespace App\Http\Controllers;
+	namespace Ankh\Http\Controllers;
 
 	class HomeController extends Controller {
 

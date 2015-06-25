@@ -1,6 +1,6 @@
 <?php 
 	
-	namespace App\Providers;
+	namespace Ankh\Providers;
 
 	use View;
 	use Illuminate\Support\ServiceProvider;

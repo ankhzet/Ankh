@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace Ankh\Events;
 
 abstract class Event
 {

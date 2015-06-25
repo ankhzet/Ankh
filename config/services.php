@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
+        'model'  => Ankh\User::class,
         'key' => '',
         'secret' => '',
     ],

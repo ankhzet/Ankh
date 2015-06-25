@@ -23,6 +23,7 @@ class CreateGroupsTable extends Migration
             $table->boolean('inline');
             $table->string('annotation');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

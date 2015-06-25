@@ -14,6 +14,7 @@
 
 			$this->call('RolesTableSeeder');
 			$this->call('UsersTableSeeder');
+			$this->call('AuthorsTableSeeder');
 		}
 
 	}

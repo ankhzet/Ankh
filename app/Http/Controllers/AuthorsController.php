@@ -13,7 +13,7 @@
 		const AUTHORS_PER_PAGE = 20;
 
 		/**
-		* Display a listing of the resource.
+		* Display a listing of the authors.
 		*
 		* @return Response
 		*/
@@ -48,60 +48,60 @@
 		}
 
 		/**
-		* Show the form for creating a new resource.
+		* Show the form for creating a new author entry.
 		*
 		* @return Response
 		*/
 		public function create() {
-		//
+
 		}
 
 		/**
-		* Store a newly created resource in storage.
+		* Store a newly created author entry in storage.
 		*
 		* @return Response
 		*/
 		public function store() {
-		//
+
 		}
 
 		/**
-		* Display the specified resource.
+		* Display the specified author.
 		*
-		* @param  int  $id
+		* @param  Author  $author
 		* @return Response
 		*/
 		public function show(Author $author) {
-		//
+			return view('authors.author', ['author' => $author]);
 		}
 
 		/**
-		* Show the form for editing the specified resource.
+		* Show the form for editing the specified author entry.
 		*
-		* @param  int  $id
+		* @param  Author  $author
 		* @return Response
 		*/
-		public function edit($id) {
-		//
+		public function edit(Author $author) {
+
 		}
 
 		/**
-		* Update the specified resource in storage.
+		* Update the specified author entry in storage.
 		*
-		* @param  int  $id
+		* @param  Author  $author
 		* @return Response
 		*/
-		public function update($id) {
-		//
+		public function update(Author $author) {
+
 		}
 
 		/**
-		* Remove the specified resource from storage.
+		* Remove the specified author entry from storage.
 		*
-		* @param  int  $id
+		* @param  Author  $author
 		* @return Response
 		*/
-		public function destroy($id) {
-		//
+		public function destroy(Author $author) {
+
 		}
 	}

@@ -20,3 +20,8 @@
 
 
 	Route::resource('authors', 'AuthorsController');
+	Route::model('authors', 'Ankh\Author', function ($identifier) {
+		return is_numeric($identifier)
+			? Ankh\Author::find(intval($identifier))
+			: Ankh\Author::where('link', strtolower("/{$identifier}"))->first();
+	});

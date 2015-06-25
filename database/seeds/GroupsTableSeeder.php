@@ -5,17 +5,14 @@
 	use Ankh\Author;
 	use Ankh\Group;
 
-	class GroupsTableSeeder extends Seeder {
-		var $faker = null;
+	class GroupsTableSeeder extends CommonSeeder {
+		const GROUPS_TO_SEED = 100;
 
 		public function run() {
-			$faker = $this->faker();
-
 			$authors = Author::all();
-			for ($i = 0; $i < $faker->numberBetween(1, 100); $i++) {
-				$group = $this->createGroup($authors->random(1));
-			}
-
+			$this->iterate(self::GROUPS_TO_SEED / 2, self::GROUPS_TO_SEED, function ($i) use ($authors) {
+				$this->createGroup($authors->random(1));
+			});
 		}
 
 		function createGroup(Author $author) {
@@ -32,7 +29,4 @@
 		}
 
 
-		function faker() {
-			return $this->faker ?: ($this->faker = Faker\Factory::create());
-		}
 	}

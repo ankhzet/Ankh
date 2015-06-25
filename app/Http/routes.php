@@ -6,10 +6,10 @@
 
 	Route::controller('password', 'Auth\PasswordController');
 
-	Route::get('/password/email', ['uses' => 'PasswordController@getEmail', 'as' => 'password.email']);
-	Route::post('/password/email', ['uses' => 'PasswordController@postEmail', 'as' => 'password.email']);
-	Route::get('/password/reset/{token}', ['uses' => 'PasswordController@getReset', 'as' => 'password.reset']);
-	Route::post('/password/reset', ['uses' => 'PasswordController@postReset', 'as' => 'password.reset']);
+	Route::get('/password/email', ['uses' => 'Auth\PasswordController@getEmail', 'as' => 'password.email']);
+	Route::post('/password/email', ['uses' => 'Auth\PasswordController@postEmail', 'as' => 'password.email']);
+	Route::get('/password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset', 'as' => 'password.reset']);
+	Route::post('/password/reset', ['uses' => 'Auth\PasswordController@postReset', 'as' => 'password.reset']);
 
 
 	Route::controller('auth', 'Auth\AuthController');
@@ -19,3 +19,4 @@
 	});
 
 
+	Route::resource('authors', 'AuthorsController');

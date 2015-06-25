@@ -2,3 +2,5 @@
 /node_modules
 .env
 *.sublime*
+.DS_Store
+*_ide_helper.php

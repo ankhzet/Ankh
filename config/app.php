@@ -152,6 +152,7 @@ return [
         Serafim\Asset\AssetServiceProvider::class,
 
 
+        Ankh\Providers\StorageServiceProvider::class,
     ],
 
     /*

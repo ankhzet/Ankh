@@ -20,8 +20,19 @@
 
 
 	Route::resource('authors', 'AuthorsController');
-	Route::model('authors', 'Ankh\Author', function ($identifier) {
-		return is_numeric($identifier)
-			? Ankh\Author::find(intval($identifier))
-			: Ankh\Author::where('link', strtolower("/{$identifier}"))->first();
+	Route::resource('groups', 'GroupsController');
+	Route::resource('pages', 'PagesController');
+
+	Route::resource('authors.groups', 'GroupsController');
+	Route::resource('authors.pages', 'PagesController');
+	Route::resource('groups.pages', 'PagesController');
+
+	Route::bind('authors', function ($id) {
+		return Ankh\Author::findOrFail($id);
+	});
+	Route::bind('groups', function ($id) {
+		return Ankh\Group::findOrFail($id);
+	});
+	Route::bind('pages', function ($id) {
+		return Ankh\Page::findOrFail($id);
 	});

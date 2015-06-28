@@ -151,6 +151,7 @@ return [
 
         Serafim\Asset\AssetServiceProvider::class,
 
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 
         Ankh\Providers\StorageServiceProvider::class,
     ],
@@ -209,6 +210,8 @@ return [
 
         'Asset'     => Serafim\Asset\Facade::class,
 
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
     ],
 
 ];

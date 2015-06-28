@@ -10,8 +10,14 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
+	use Ankh\Crumbs as Breadcrumbs;
+
 	class PagesController extends Controller {
 		const PAGES_PER_PAGE = 20;
+
+		public function __construct(Breadcrumbs $breadcrumbs) {
+
+		}
 
 		/**
 		 * Display a listing of the page entities.

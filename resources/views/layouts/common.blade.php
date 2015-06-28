@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-		<title>@lang('homepage') - @lang('site')</title>
+		<title>{{$page_title or Lang::get('common.homepage')}} - @lang('common.site')</title>
 
 		{!! asset_link('less/style.less') !!}
 

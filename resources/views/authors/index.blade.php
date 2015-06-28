@@ -7,18 +7,18 @@
 			@include('layouts.letter-filter')
 		@show
 
-	@if(!$pages->isEmpty())
+
+	@if(!$authors->isEmpty())
 		<ul>
-		@foreach($pages as $page)
-			<li><a href="">Author</a>: <a href="{!!route('pages.show', $page->id)!!}">{{$page->title}}</a><br/></li>
+		@foreach($authors as $a)
+			<li><a href="{{ route('authors.show', $a->id) }}">{{$a->fio}}</a><br/></li>
 		@endforeach
 		</ul>
-		{!! $pages->render() !!}
+		{!! $authors->render() !!}
 	@else
-		No pages.
+		No authors.
 	@endif
 
 	</div>
 
 @stop
-

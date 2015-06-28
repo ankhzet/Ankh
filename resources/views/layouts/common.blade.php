@@ -1,29 +1,62 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-		<title>{{$page_title or Lang::get('common.homepage')}} - @lang('common.site')</title>
+@section('meta')
+	@include('meta')
+@show
+
+		<link rel="shortcut icon" href="/favicon.ico" />
 
 		{!! asset_link('less/style.less') !!}
 
 	</head>
 	<body class="{{Request::segments(0)[0]}}-page">
-			{!! Breadcrumbs::renderIfExists() !!}
 
+	<div class="wrapper">
+		<header>
+			<nav id="navigation">
+				<div class="menu">
+					<ul>
+						<li><a href="{{ route('home') }}"><img src="{{asset('assets/img/logo.png')}}" alt="@lang('pages.home')" title="@lang('pages.home')" /></a></li>
+						<li><a href="{{ route('authors.index') }}">@lang('pages.authors.index')</a></li>
+						<li><a href="{{ route('groups.index') }}">@lang('pages.groups.index')</a></li>
+						<li><a href="{{ route('pages.index') }}">@lang('pages.pages.index')</a></li>
+					</ul>
 
-		<div id="main-container">
-			@if (isset($content))
-				{{$content}}
-			@else
-				@yield('content')
-			@endif
+					<span class="user">
+@if(Auth::guest())
+						<a href="{{ route('login') }}">@lang('common.login')</a>
+@else
+@include('layouts.user-menu')
+						<a href="{{ route('logout') }}">@lang('common.logout')</a>
+@endif
+					</span>
 
-			<footer>
-				<ul>
-					<li><a href="{!!URL::to('/')!!}">Ankhzet</a> &copy; 2014 All rights reserved.</li>
-				</ul>
-			</footer>
-		</div>
+				</div>
+			</nav>
+
+		</header>
+
+		<main id="content" role="main">
+			<div class="content">
+				{!! Breadcrumbs::renderIfExists() !!}
+
+@if (isset($content))
+					{{$content}}
+@else
+	@yield('content')
+@endif
+			</div>
+		</main>
+	</div>
+
+	<footer class="footer">
+		<ul>
+			<li><a href="{{ route('home') }}">@lang('common.site')</a> &copy; 2014 All rights reserved.</li>
+		</ul>
+	</footer>
+
 	</body>
 </html>

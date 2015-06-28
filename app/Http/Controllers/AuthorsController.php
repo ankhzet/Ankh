@@ -47,7 +47,7 @@
 				->orderBy('letter')
 				->lists('count', 'letter');
 
-			return view('authors.list', ['authors' => $authors, 'letters' => $summary]);
+			return view('authors.index', compact('authors', 'summary'));
 		}
 
 		/**

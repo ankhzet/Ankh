@@ -9,6 +9,8 @@
 
 	</head>
 	<body class="{{Request::segments(0)[0]}}-page">
+			{!! Breadcrumbs::renderIfExists() !!}
+
 
 		<div id="main-container">
 			@if (isset($content))

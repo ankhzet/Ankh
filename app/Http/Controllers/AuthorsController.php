@@ -3,14 +3,17 @@
 	namespace Ankh\Http\Controllers;
 
 	use Illuminate\Http\Request;
-	use Illuminate\Pagination\paginator;
 
 	use Ankh\Http\Requests;
 
 	use Ankh\Author;
+	use Ankh\Crumbs as Breadcrumbs;
 
 	class AuthorsController extends Controller {
 		const AUTHORS_PER_PAGE = 20;
+		public function __construct(Breadcrumbs $crumbs) {
+
+		}
 
 		/**
 		* Display a listing of the authors.

@@ -211,6 +211,7 @@ return [
         'Asset'     => Serafim\Asset\Facade::class,
 
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
     ],
 
 ];

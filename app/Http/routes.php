@@ -2,7 +2,7 @@
 
 	Route::any('/', function() { return Redirect::to('/home'); });
 
-	Route::controller('home', 'HomeController');
+	Route::controller('home', 'HomeController', ['anyIndex' => 'home']);
 
 	Route::controller('password', 'Auth\PasswordController');
 

@@ -1,6 +1,34 @@
 
 /* Middle
 -----------------------------------------------------------------------------*/
+#content {
+	margin-top: 0px;
+	padding: 0 0 @footer-height;
+	width: 100%;
+
+	.content-header {
+		font-weight: bold;
+		border-bottom: 1px solid #ddd;
+		background: #eee;
+		padding: 5px 2px;
+		margin-top: 5px;
+
+		.filter {
+			display: inline;
+
+		  li {
+				display: inline;
+				font-weight: normal;
+
+				.selected {
+					font-weight: bold;
+					color: blue;
+				}
+			}
+		}
+
+	}
+
 	.breadcrumbs {
 		margin-top: 5px;
 		padding: 0 2px;
@@ -15,3 +43,38 @@
 		}
 	}
 
+	.content {
+		margin: 10px;
+	}
+
+	.pagination {
+		width: 100%;
+		text-align: center;
+		margin: 7px 0 2px;
+		padding: 5px 0;
+		background: #ddd;
+		border-bottom: 1px solid #ccc;
+		white-space: nowrap;
+
+		li {
+			display: inline;
+			padding: 0 2px;
+
+			a {
+				// text-decoration: none;
+			}
+
+			&.active *, &.disabled * {
+				text-decoration: none;
+				color: #aaa;
+			}
+
+			&.active * {
+				color: #46f;
+				font-weight: bold;
+			}
+		}
+	}
+
+	@import('form-inputs')
+}

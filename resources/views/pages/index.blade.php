@@ -3,6 +3,10 @@
 @section('content')
 
 	<div class="list">
+		@section('letter-filter')
+			@include('layouts.letter-filter')
+		@show
+
 	@if(!$pages->isEmpty())
 		<ul>
 		@foreach($pages as $page)

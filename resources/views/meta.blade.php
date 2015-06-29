@@ -1,4 +1,6 @@
-	<title>@yield('title') - @lang('common.site')</title>
+@section('title')@lang('pages.home')@stop
 
-	<meta name="server-time" content="{{date('r')}}" />
-	<meta name="generator" content="Laravel framework" />
+		<title>@yield('title') - @lang('common.site')</title>
+
+		<meta name="server-time" content="{{date('r')}}" />
+		<meta name="generator" content="Laravel framework" />

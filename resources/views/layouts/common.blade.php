@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 @section('meta')
-	@include('meta')
+		@include('meta')
 @show
 
 		<link rel="shortcut icon" href="/favicon.ico" />
@@ -19,7 +19,11 @@
 			<nav id="navigation">
 				<div class="menu">
 					<ul>
-						<li><a href="{{ route('home') }}"><img src="{{asset('assets/img/logo.png')}}" alt="@lang('pages.home')" title="@lang('pages.home')" /></a></li>
+						<li>
+							<a href="{{ route('home') }}">
+								<img src="{{asset('assets/img/logo.png')}}" alt="@lang('pages.home')" title="@lang('pages.home')" />
+							</a>
+						</li>
 						<li><a href="{{ route('authors.index') }}">@lang('pages.authors.index')</a></li>
 						<li><a href="{{ route('groups.index') }}">@lang('pages.groups.index')</a></li>
 						<li><a href="{{ route('pages.index') }}">@lang('pages.pages.index')</a></li>

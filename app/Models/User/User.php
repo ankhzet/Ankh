@@ -33,4 +33,7 @@
 			return $this->belongsToMany('Role');
 		}
 
+		public function isAdmin() {
+			return $this->roles->contains(Role::find(Role::ADMIN));
+		}
 	}

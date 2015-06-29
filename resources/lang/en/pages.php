@@ -39,4 +39,8 @@ return array(
 	'pages' => $pages,
 	'updates' => $updates,
 
+	'user' => array(
+		'profile' => 'Profile',
+		),
+
 	);

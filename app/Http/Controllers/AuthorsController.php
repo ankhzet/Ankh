@@ -75,7 +75,8 @@
 		* @return Response
 		*/
 		public function show(Author $author) {
-			return view('authors.author', ['author' => $author]);
+
+			return view('authors.show', compact('author'));
 		}
 
 		/**

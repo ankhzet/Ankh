@@ -8,11 +8,13 @@
 
 	Route::get('/password/email', ['uses' => 'Auth\PasswordController@getEmail', 'as' => 'password.email']);
 	Route::post('/password/email', ['uses' => 'Auth\PasswordController@postEmail', 'as' => 'password.email']);
-	Route::get('/password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset', 'as' => 'password.reset']);
-	Route::post('/password/reset', ['uses' => 'Auth\PasswordController@postReset', 'as' => 'password.reset']);
+	Route::get('/password/reset/{token?}', ['uses' => 'Auth\PasswordController@getReset', 'as' => 'password.reset']);
 
 
-	Route::controller('auth', 'Auth\AuthController');
+	Route::controller('auth', 'Auth\AuthController', [
+			'getLogin' => 'login',
+			'getLogout' => 'logout',
+		]);
 
 	Route::get('/auth', function() {
 		return Redirect::to('/user');

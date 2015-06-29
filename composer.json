@@ -12,6 +12,7 @@
         "serafim/asset": "2.*"
     },
     "require-dev": {
+        "heroku/heroku-buildpack-php": "*",
         "barryvdh/laravel-ide-helper": "^2.0@dev",
         "barryvdh/laravel-debugbar": "dev-master",
         "filp/whoops": "^1.2@dev",

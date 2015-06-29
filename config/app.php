@@ -140,12 +140,10 @@ return [
         /*
          * Application Service Providers...
          */
-        Barryvdh\Debugbar\ServiceProvider::class,
         Ankh\Providers\AppServiceProvider::class,
         Ankh\Providers\EventServiceProvider::class,
         Ankh\Providers\RouteServiceProvider::class,
 
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         Illuminate\Html\HtmlServiceProvider::class,
 
@@ -201,8 +199,6 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-
-        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
 
         'Form'      => Illuminate\Html\FormFacade::class,
         'HTML'      => Illuminate\Html\HtmlFacade::class,

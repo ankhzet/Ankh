@@ -44,6 +44,7 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 
 
 
+
 ### Change notes
 
 - 0.0 Initial commit

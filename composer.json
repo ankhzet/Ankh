@@ -11,12 +11,13 @@
         "doctrine/dbal": "~2.3",
         "serafim/asset": "2.*",
         "fzaninotto/faker": "~1.4",
+        "barryvdh/laravel-debugbar": "dev-master",
+        "filp/whoops": "^1.2@dev",
         "davejamesmiller/laravel-breadcrumbs": "dev-master"
     },
     "require-dev": {
+        "heroku/heroku-buildpack-php": "*",
         "barryvdh/laravel-ide-helper": "^2.0@dev",
-        "barryvdh/laravel-debugbar": "dev-master",
-        "filp/whoops": "^1.2@dev",
         "mockery/mockery": "0.9.*",
         "phpspec/phpspec": "~2.1",
         "laracasts/generators": "dev-master"

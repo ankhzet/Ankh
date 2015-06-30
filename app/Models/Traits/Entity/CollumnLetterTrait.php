@@ -13,7 +13,7 @@
 		}
 
 		public function letterCollumn() {
-			return "substring(`{$this->collumn()}`, 1, 1) as `letter`";
+			return "substring({$this->collumn()}, 1, 1) as letter";
 		}
 
 		public function getQuery() {

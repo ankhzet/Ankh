@@ -27,7 +27,7 @@
 		}
 
 		public function lettersUsage(Entity $entity, array $filters = []) {
-			$query = $entity->newQuery()->selectRaw("{$entity->letterCollumn()}, count(`id`) as `count`");
+			$query = $entity->newQuery()->selectRaw("{$entity->letterCollumn()}, count(id) as count");
 			foreach ($filters as $filter)
 				$query = $filter->applyFilterToQuery($query);
 

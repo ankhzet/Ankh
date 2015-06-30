@@ -6,10 +6,11 @@
 
 	Route::controller('password', 'Auth\PasswordController');
 
-	Route::get('/password/email', ['uses' => 'Auth\PasswordController@getEmail', 'as' => 'password.email']);
-	Route::post('/password/email', ['uses' => 'Auth\PasswordController@postEmail', 'as' => 'password.email']);
-	Route::get('/password/reset/{token?}', ['uses' => 'Auth\PasswordController@getReset', 'as' => 'password.reset']);
-
+	Route::group(['prefix' => 'password', 'namespace' => 'Auth'], function () {
+		Route::get('email', ['uses' => 'PasswordController@getEmail', 'as' => 'password.email']);
+		Route::post('email', ['uses' => 'PasswordController@postEmail', 'as' => 'password.email']);
+		Route::get('reset/{token?}', ['uses' => 'PasswordController@getReset', 'as' => 'password.reset']);
+	});
 
 	Route::controller('auth', 'Auth\AuthController', [
 			'getLogin' => 'login',

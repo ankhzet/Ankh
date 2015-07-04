@@ -11,7 +11,7 @@
         "doctrine/dbal": "~2.3",
         "serafim/asset": "2.*",
         "fzaninotto/faker": "~1.4",
-        "barryvdh/laravel-debugbar": "dev-master",
+        "barryvdh/laravel-debugbar": "^2.0@dev",
         "filp/whoops": "^1.2@dev",
         "sleeping-owl/admin": "2.*",
         "davejamesmiller/laravel-breadcrumbs": "dev-master"

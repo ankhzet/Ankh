@@ -140,6 +140,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Barryvdh\Debugbar\ServiceProvider::class,
         Ankh\Providers\AppServiceProvider::class,
         Ankh\Providers\EventServiceProvider::class,
         Ankh\Providers\RouteServiceProvider::class,

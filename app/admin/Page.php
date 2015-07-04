@@ -7,13 +7,13 @@ Admin::model(Ankh\Page::class)->title('Pages')->with('author', 'group')->filters
 })->columns(function ()
 {
 	Column::string('author.fio', 'Author')->append(
-		Column::url('author_id', 'Edit')->formatted(function ($id) {
+		Column::formattedurl('author_id', 'Edit')->formatted(function ($id) {
 			return "authors/{$id}/edit";
 		}),
     Column::filter('author')->value('author.id')
 	);
 	Column::string('group.title', 'Group')->append(
-		Column::url('group_id', 'Edit')->formatted(function ($id) {
+		Column::formattedurl('group_id', 'Edit')->formatted(function ($id) {
 			return "groups/{$id}/edit";
 		}),
     Column::filter('group')->value('group.id')

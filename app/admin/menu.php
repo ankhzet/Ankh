@@ -12,4 +12,5 @@ Admin::menu()->label('Users related')->icon('fa-user-plus')->items(function () {
 Admin::menu()->label('Content')->icon('fa-file-text-o')->items(function () {
 	Admin::menu('Ankh\Author')->icon('fa-user');
 	Admin::menu('Ankh\Group')->icon('fa-list');
+	Admin::menu('Ankh\Page')->icon('fa-file-text-o');
 });

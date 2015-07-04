@@ -1,5 +1,5 @@
 <?php
-	namespace Ankh;
+	namespace Ankh\Admin\Columns;
 
 	use SleepingOwl\Admin\Columns\Column\BaseColumn;
 

@@ -7,6 +7,10 @@
 
 	abstract class BasicFilter implements FilterContract {
 
+		public function shouldApply() {
+			return true;
+		}
+
 		public function applyFilterToQuery($query) {
 		}
 

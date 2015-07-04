@@ -12,11 +12,17 @@
 			$this->letter($letter);
 		}
 
-		public function applyFilterToQuery($query) {
-			$applied = \DB::raw("({$query->toSql()}) as a");
-			$applied = \DB::table($applied)->mergeBindings($query->getQuery());
+		public function shouldApply() {
+			return $this->letter() !== null;
+		}
 
-			return $applied->where('letter', '=', $this->letter());
+		public function paginationQueryFilter() {
+			return $this->letter();
+		}
+
+		public function applyFilterToQuery($query) {
+			$collumn = $query->getModel()->letterCollumn();
+			return $query->where($collumn, 'like', "{$this->letter()}%");
 		}
 
 		public function letter($value = null) {
@@ -27,14 +33,26 @@
 		}
 
 		public function lettersUsage(Entity $entity, array $filters = []) {
-			$query = $entity->newQuery()->selectRaw("{$entity->letterCollumn()}, count(id) as count");
-			foreach ($filters as $filter)
-				$query = $filter->applyFilterToQuery($query);
+			$collumn = $entity->letterCollumn();
 
-			return $query
-				->groupBy('letter')
-				->orderBy('letter')
-				->lists('count', 'letter');
+			$query = $entity->newQuery()->selectRaw("{$collumn}, count(id) as count");
+			foreach ($filters as $filter)
+				if ($filter != $this)
+					$query = $filter->applyFilterToQuery($query);
+
+			$fetched = $query
+				->groupBy($collumn)
+				->orderBy($collumn)
+				->lists('count', $collumn);
+
+			$result = [];
+			foreach ($fetched as $letter => $count) {
+				preg_match('/(.)/iu', $letter, $match);
+				$letter = mb_strtoupper($match[1]);
+				$result[$letter] = (isset($result[$letter]) ? $result[$letter] : 0) + $count;
+			}
+
+			return $result;
 		}
 
 	}

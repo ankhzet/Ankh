@@ -13,11 +13,11 @@
 		}
 
 		public function letterCollumn() {
-			return "substring({$this->collumn()}, 1, 1) as letter";
+			return $this->collumn();
 		}
 
 		public function getQuery() {
-			return static::selectRaw("*, {$this->letterCollumn()}");
+			return static::selectRaw("*");
 		}
 
 	}

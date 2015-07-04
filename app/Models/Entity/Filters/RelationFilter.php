@@ -14,6 +14,10 @@
 			$this->id = $id;
 		}
 
+		public function paginationQueryFilter() {
+			return $this->id;
+		}
+
 		public function applyFilterToQuery($query) {
 			return $query->where("{$this->relation}_id", $this->id);
 		}

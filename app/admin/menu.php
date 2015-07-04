@@ -9,3 +9,6 @@ Admin::menu()->label('Users related')->icon('fa-user-plus')->items(function () {
 	Admin::menu('Role')->icon('fa-unlock-alt');
 });
 
+Admin::menu()->label('Content')->icon('fa-file-text-o')->items(function () {
+	Admin::menu('Ankh\Author')->icon('fa-user');
+});

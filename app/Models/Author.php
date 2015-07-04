@@ -9,7 +9,12 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
-	class Author extends Model implements EntityContract {
+	use SleepingOwl\Models\Interfaces\ValidationModelInterface;
+	use SleepingOwl\Models\Traits\ValidationModelTrait;
+
+	class Author extends Model implements EntityContract, ValidationModelInterface {
+
+		use ValidationModelTrait;
 
 		use \Ankh\Traits\Entity\LayeredRepositoryTrait;
 
@@ -19,6 +24,7 @@
 		use \Ankh\Traits\Entity\CollumnLetterTrait;
 
 		protected $filterCollumn = 'fio';
+		protected $guarded = ['id'];
 
 		public function groups() {
 			return $this->hasMany('Ankh\Group');
@@ -33,6 +39,14 @@
 				$this->filterCollumn = $value;
 
 			return $this->filterCollumn;
+		}
+
+		public static function getList() {
+			$result = [];
+			foreach (static::all() as $author)
+				$result[$author->id] = $author->fio;
+
+			return $result;
 		}
 
 	}

@@ -6,9 +6,12 @@
 
 	use Ankh\Http\Requests;
 
+	use Ankh\Entity\Filters\RelationFilter;
+	use Ankh\Entity\Filters\LetterFilter;
+	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
+
 	use Ankh\Author;
 	use Ankh\Group;
-	use Ankh\Page;
 
 	use Ankh\Crumbs as Breadcrumbs;
 
@@ -21,18 +24,46 @@
 			$this->group = $group;
 		}
 
+		function applyFiltersToPaginator($paginator, array $filters) {
+			$appends = [];
+			foreach ($filters as $key => $filter)
+				$appends[$key] = $filter->paginationQueryFilter();
+
+			$paginator->appends($appends);
+		}
+
 		/**
 		 * Display a listing of the group entities.
 		 *
 		 * @return Response
 		 */
 		public function index(Request $request, Author $author) {
-			$groups = $author->id ? $author->groups() : Group::all();
-			$groups = $groups->paginate(self;:GROUPS_PER_PAGE);
-			if ($author->id)
-				$groups->appends(compact('author'));
+			$isAjax = $request->ajax();
 
-			return view('groups.index', compact('author', 'groups'));
+			$filters = [];
+
+			if ($author->id)
+				$filters['author'] = new RelationFilter('author', $author->id);
+
+			$filters['letter'] = new LetterFilter($request->get('letter'));
+
+			foreach ($filters as $filter)
+				if ($filter->shouldApply())
+					$this->group->filterWith($filter);
+
+			if (!$isAjax)
+				$letters = $filters['letter']->lettersUsage($this->group, $filters);
+
+			$this->group->orderWith(new OrderingDescriptor());
+
+			$groups = $this->group->paginate(self::GROUPS_PER_PAGE);
+
+			if ($isAjax)
+				return $groups;
+
+			$this->applyFiltersToPaginator($groups, array_except($filters, 'author'));
+
+			return view('groups.index', compact('author', 'groups', 'letters'));
 		}
 
 		/**

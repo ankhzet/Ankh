@@ -8,16 +8,20 @@
 		@show
 
 
-	@if(!$authors->isEmpty())
-		<ul>
-		@foreach($authors as $a)
-			<li><a href="{{ route('authors.show', $a->id) }}">{{$a->fio}}</a><br/></li>
-		@endforeach
-		</ul>
+@if(!$authors->isEmpty())
+@foreach($authors as $a)
+		<div class="cnt-item">
+			<div class="title">
+				<span class="head"><a href="{{ route('authors.show', $a) }}">{{$a->fio}}</a></span>
+				<span class="link samlib"><a href="http://samlib.ru/{{ $a->link }}">/{{$a->link}}</a></span>
+			</div>
+		</div>
+@endforeach
+
 		{!! $authors->render() !!}
-	@else
+@else
 		No authors.
-	@endif
+@endif
 
 	</div>
 

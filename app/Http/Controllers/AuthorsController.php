@@ -6,13 +6,20 @@
 
 	use Ankh\Http\Requests;
 
+	use Ankh\Entity\Filters\RelationFilter;
+	use Ankh\Entity\Filters\LetterFilter;
+	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
+
 	use Ankh\Author;
 	use Ankh\Crumbs as Breadcrumbs;
 
 	class AuthorsController extends Controller {
 		const AUTHORS_PER_PAGE = 20;
-		public function __construct(Breadcrumbs $crumbs) {
 
+		private $author = null;
+
+		public function __construct(Author $author, Breadcrumbs $crumbs) {
+			$this->author = $author;
 		}
 
 		/**
@@ -21,33 +28,27 @@
 		* @return Response
 		*/
 		public function index(Request $request) {
-			$letterGetter = 'ucase(substring(`fio`, 1, 1)) as `letter`';
+			$isAjax = $request->ajax();
 
-			$authors = Author::selectRaw("*, {$letterGetter}");
+			$letterFilter = new LetterFilter($request->get('letter'));
 
-			if ($letter = $request->get('letter')) {
-				$authors = \DB::table(\DB::raw("({$authors->toSql()}) as a"))
-					->mergeBindings($authors->getQuery());
+			if (!$isAjax)
+				$letters = $letterFilter->lettersUsage($this->author);
 
-				$authors = $authors->where('letter', '=', $letter);
-			}
+			if ($letterFilter->letter() !== null)
+				$this->author->filterWith($letterFilter);
 
-			$authors = $authors
-				->orderBy('letter')
-				->paginate(self::AUTHORS_PER_PAGE);
+			$this->author->orderWith(new AuthorOrderingDescriptor());
 
-			if ($letter)
-				$authors->appends(['letter' => $letter]);
+			$authors = $this->author->paginate(self::AUTHORS_PER_PAGE);
 
-			if ($request->ajax())
+			if ($isAjax)
 				return $authors;
 
-			$summary = Author::selectRaw("{$letterGetter}, count(`id`) as `count`")
-				->groupBy('letter')
-				->orderBy('letter')
-				->lists('count', 'letter');
+			if ($letterFilter)
+				$authors->appends(['letter' => $letterFilter->letter()]);
 
-			return view('authors.index', compact('authors', 'summary'));
+			return view('authors.index', compact('authors', 'letters'));
 		}
 
 		/**
@@ -75,7 +76,6 @@
 		* @return Response
 		*/
 		public function show(Author $author) {
-
 			return view('authors.show', compact('author'));
 		}
 
@@ -108,4 +108,13 @@
 		public function destroy(Author $author) {
 
 		}
+	}
+
+	class AuthorOrderingDescriptor extends OrderingDescriptor {
+
+		public function __construct($direction = 'asc', $collumn = 'fio') {
+			$this->direction = $direction;
+			$this->collumn = $collumn;
+		}
+
 	}

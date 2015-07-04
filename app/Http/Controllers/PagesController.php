@@ -10,13 +10,19 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
+	use Ankh\Entity\Filters\RelationFilter;
+	use Ankh\Entity\Filters\LetterFilter;
+	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
+
 	use Ankh\Crumbs as Breadcrumbs;
 
 	class PagesController extends Controller {
-		const PAGES_PER_PAGE = 20;
+		const PAGES_PER_PAGE = 2;
 
-		public function __construct(Breadcrumbs $breadcrumbs) {
+		private $page = null;
 
+		public function __construct(Page $page, Breadcrumbs $breadcrumbs) {
+			$this->page = $page;
 		}
 
 		/**
@@ -24,9 +30,37 @@
 		 *
 		 * @return Response
 		 */
-		public function index(Request $request) {
-			$pages = Page::orderBy('title')->paginate(self::PAGES_PER_PAGE);
-			return view('pages.index', compact('pages'));
+		public function index(Request $request, Author $author, Group $group) {
+			$isAjax = $request->ajax();
+
+			$relationFilter = null;
+			if ($author->id)
+				$relationFilter = new RelationFilter('author', $author->id);
+			else {
+				if ($group->id) {
+					$author= $group->author;
+					$relationFilter = new RelationFilter('group', $group->id);
+				}
+			}
+
+			$letterFilter = new LetterFilter($request->get('letter'));
+
+			if ($relationFilter)
+				$this->page->filterWith($relationFilter);
+
+			if ($letterFilter->letter() !== null)
+				$this->page->filterWith($letterFilter);
+
+			$letters = $letterFilter->lettersUsage($this->page, $relationFilter ? [$relationFilter] : []);
+
+			$this->page->orderWith(new OrderingDescriptor());
+
+			$pages = $this->page->paginate(self::PAGES_PER_PAGE);
+
+			if ($letterFilter)
+				$pages->appends(['letter' => $letterFilter->letter()]);
+
+			return view('pages.index', compact('author', 'group', 'pages', 'letters'));
 		}
 
 		/**
@@ -88,4 +122,3 @@
 
 		}
 	}
-

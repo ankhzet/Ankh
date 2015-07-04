@@ -6,9 +6,14 @@
 	use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 	use Illuminate\Database\Eloquent\SoftDeletes;
 
-	class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract {
+	use SleepingOwl\Models\Interfaces\ValidationModelInterface;
+	use SleepingOwl\Models\Traits\ValidationModelTrait;
+
+	class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract, ValidationModelInterface {
 
 		use Authenticatable, CanResetPassword, SoftDeletes;
+
+		use ValidationModelTrait;
 
 		/** For soft deletion. */
 			protected $dates = ['deleted_at'];
@@ -27,7 +32,7 @@
 		 */
 		protected $hidden = array('password', 'remember_token');
 
-		protected $fillable = array('name', 'email', 'password');
+		protected $fillable = array('name', 'email', 'password', 'roles');
 
 		public function roles() {
 			return $this->belongsToMany('Role');
@@ -35,5 +40,13 @@
 
 		public function isAdmin() {
 			return $this->roles->contains(Role::find(Role::ADMIN));
+		}
+
+		public function setRolesAttribute($roles) {
+			$this->roles()->detach();
+			if (!$roles) return;
+			if (!$this->exists) $this->save();
+
+			$this->roles()->attach($roles);
 		}
 	}

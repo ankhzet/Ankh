@@ -13,6 +13,7 @@
         "fzaninotto/faker": "~1.4",
         "barryvdh/laravel-debugbar": "dev-master",
         "filp/whoops": "^1.2@dev",
+        "sleeping-owl/admin": "2.*",
         "davejamesmiller/laravel-breadcrumbs": "dev-master"
     },
     "require-dev": {

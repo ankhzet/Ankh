@@ -8,4 +8,8 @@
 			return view('home');
 		}
 
+		public function getAdmin() {
+			return view('admin.home');
+		}
+
 	}

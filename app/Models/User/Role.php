@@ -5,7 +5,6 @@
 
 		const ADMIN      = 1;
 		const MODERATOR  = 2;
-		const GAMEMASTER = 3;
 		const USER       = 4;
 		const BANNED     = 5;
 		const MUTED      = 6;

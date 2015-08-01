@@ -10,20 +10,22 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
-	use Ankh\Entity\Filters\RelationFilter;
-	use Ankh\Entity\Filters\LetterFilter;
 	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
 
 	use Ankh\Crumbs as Breadcrumbs;
 
-	class PagesController extends Controller {
-		const PAGES_PER_PAGE = 2;
+	class PagesController extends BasicEntityController {
+		const PAGES_PER_PAGE = 10;
 
-		private $page = null;
 
 		public function __construct(Page $page, Breadcrumbs $breadcrumbs) {
-			$this->page = $page;
+			$this->setModel($page);
 		}
+
+		protected function entriesPerPage() {
+			return self::PAGES_PER_PAGE;
+		}
+
 
 		/**
 		 * Display a listing of the page entities.
@@ -33,34 +35,27 @@
 		public function index(Request $request, Author $author, Group $group) {
 			$isAjax = $request->ajax();
 
-			$relationFilter = null;
-			if ($author->id)
-				$relationFilter = new RelationFilter('author', $author->id);
-			else {
-				if ($group->id) {
-					$author= $group->author;
-					$relationFilter = new RelationFilter('group', $group->id);
-				}
-			}
+			$this->addRelationFilter('author', $author->id);
+			$this->addRelationFilter('group', $group->id);
+			$this->addLetterFilter($request->get('letter'));
+			$this->applyFilters();
+			if (!$isAjax)
+				$letters = $this->lettersUsage();
 
-			$letterFilter = new LetterFilter($request->get('letter'));
+			$this->applyOrdering(new OrderingDescriptor());
 
-			if ($relationFilter)
-				$this->page->filterWith($relationFilter);
+			$pages = $this->paginate();
 
-			if ($letterFilter->letter() !== null)
-				$this->page->filterWith($letterFilter);
+			if ($isAjax)
+				return $pages;
 
-			$letters = $letterFilter->lettersUsage($this->page, $relationFilter ? [$relationFilter] : []);
+			$this->appendFiltersToPaginator($pages);
 
-			$this->page->orderWith(new OrderingDescriptor());
+			$exclude = [];
+			if ($author->id) $exclude[] = 'author';
+			if ($group->id) $exclude[] = 'group';
 
-			$pages = $this->page->paginate(self::PAGES_PER_PAGE);
-
-			if ($letterFilter)
-				$pages->appends(['letter' => $letterFilter->letter()]);
-
-			return view('pages.index', compact('author', 'group', 'pages', 'letters'));
+			return view('pages.index', compact('author', 'group', 'pages', 'letters', 'exclude'));
 		}
 
 		/**
@@ -86,10 +81,11 @@
 		 * @param  Page $page
 		 * @return Response
 		 */
-		public function show(Page $page) {
+		public function show(Author $author, Group $group, Page $page) {
 			$author = $page->author;
 			$group = $page->group;
-			return view('pages.show', compact('author', 'group', 'page'));
+			$reader = (string)$page;
+			return view('pages.show', compact('author', 'group', 'page', 'reader'));
 		}
 
 		/**

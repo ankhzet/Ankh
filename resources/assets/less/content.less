@@ -47,6 +47,27 @@
 		margin: 10px;
 	}
 
+	.inline-menu {
+		font-weight: normal;
+		font-size: 70%;
+		line-height: 100%;
+
+		margin-top: -5px;
+		margin-left: 5px;
+		vertical-align: top;
+
+		&::before {
+			content: '[';
+		}
+		&::after {
+			content: ']';
+		}
+
+		&.admin a {
+			color: red;
+		}
+	}
+
 	.pagination {
 		width: 100%;
 		text-align: center;
@@ -121,7 +142,7 @@
 					white-space: nowrap;
 				}
 
-				&.size , &.size2 {
+				&.size , &.size2, &.date {
 					padding-left: 0;
 					width: 80px;
 					font-size: 11px;
@@ -147,7 +168,7 @@
 	}
 
 
+	@import('reader');
 
-
-	@import('form-inputs')
+	@import('form-inputs');
 }

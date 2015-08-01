@@ -7,6 +7,7 @@
 			@include('layouts.letter-filter')
 		@show
 
+		@include('groups.list')
 
 	@if(!$groups->isEmpty())
 		<ul>

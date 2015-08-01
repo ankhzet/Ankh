@@ -5,4 +5,7 @@ return array(
 
 	'login' => 'Login',
 	'logout' => 'Logout',
+
+	'edit' => 'edit',
+	'delete' => 'delete',
 	);

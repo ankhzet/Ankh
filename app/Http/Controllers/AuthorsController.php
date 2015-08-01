@@ -6,21 +6,22 @@
 
 	use Ankh\Http\Requests;
 
-	use Ankh\Entity\Filters\RelationFilter;
-	use Ankh\Entity\Filters\LetterFilter;
 	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
 
 	use Ankh\Author;
 	use Ankh\Crumbs as Breadcrumbs;
 
-	class AuthorsController extends Controller {
+	class AuthorsController extends BasicEntityController {
 		const AUTHORS_PER_PAGE = 20;
 
-		private $author = null;
-
 		public function __construct(Author $author, Breadcrumbs $crumbs) {
-			$this->author = $author;
+			$this->setModel($author);
 		}
+
+		protected function entriesPerPage() {
+			return self::AUTHORS_PER_PAGE;
+		}
+
 
 		/**
 		* Display a listing of the authors.
@@ -30,23 +31,19 @@
 		public function index(Request $request) {
 			$isAjax = $request->ajax();
 
-			$letterFilter = new LetterFilter($request->get('letter'));
-
+			$this->addLetterFilter($request->get('letter'));
+			$this->applyFilters();
 			if (!$isAjax)
-				$letters = $letterFilter->lettersUsage($this->author);
+				$letters = $this->lettersUsage();
 
-			if ($letterFilter->letter() !== null)
-				$this->author->filterWith($letterFilter);
+			$this->applyOrdering(new AuthorOrderingDescriptor());
 
-			$this->author->orderWith(new AuthorOrderingDescriptor());
-
-			$authors = $this->author->paginate(self::AUTHORS_PER_PAGE);
+			$authors = $this->paginate();
 
 			if ($isAjax)
 				return $authors;
 
-			if ($letterFilter)
-				$authors->appends(['letter' => $letterFilter->letter()]);
+			$this->appendFiltersToPaginator($authors);
 
 			return view('authors.index', compact('authors', 'letters'));
 		}

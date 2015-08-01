@@ -3,6 +3,8 @@
 $updates = array(
 	'index' => 'Updates',
 
+	'chronology' => 'chronology',
+	'check' => 'check new',
 	);
 
 $pages = array(
@@ -10,6 +12,8 @@ $pages = array(
 		'show' => '{:title}',
 
 		'updates' => $updates,
+
+		'list' => 'list pages',
 	);
 
 $groups = array(

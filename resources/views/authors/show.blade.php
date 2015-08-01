@@ -2,6 +2,7 @@
 
 @section('title')<a href="/authors/{{$author->id}}">{{$author->fio}}</a>@stop
 @section('title-plain'){{$author->fio}}@stop
+@section('rss')author={{$author->id}}@stop
 
 @section('content')
 

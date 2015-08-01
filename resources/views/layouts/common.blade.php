@@ -49,6 +49,8 @@
 
 				<div class="title content-header">
 					@yield('title')
+
+					@yield('rss-link')
 				</div>
 
 @if (isset($content))

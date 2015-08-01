@@ -19,6 +19,7 @@
 		use Traits\Entity\CollumnLetterTrait;
 
 		protected $guarded = ['id'];
+		protected $fillable = ['title', 'link', 'annotation', 'size', 'author_id', 'group_id'];
 
 		public function author() {
 			return $this->belongsTo('Ankh\Author');
@@ -32,13 +33,13 @@
 			$result = [];
 			if ($sub && $sub != get_class()) {
 				switch ($sub) {
-					case \Ankh\Group::class:
+					case Group::class:
 						foreach ($instance->author->groups as $group)
 							$result[$group->id] = $group->title;
 						break;
 
 					default:
-						throw new \Exception("Don't know how to getList()'s entities of type '$sub'");
+						throw new \Exception("Don't know how to getList()'s entities of class '$sub'");
 				}
 			} else
 				foreach (static::all() as $page)
@@ -46,5 +47,6 @@
 
 			return $result;
 		}
+
 
 	}

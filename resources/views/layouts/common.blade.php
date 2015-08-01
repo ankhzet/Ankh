@@ -47,6 +47,10 @@
 			<div class="content">
 				{!! Breadcrumbs::renderIfExists() !!}
 
+				<div class="title content-header">
+					@yield('title')
+				</div>
+
 @if (isset($content))
 					{{$content}}
 @else

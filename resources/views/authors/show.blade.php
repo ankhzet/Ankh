@@ -1,6 +1,7 @@
 @extends('layouts.common')
 
-@section('title') {{$author->fio}} @stop
+@section('title')<a href="/authors/{{$author->id}}">{{$author->fio}}</a>@stop
+@section('title-plain'){{$author->fio}}@stop
 
 @section('content')
 

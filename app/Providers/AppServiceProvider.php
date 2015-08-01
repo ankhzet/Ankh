@@ -42,8 +42,6 @@ class AppServiceProvider extends ServiceProvider
 
 			$this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
 
-			$this->app->register('Barryvdh\Debugbar\ServiceProvider');
-
 			$this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
 
 		}

@@ -6,14 +6,9 @@
 	use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 	use Illuminate\Database\Eloquent\SoftDeletes;
 
-	use SleepingOwl\Models\Interfaces\ValidationModelInterface;
-	use SleepingOwl\Models\Traits\ValidationModelTrait;
-
-	class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract, ValidationModelInterface {
+	class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
 		use Authenticatable, CanResetPassword, SoftDeletes;
-
-		use ValidationModelTrait;
 
 		/** For soft deletion. */
 			protected $dates = ['deleted_at'];

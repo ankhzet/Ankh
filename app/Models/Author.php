@@ -9,12 +9,7 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
-	use SleepingOwl\Models\Interfaces\ValidationModelInterface;
-	use SleepingOwl\Models\Traits\ValidationModelTrait;
-
-	class Author extends Model implements EntityContract, ValidationModelInterface {
-
-		use ValidationModelTrait;
+	class Author extends Model implements EntityContract {
 
 		use \Ankh\Traits\Entity\LayeredRepositoryTrait;
 

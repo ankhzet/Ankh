@@ -140,6 +140,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Barryvdh\Debugbar\ServiceProvider::class,
         Ankh\Providers\AppServiceProvider::class,
         Ankh\Providers\EventServiceProvider::class,
         Ankh\Providers\RouteServiceProvider::class,
@@ -153,7 +154,6 @@ return [
 
         Ankh\Providers\StorageServiceProvider::class,
 
-        SleepingOwl\Admin\AdminServiceProvider::class,
     ],
 
     /*
@@ -211,15 +211,6 @@ return [
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
 
-        /* SlepingOwl\Admin
-        */
-        'Admin'        => SleepingOwl\Admin\Admin::class,
-        'AdminAuth'    => SleepingOwl\AdminAuth\Facades\AdminAuth::class,
-        'AdminRouter'  => SleepingOwl\Admin\Facades\AdminRouter::class,
-        'AssetManager' => SleepingOwl\Admin\AssetManager\AssetManager::class,
-        'Column'       => SleepingOwl\Admin\Columns\Column::class,
-        'FormItem'     => SleepingOwl\Admin\Models\Form\FormItem::class,
-        'ModelItem'    => SleepingOwl\Admin\Models\ModelItem::class,
     ],
 
 ];

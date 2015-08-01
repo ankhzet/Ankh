@@ -27,10 +27,21 @@
 		 */
 		protected $hidden = array('password', 'remember_token');
 
-		protected $fillable = array('name', 'email', 'password');
+		protected $fillable = array('name', 'email', 'password', 'roles');
 
 		public function roles() {
 			return $this->belongsToMany('Role');
 		}
 
+		public function isAdmin() {
+			return $this->roles->contains(Role::find(Role::ADMIN));
+		}
+
+		public function setRolesAttribute($roles) {
+			$this->roles()->detach();
+			if (!$roles) return;
+			if (!$this->exists) $this->save();
+
+			$this->roles()->attach($roles);
+		}
 	}

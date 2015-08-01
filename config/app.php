@@ -141,16 +141,18 @@ return [
          * Application Service Providers...
          */
         Barryvdh\Debugbar\ServiceProvider::class,
-        App\Providers\AppServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Ankh\Providers\AppServiceProvider::class,
+        Ankh\Providers\EventServiceProvider::class,
+        Ankh\Providers\RouteServiceProvider::class,
 
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         Illuminate\Html\HtmlServiceProvider::class,
 
         Serafim\Asset\AssetServiceProvider::class,
 
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+
+        Ankh\Providers\StorageServiceProvider::class,
 
     ],
 
@@ -200,13 +202,14 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
-
         'Form'      => Illuminate\Html\FormFacade::class,
         'HTML'      => Illuminate\Html\HtmlFacade::class,
 
 
         'Asset'     => Serafim\Asset\Facade::class,
+
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
 
     ],
 

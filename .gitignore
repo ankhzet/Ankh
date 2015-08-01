@@ -2,3 +2,8 @@
 /node_modules
 .env
 *.sublime*
+.DS_Store
+*_ide_helper.php
+
+public/packages/sleeping-owl
+public/assets/*-style.css

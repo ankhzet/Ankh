@@ -51,6 +51,7 @@
 					@yield('title')
 
 					@yield('rss-link')
+					@yield('moderation')
 				</div>
 
 @if (isset($content))

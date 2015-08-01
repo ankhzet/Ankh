@@ -4,6 +4,12 @@
 @section('title-plain'){{$author->fio}} - {{$group->title}}@stop
 @section('rss')group={{$group->id}}@stop
 
+@section('moderation')
+<span class="inline-menu admin">
+	<a href="/groups/{{$group->id}}/edit">@lang('common.edit')</a> | <a href="/groups/{{$group->id}}/delete">@lang('common.delete')</a>
+</span>
+@stop
+
 @section('content')
 
 				<div class="author">

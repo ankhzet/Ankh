@@ -153,6 +153,7 @@ return [
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 
         Ankh\Providers\StorageServiceProvider::class,
+        Ankh\Providers\HelpersServiceProvider::class,
 
         Jenssegers\Date\DateServiceProvider::class,
     ],

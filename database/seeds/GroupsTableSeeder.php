@@ -1,6 +1,7 @@
 <?php
 
 	use Illuminate\Database\Seeder;
+	use Illuminate\Support\Str;
 
 	use Ankh\Author;
 	use Ankh\Group;
@@ -21,7 +22,7 @@
 			$group->title = join(' ', $faker->words(5));
 			$group->link = $faker->boolean() ? '/' . $faker->slug(3) . '.html' : '';
 			$group->inline = $faker->boolean();
-			$group->annotation = $faker->realText();
+			$group->annotation = Str::limit($faker->realText(), 250);
 			$group->author()->associate($author);
 			$group->save();
 

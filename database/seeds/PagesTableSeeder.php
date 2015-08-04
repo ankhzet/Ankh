@@ -1,6 +1,7 @@
 <?php
 
 	use Illuminate\Database\Seeder;
+	use Illuminate\Support\Str;
 
 	use Ankh\Author;
 	use Ankh\Group;
@@ -27,7 +28,7 @@
 
 				$page = new Page;
 				$page->title = $faker->sentence(5);
-				$page->annotation = join(' ', $faker->sentences(5));
+				$page->annotation = Str::limit(join(' ', $faker->sentences(5)), 250);
 				$page->link = $faker->slug(3);
 				$page->size = $faker->numberBetween(0, 9999);
 				$page->author()->associate($author);

@@ -9,6 +9,6 @@
 						</div>
 						<div class="text">{{$page->annotation}}</div>
 						<div class="text">
-							<a href="/pages/{{$page->id}}/version">все версии</a> | <span class="size">{{($page->size)}}</span> @if(array_search('group', $exclude) === false)| Группа: <a href="/groups/{{$page->group->id}}">{{$page->group->title}}</a>@endif
+							<a href="/pages/{{$page->id}}/version">все версии</a> | <span class="size">{{file_size($page->size * 1024, 1)}}</span> @if(array_search('group', $exclude) === false)| Группа: <a href="/groups/{{$page->group->id}}">{{$page->group->title}}</a>@endif
 						</div>
 					</div>

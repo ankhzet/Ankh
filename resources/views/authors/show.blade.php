@@ -6,7 +6,7 @@
 
 @section('moderation')
 <span class="inline-menu admin">
-	<a href="/authors/{{$author->id}}/edit">@lang('common.edit')</a> | <a href="/authors/{{$author->id}}/delete">@lang('common.delete')</a>
+	<a href="/authors/{{$author->id}}/edit">@lang('common.edit')</a> | <a href="/authors/{{$author->id}}/destroy" data-method="delete">@lang('common.delete')</a>
 </span>
 @stop
 

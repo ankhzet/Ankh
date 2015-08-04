@@ -3,7 +3,7 @@
 						<div class="title">
 							<span class="head">
 								@if(array_search('author', $exclude) === false)<a href="/authors/{{$page->author->id}}">{{$page->author->fio}}</a> -@endif <a href="/pages/{{$page->id}}">{{$page->title}}</a>
-								<span class="inline-menu admin right"> <a href="/pages/{{$page->id}}/delete">удалить</a> </span>
+								<span class="inline-menu admin right"> <a href="/pages/{{$page->id}}/destroy" data-method="delete" data-confirm="You sure?">@lang('common.delete')</a> </span>
 							</span>
 							<span class="link samlib"><a href="http://samlib.ru{{$page->author->link}}/{{$page->link}}">{{$page->author->link}}/{{$page->link}}</a></span>
 						</div>

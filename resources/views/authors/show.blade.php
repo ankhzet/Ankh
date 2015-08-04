@@ -23,7 +23,7 @@
 									| <a href="/authors/check/24">@lang('pages.updates.check')</a>
 								</span>
 							</span>
-							<span class="link date">{{$author->updated_at->diffForHumans()}}</span>
+							<span class="link date">{{$author->updated_at->ago()}}</span>
 							<span class="link samlib"><a href="http://samlib.ru{{$author->link}}">{{$author->link}}</a></span>
 						</div>
 

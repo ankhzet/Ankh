@@ -10,6 +10,7 @@
 	use Ankh\Group;
 
 	class Page extends Model implements EntityContract {
+		use \Ankh\Traits\Entity\DateAccessorTrait;
 
 		use Traits\Entity\LayeredRepositoryTrait;
 

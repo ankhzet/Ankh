@@ -20,7 +20,7 @@
 									<a href="/groups/{{$group->id}}/chronology">@lang('pages.updates.chronology')</a>
 								</span>
 							</span>
-							<span class="link date">{{$author->updated_at->diffForHumans()}}</span>
+							<span class="link date">{{$author->updated_at->ago()}}</span>
 							<span class="link samlib"><a href="http://samlib.ru{{$author->link}}{{$group->link}}">{{$author->link}}{{$group->link}}</a></span>
 						</div>
 

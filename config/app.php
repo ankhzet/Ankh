@@ -154,6 +154,7 @@ return [
 
         Ankh\Providers\StorageServiceProvider::class,
 
+        Jenssegers\Date\DateServiceProvider::class,
     ],
 
     /*

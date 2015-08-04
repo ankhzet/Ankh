@@ -10,6 +10,7 @@
 	use Ankh\Page;
 
 	class Author extends Model implements EntityContract {
+		use \Ankh\Traits\Entity\DateAccessorTrait;
 
 		use \Ankh\Traits\Entity\LayeredRepositoryTrait;
 

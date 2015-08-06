@@ -1,30 +1,22 @@
-<?php
-
-namespace Ankh\Http\Controllers;
+<?php namespace Ankh\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use Ankh\Http\Requests;
 
-use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
-
 use Ankh\Author;
 use Ankh\Group;
 
+use Ankh\Contracts\GroupRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
-class GroupsController extends BasicEntityController {
+class GroupsController extends Controller {
 	const GROUPS_PER_PAGE = 5;
+	protected $m;
 
-	public function __construct(Group $group, Breadcrumbs $breadcrumbs) {
-		$this->setModel($group);
+	public function __construct(GroupRepository $groups, Breadcrumbs $breadcrumbs) {
+		$this->m = $groups;
 	}
-
-
-	protected function entriesPerPage() {
-		return self::GROUPS_PER_PAGE;
-	}
-
 
 	/**
 	 * Display a listing of the group entities.
@@ -34,20 +26,20 @@ class GroupsController extends BasicEntityController {
 	public function index(Request $request, Author $author) {
 		$isAjax = $request->ajax();
 
-		$this->addRelationFilter('author', $author->id);
-		$this->addLetterFilter($request->get('letter'));
-		$this->applyFilters();
+		$this->m->addRelationFilter('author', $author->id);
+		$this->m->addLetterFilter($request->get('letter'));
+		$this->m->applyFilters();
 		if (!$isAjax)
-			$letters = $this->lettersUsage();
+			$letters = $this->m->lettersUsage();
 
-		$this->applyOrdering(new OrderingDescriptor());
+		$this->m->order();
 
-		$groups = $this->paginate();
+		$groups = $this->m->paginate(self::GROUPS_PER_PAGE);
 
 		if ($isAjax)
 			return $groups;
 
-		$this->appendFiltersToPaginator($groups);
+		$this->m->appendFiltersToPaginator($groups);
 
 		return view('groups.index', compact('author', 'groups', 'letters'));
 	}

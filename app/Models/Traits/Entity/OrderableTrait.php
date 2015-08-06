@@ -1,13 +1,11 @@
-<?php
+<?php namespace Ankh\Traits\Entity;
 
-	namespace Ankh\Traits\Entity;
+use Ankh\Contracts\OrderingDescriptor;
 
-	use Ankh\Contracts\OrderingDescriptorContract as OrderingDescriptor;
+trait OrderableTrait {
 
-	trait OrderableTrait {
-
-		public function orderWith(OrderingDescriptor $descriptor) {
-			$descriptor->applyOrdering($this);
-		}
-
+	public function orderWith(OrderingDescriptor $descriptor) {
+		$descriptor->applyOrdering($this);
 	}
+
+}

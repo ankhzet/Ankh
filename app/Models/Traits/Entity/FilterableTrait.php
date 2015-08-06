@@ -1,13 +1,11 @@
-<?php
+<?php namespace Ankh\Traits\Entity;
 
-	namespace Ankh\Traits\Entity;
+use Ankh\Contracts\Filter;
 
-	use Ankh\Contracts\FilterContract as Filter;
+trait FilterableTrait {
 
-	trait FilterableTrait {
-
-		public function filterWith(Filter $filter) {
-			$filter->applyFilter($this);
-		}
-
+	public function filterWith(Filter $filter) {
+		$filter->applyFilter($this);
 	}
+
+}

@@ -6,7 +6,7 @@
 
 @section('moderation')
 <span class="inline-menu admin">
-	<a href="/pages/{{$page->id}}/edit">@lang('common.edit')</a> | <a href="/pages/{{$page->id}}/delete">@lang('common.delete')</a>
+  <a href="/pages/{{$page->id}}/edit">@lang('common.edit')</a> | <a href="/pages/{{$page->id}}/destroy">@lang('common.delete')</a>
 </span>
 @stop
 
@@ -15,13 +15,17 @@ Reader: {!!$reader!!}
 @stop
 
 @section('content')
-				<div class="page">
-					<div class="text reader">
-						<div class="pre">
-@yield('reader')
-						</div>
-						<div class="terminator"></div>
-					</div>
-				</div>
+
+
+<div class="page">
+  <div class="text reader">
+    <div class="pre">
+      @yield('reader')
+    </div>
+    <div class="terminator"></div>
+  </div>
+</div>
+
+
 @stop
 

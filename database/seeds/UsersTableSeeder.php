@@ -6,7 +6,7 @@
 	class UsersTableSeeder extends Seeder {
 
 		public function run() {
-			$this->createUser('root', 'ankhzet@gmail.com', 'password')->roles()->sync([Role::ADMIN, Role::GAMEMASTER]);
+			$this->createUser('root', 'ankhzet@gmail.com', 'password')->roles()->sync([Role::ADMIN]);
 		}
 
 

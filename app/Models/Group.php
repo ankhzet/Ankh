@@ -15,12 +15,4 @@
 			return $this->hasMany('Ankh\Page');
 		}
 
-		public static function getList() {
-			$result = [];
-			foreach (static::all() as $group)
-				$result[$group->id] = $group->title;
-
-			return $result;
-		}
-
 	}

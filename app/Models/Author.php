@@ -23,12 +23,4 @@
 			return $this->filterCollumn;
 		}
 
-		public static function getList() {
-			$result = [];
-			foreach (static::all() as $author)
-				$result[$author->id] = $author->fio;
-
-			return $result;
-		}
-
 	}

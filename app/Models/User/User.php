@@ -39,11 +39,4 @@ class User extends Entity implements AuthenticatableContract, CanResetPasswordCo
 		return $this->roles->contains(Role::find(Role::ADMIN));
 	}
 
-	public function setRolesAttribute($roles) {
-		$this->roles()->detach();
-		if (!$roles) return;
-		if (!$this->exists) $this->save();
-
-		$this->roles()->attach($roles);
-	}
 }

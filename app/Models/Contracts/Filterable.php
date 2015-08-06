@@ -1,7 +1,7 @@
 <?php namespace Ankh\Contracts;
 
-	interface Filterable {
+interface Filterable {
 
-		public function filterWith(Filter $filter);
+	public function filterWith(Filter $filter);
 
-	}
+}

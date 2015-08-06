@@ -1,47 +1,47 @@
 <?php namespace Ankh\Entity\Filters;
 
-	use Ankh\Contracts\Filter;
-	use Ankh\Contracts\Entity;
+use Ankh\Contracts\Filter;
+use Ankh\Contracts\Entity;
 
-	class LetterFilter extends BasicFilter {
-		protected $letter = null;
+class LetterFilter extends BasicFilter {
+	protected $letter = null;
 
-		public function __construct($letter) {
-			$this->letter($letter);
-		}
+	public function __construct($letter) {
+		$this->letter($letter);
+	}
 
-		public function shouldApply() {
-			return $this->letter() !== null;
-		}
+	public function shouldApply() {
+		return $this->letter() !== null;
+	}
 
-		public function paginationQueryFilter() {
-			return $this->letter();
-		}
+	public function paginationQueryFilter() {
+		return $this->letter();
+	}
 
-		public function applyFilterToQuery($query) {
-			$collumn = $query->getModel()->letterCollumn();
-			return $query->where($collumn, 'like', "{$this->letter()}%");
-		}
+	public function applyFilterToQuery($query) {
+		$collumn = $query->getModel()->letterCollumn();
+		return $query->where($collumn, 'like', "{$this->letter()}%");
+	}
 
-		public function letter($value = null) {
-			if ($value !== null)
-				$this->letter = mb_strtoupper($value);
+	public function letter($value = null) {
+		if ($value !== null)
+			$this->letter = mb_strtoupper($value);
 
-			return $this->letter;
-		}
+		return $this->letter;
+	}
 
-		public function lettersUsage(Entity $entity, array $filters = []) {
-			$collumn = $entity->letterCollumn();
+	public function lettersUsage(Entity $entity, array $filters = []) {
+		$collumn = $entity->letterCollumn();
 
-			$query = $entity->newQuery()->selectRaw("{$collumn}, count(id) as count");
-			foreach ($filters as $filter)
-				if ($filter != $this)
-					$query = $filter->applyFilterToQuery($query);
+		$query = $entity->newQuery()->selectRaw("{$collumn}, count(id) as count");
+		foreach ($filters as $filter)
+			if ($filter != $this)
+				$query = $filter->applyFilterToQuery($query);
 
 			$fetched = $query
-				->groupBy($collumn)
-				->orderBy($collumn)
-				->lists('count', $collumn);
+			->groupBy($collumn)
+			->orderBy($collumn)
+			->lists('count', $collumn);
 
 			$result = [];
 			foreach ($fetched as $letter => $count) {

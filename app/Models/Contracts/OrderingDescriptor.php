@@ -1,7 +1,7 @@
 <?php namespace Ankh\Contracts;
 
-	interface OrderingDescriptor {
+interface OrderingDescriptor {
 
-		public function applyOrdering(Entity $entity);
+	public function applyOrdering(Entity $entity);
 
-	}
+}

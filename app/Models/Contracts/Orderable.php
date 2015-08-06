@@ -1,7 +1,7 @@
 <?php namespace Ankh\Contracts;
 
-	interface Orderable {
+interface Orderable {
 
-		public function orderWith(OrderingDescriptor $descriptor);
+	public function orderWith(OrderingDescriptor $descriptor);
 
-	}
+}

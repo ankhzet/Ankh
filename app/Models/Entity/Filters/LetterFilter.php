@@ -1,9 +1,7 @@
 <?php
 
-	namespace Ankh\Entity\Filters;
-
-	use Ankh\Contracts\EntityContract as Entity;
-	use Ankh\Contracts\FilterContract;
+	use Ankh\Contracts\Filter;
+	use Ankh\Contracts\Entity;
 
 	class LetterFilter extends BasicFilter {
 		protected $letter = null;

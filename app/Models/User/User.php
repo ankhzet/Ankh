@@ -6,8 +6,9 @@
 	use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 	use Illuminate\Database\Eloquent\SoftDeletes;
 
-	class User extends Eloquent implements AuthenticatableContract, CanResetPasswordContract {
-		use \Ankh\Traits\Entity\DateAccessorTrait;
+	use Ankh\Entity;
+
+	class User extends Entity implements AuthenticatableContract, CanResetPasswordContract {
 
 		use Authenticatable, CanResetPassword, SoftDeletes;
 

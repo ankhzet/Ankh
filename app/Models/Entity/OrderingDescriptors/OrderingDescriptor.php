@@ -1,9 +1,8 @@
 <?php
 
 	namespace Ankh\Entity\OrderingDescriptors;
-
-	use Ankh\Contracts\EntityContract as Entity;
-	use Ankh\Contracts\OrderingDescriptorContract;
+	use Ankh\Contracts\Entity;
+	use Ankh\Contracts\OrderingDescriptor as OrderingDescriptorContract;
 
 	/*
 	 * Helper class for pages ordering.

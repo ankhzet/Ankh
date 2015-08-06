@@ -2,8 +2,6 @@
 
 	namespace Ankh\Entity\Filters;
 
-	use Ankh\Contracts\EntityContract as Entity;
-	use Ankh\Contracts\FilterContract;
 
 	class RelationFilter extends BasicFilter {
 		protected $relation;

@@ -2,22 +2,10 @@
 
 	namespace Ankh;
 
-	use Illuminate\Database\Eloquent\Model;
-
-	use Ankh\Contracts\EntityContract;
-
 	use Ankh\Author;
 	use Ankh\Group;
 
-	class Page extends Model implements EntityContract {
-		use \Ankh\Traits\Entity\DateAccessorTrait;
-
-		use Traits\Entity\LayeredRepositoryTrait;
-
-		use Traits\Entity\FilterableTrait;
-		use Traits\Entity\OrderableTrait;
-
-		use Traits\Entity\CollumnLetterTrait;
+	class Page extends Entity {
 
 		protected $guarded = ['id'];
 		protected $fillable = ['title', 'link', 'annotation', 'size', 'author_id', 'group_id'];

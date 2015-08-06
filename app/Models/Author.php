@@ -2,22 +2,10 @@
 
 	namespace Ankh;
 
-	use Illuminate\Database\Eloquent\Model;
-
-	use Ankh\Contracts\EntityContract;
-
 	use Ankh\Group;
 	use Ankh\Page;
 
-	class Author extends Model implements EntityContract {
-		use \Ankh\Traits\Entity\DateAccessorTrait;
-
-		use \Ankh\Traits\Entity\LayeredRepositoryTrait;
-
-		use \Ankh\Traits\Entity\FilterableTrait;
-		use \Ankh\Traits\Entity\OrderableTrait;
-
-		use \Ankh\Traits\Entity\CollumnLetterTrait;
+	class Author extends Entity {
 
 		protected $filterCollumn = 'fio';
 		protected $guarded = ['id'];

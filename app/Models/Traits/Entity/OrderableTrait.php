@@ -2,7 +2,7 @@
 
 	namespace Ankh\Traits\Entity;
 
-	use Ankh\Contracts\OrderingDescriptorContract as OrderingDescriptor;
+	use Ankh\Contracts\OrderingDescriptor;
 
 	trait OrderableTrait {
 

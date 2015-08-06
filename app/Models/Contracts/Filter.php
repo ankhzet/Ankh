@@ -1,10 +1,6 @@
-<?php
+<?php namespace Ankh\Contracts;
 
-	namespace Ankh\Contracts;
-
-	use EntityContract as Entity;
-
-	interface FilterContract {
+	interface Filter {
 
 		public function shouldApply();
 

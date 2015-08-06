@@ -2,7 +2,7 @@
 
 	namespace Ankh\Traits\Entity;
 
-	use Ankh\Contracts\FilterContract as Filter;
+	use Ankh\Contracts\Filter;
 
 	trait FilterableTrait {
 

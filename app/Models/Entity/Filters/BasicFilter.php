@@ -1,11 +1,10 @@
 <?php
 
 	namespace Ankh\Entity\Filters;
+	use Ankh\Contracts\Filter;
+	use Ankh\Contracts\Entity;
 
-	use Ankh\Contracts\EntityContract as Entity;
-	use Ankh\Contracts\FilterContract;
-
-	abstract class BasicFilter implements FilterContract {
+	abstract class BasicFilter implements Filter {
 
 		public function shouldApply() {
 			return true;

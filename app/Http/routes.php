@@ -31,11 +31,11 @@
 	Route::resource('groups.pages', 'PagesController');
 
 	Route::bind('authors', function ($id) {
-		return Ankh\Author::findOrFail($id);
+		return \App::make(\Ankh\Contracts\AuthorRepository::class)->find($id);
 	});
 	Route::bind('groups', function ($id) {
-		return Ankh\Group::findOrFail($id);
+		return \App::make(\Ankh\Contracts\GroupRepository::class)->find($id);
 	});
 	Route::bind('pages', function ($id) {
-		return Ankh\Page::findOrFail($id);
+		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
 	});

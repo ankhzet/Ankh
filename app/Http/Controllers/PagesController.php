@@ -10,22 +10,16 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
-	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
-
+	use Ankh\Contracts\PageRepository;
 	use Ankh\Crumbs as Breadcrumbs;
 
-	class PagesController extends BasicEntityController {
+	class PagesController extends Controller {
 		const PAGES_PER_PAGE = 10;
+		protected $m;
 
-
-		public function __construct(Page $page, Breadcrumbs $breadcrumbs) {
-			$this->setModel($page);
+		public function __construct(PageRepository $pages, Breadcrumbs $breadcrumbs) {
+			$this->m = $pages;
 		}
-
-		protected function entriesPerPage() {
-			return self::PAGES_PER_PAGE;
-		}
-
 
 		/**
 		 * Display a listing of the page entities.
@@ -35,21 +29,21 @@
 		public function index(Request $request, Author $author, Group $group) {
 			$isAjax = $request->ajax();
 
-			$this->addRelationFilter('author', $author->id);
-			$this->addRelationFilter('group', $group->id);
-			$this->addLetterFilter($request->get('letter'));
-			$this->applyFilters();
+			$this->m->addRelationFilter('author', $author->id);
+			$this->m->addRelationFilter('group', $group->id);
+			$this->m->addLetterFilter($request->get('letter'));
+			$this->m->applyFilters();
 			if (!$isAjax)
-				$letters = $this->lettersUsage();
+				$letters = $this->m->lettersUsage();
 
-			$this->applyOrdering(new OrderingDescriptor());
+			$this->m->order();
 
-			$pages = $this->paginate();
+			$pages = $this->m->paginate(self::PAGES_PER_PAGE);
 
 			if ($isAjax)
 				return $pages;
 
-			$this->appendFiltersToPaginator($pages);
+			$this->m->appendFiltersToPaginator($pages);
 
 			$exclude = [];
 			if ($author->id) $exclude[] = 'author';

@@ -6,22 +6,18 @@
 
 	use Ankh\Http\Requests;
 
-	use Ankh\Entity\OrderingDescriptors\OrderingDescriptor;
-
 	use Ankh\Author;
+
+	use Ankh\Contracts\AuthorRepository;
 	use Ankh\Crumbs as Breadcrumbs;
 
-	class AuthorsController extends BasicEntityController {
+	class AuthorsController extends Controller {
 		const AUTHORS_PER_PAGE = 20;
+		protected $m;
 
-		public function __construct(Author $author, Breadcrumbs $crumbs) {
-			$this->setModel($author);
+		public function __construct(AuthorRepository $authors, Breadcrumbs $crumbs) {
+			$this->m = $authors;
 		}
-
-		protected function entriesPerPage() {
-			return self::AUTHORS_PER_PAGE;
-		}
-
 
 		/**
 		* Display a listing of the authors.
@@ -31,19 +27,19 @@
 		public function index(Request $request) {
 			$isAjax = $request->ajax();
 
-			$this->addLetterFilter($request->get('letter'));
-			$this->applyFilters();
+			$this->m->addLetterFilter($request->get('letter'));
+			$this->m->applyFilters();
 			if (!$isAjax)
-				$letters = $this->lettersUsage();
+				$letters = $this->m->lettersUsage();
 
-			$this->applyOrdering(new AuthorOrderingDescriptor());
+			$this->m->order();
 
-			$authors = $this->paginate();
+			$authors = $this->m->paginate(self::AUTHORS_PER_PAGE);
 
 			if ($isAjax)
 				return $authors;
 
-			$this->appendFiltersToPaginator($authors);
+			$this->m->appendFiltersToPaginator($authors);
 
 			return view('authors.index', compact('authors', 'letters'));
 		}
@@ -105,13 +101,4 @@
 		public function destroy(Author $author) {
 
 		}
-	}
-
-	class AuthorOrderingDescriptor extends OrderingDescriptor {
-
-		public function __construct($direction = 'asc', $collumn = 'fio') {
-			$this->direction = $direction;
-			$this->collumn = $collumn;
-		}
-
 	}

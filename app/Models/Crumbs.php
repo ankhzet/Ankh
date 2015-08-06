@@ -147,6 +147,9 @@ class Crumbs {
 		if (!$specifier)
 			return $label;
 
+		if (!is_object($specifier))
+			return $specifier;
+
 		return preg_replace_callback('/\{:([\w_][\w\d_]*)\}/i', function ($match) use ($specifier) {
 			$method = $match[1];
 			// $method = studly_case($match[1]);

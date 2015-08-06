@@ -1,6 +1,5 @@
 <?php
 
-
 	class Role extends Eloquent {
 
 		const ADMIN      = 1;

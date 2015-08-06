@@ -1,6 +1,4 @@
-<?php
-
-namespace Ankh\Http\Controllers;
+<?php namespace Ankh\Http\Controllers;
 
 use Illuminate\Http\Request;
 

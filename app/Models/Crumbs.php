@@ -1,6 +1,4 @@
-<?php
-
-namespace Ankh;
+<?php namespace Ankh;
 
 use Illuminate\Routing\Router;
 use Illuminate\Routing\Route;

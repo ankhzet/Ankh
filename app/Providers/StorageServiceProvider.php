@@ -1,6 +1,5 @@
-<?php
+<?php namespace Ankh\Providers;
 
-	namespace Ankh\Providers;
 use Illuminate\Support\ServiceProvider;
 
 class StorageServiceProvider extends ServiceProvider {

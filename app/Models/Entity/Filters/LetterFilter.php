@@ -1,4 +1,4 @@
-<?php
+<?php namespace Ankh\Entity\Filters;
 
 	use Ankh\Contracts\Filter;
 	use Ankh\Contracts\Entity;

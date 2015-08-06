@@ -1,6 +1,4 @@
-<?php
-
-	namespace Ankh\Traits\Entity;
+<?php namespace Ankh\Traits\Entity;
 
 	use Ankh\Contracts\Filter;
 

@@ -1,7 +1,4 @@
-<?php
-
-	namespace Ankh\Entity\Filters;
-
+<?php namespace Ankh\Entity\Filters;
 
 	class RelationFilter extends BasicFilter {
 		protected $relation;

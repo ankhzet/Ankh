@@ -1,6 +1,4 @@
-<?php
-
-	namespace Ankh\Facades;
+<?php namespace Ankh\Facades;
 
 	use Illuminate\Support\Facades\Facade;
 

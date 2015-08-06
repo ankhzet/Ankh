@@ -1,6 +1,4 @@
-<?php
-
-	namespace Ankh\Traits\Entity;
+<?php namespace Ankh\Traits\Entity;
 
 	trait LayeredRepositoryTrait {
 		protected $LayeredEntityRepository_query = null;

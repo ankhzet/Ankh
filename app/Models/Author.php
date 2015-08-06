@@ -1,6 +1,4 @@
-<?php
-
-	namespace Ankh;
+<?php namespace Ankh;
 
 	use Ankh\Group;
 	use Ankh\Page;

@@ -1,6 +1,4 @@
-<?php
-
-	namespace Ankh;
+<?php namespace Ankh;
 
 	use Ankh\Author;
 	use Ankh\Page;

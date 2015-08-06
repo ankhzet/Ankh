@@ -1,6 +1,5 @@
-<?php
+<?php namespace Ankh\Entity\Filters;
 
-	namespace Ankh\Entity\Filters;
 	use Ankh\Contracts\Filter;
 	use Ankh\Contracts\Entity;
 

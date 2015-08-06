@@ -1,6 +1,5 @@
-<?php
+<?php namespace Ankh\Entity\OrderingDescriptors;
 
-	namespace Ankh\Entity\OrderingDescriptors;
 	use Ankh\Contracts\Entity;
 	use Ankh\Contracts\OrderingDescriptor as OrderingDescriptorContract;
 

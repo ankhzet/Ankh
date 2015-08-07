@@ -79,7 +79,7 @@ class GroupsController extends Controller {
 	 * @return Response
 	 */
 	public function edit(Group $group) {
-
+		return view('groups.edit', compact('group'));
 	}
 
 	/**
@@ -88,8 +88,15 @@ class GroupsController extends Controller {
 	 * @param  Group $group
 	 * @return Response
 	 */
-	public function update(Group $group) {
+	public function update(Request $request, Group $group) {
 
+		if ($group->trashed() && !intval($request->get('deleted')))
+			$group->restore();
+
+		if ($group->update(array_except($request->input(), 'deleted')))
+			return Redirect::to(route('groups.show', $group));
+		else
+			;
 	}
 
 	/**

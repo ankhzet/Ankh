@@ -33,6 +33,7 @@ $groups = array(
 $authors = array(
 	'index' => 'Authors',
 	'show' => '{:fio}',
+	'author' => 'Author',
 	'create' => 'Add',
 	'edit' => 'Edit',
 	'trace-updates' => 'trace updates',

@@ -33,7 +33,7 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 	}
 
 	public function find($id, $columns = array('*')) {
-		return $this->model->find($id, $columns);
+		return $this->model->withTrashed()->findOrFail($id, $columns);
 	}
 
 	public function updateWithIdAndInput($id, array $input) {

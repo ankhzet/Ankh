@@ -1,13 +1,17 @@
 @extends('layouts.common')
 
-@section('title')<a href="/authors/{{$author->id}}">{{$author->fio}}</a> - <a href="/groups/{{$group->id}}">{{$group->title}}</a>@stop
+@section('title')<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a> - <a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
+@stop
 @section('title-plain'){{$author->fio}} - {{$group->title}}@stop
 @section('rss')group={{$group->id}}@stop
 
 @section('moderation')
-<span class="inline-menu admin">
-	<a href="/groups/{{$group->id}}/edit">@lang('common.edit')</a> | <a href="/groups/{{$group->id}}/destroy">@lang('common.delete')</a>
-</span>
+@admin()
+@i-menu(admin)
+	@m-item('common.edit', route('groups.edit', $group) )
+	@m-delete('common.delete', route('groups.destroy', $group) )
+@endmenu
+@endadmin
 @stop
 
 @section('content')
@@ -16,12 +20,12 @@
 					<div class="cnt-item">
 						<div class="title">
 							<span class="head">
-								<span class="pull_right inline-menu">
-									<a href="/groups/{{$group->id}}/chronology">@lang('pages.updates.chronology')</a>
-								</span>
+								@i-menu()
+									@m-item('pages.updates.chronology', route('groups.chronology', $group) )
+								@endmenu
 							</span>
 							<span class="link date">{{$author->updated_at->ago()}}</span>
-							<span class="link samlib"><a href="http://samlib.ru{{$author->link}}{{$group->link}}">{{$author->link}}{{$group->link}}</a></span>
+							@if($group->link) @samlib($author, $group) @endif
 						</div>
 
 						<br /><br />

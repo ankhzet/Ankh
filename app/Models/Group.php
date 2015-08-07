@@ -15,4 +15,10 @@
 			return $this->hasMany('Ankh\Page');
 		}
 
+		public function peekPages($amount, &$delta) {
+			$paginator = $this->pages()->take($amount)->orderBy('updated_at', 'desc');
+			$delta = $paginator->count() - $amount;
+			return $paginator->get();
+		}
+
 	}

@@ -2,13 +2,7 @@
 
 @section('content')
 
-	<div class="list">
-		@section('letter-filter')
-			@include('layouts.letter-filter')
-		@show
-
-		@include('groups.list')
-
-	</div>
+	@include('layouts.filters')
+	@include('groups.list')
 
 @stop

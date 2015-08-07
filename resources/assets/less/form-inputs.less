@@ -1,1 +1,70 @@
 
+
+form {
+	width: 60%;
+	margin: 20px auto;
+
+	border: 1px solid gray;
+	round-border(4px);
+
+	.edit {
+		border: 1px solid white;
+		round-border(2px);
+
+	}
+
+	color: lighten(@dark-font-color, 10%);
+
+	.header {
+		@color1: darken(@grayed-color, 20%);
+		@color2: lighten(@color1, 30%);
+		background-color: @color1;
+		round-border(2px);
+
+		div {
+			padding: 10px;
+			font-weight: bold;
+
+			text-shadow: 0 1px 0 @color2;
+
+			text-align: center;
+		}
+	}
+
+	.option {
+		@width: 96%;
+		@div: 30%;
+		overflow: hidden;
+
+		width: @width;
+		margin: 10px auto;
+		line-height: 24px;
+		vertical-align: middle;
+
+		.label {
+			float: left;
+			width: @div;
+			text-align: right;
+			label {
+				padding-right: 10px;
+			}
+		}
+
+		.field {
+			float: right;
+			width: 100% - @div - 1%;
+			color: @dark-font-color;
+
+			&.half {
+				width: (100% - @div - 1%) / 2;
+			}
+
+		  &.label {
+		  	float: none;
+				padding-left: 5px;
+				font-weight: bold;
+			}
+		}
+
+	}
+}

@@ -1,10 +1,12 @@
 <?php namespace Ankh;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Ankh\Contracts\Entity as EntityContract;
 
 class Entity extends Model implements EntityContract {
+	use SoftDeletes;
 
 	use \Ankh\Traits\Entity\DateAccessorTrait;
 

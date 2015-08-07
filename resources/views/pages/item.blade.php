@@ -1,14 +1,31 @@
 
+
 					<div class="cnt-item">
 						<div class="title">
 							<span class="head">
-								@if(array_search('author', $exclude) === false)<a href="/authors/{{$page->author->id}}">{{$page->author->fio}}</a> -@endif <a href="/pages/{{$page->id}}">{{$page->title}}</a>
-								<span class="inline-menu admin right"> <a href="/pages/{{$page->id}}/destroy" data-method="delete" data-confirm="You sure?">@lang('common.delete')</a> </span>
+@kept(author)
+								<a href="{{ route('authors.show', $page->author) }}">{{$page->author->fio}}</a>&nbsp;-
+@endkept
+								<a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>
+								@admin()
+									@i-menu(admin)
+										@m-item('common.edit', route('pages.edit', $page) )
+										@m-delete('common.delete', route('pages.destroy', $page) )
+									@endmenu
+								@endadmin
 							</span>
-							<span class="link samlib"><a href="http://samlib.ru{{$page->author->link}}/{{$page->link}}">{{$page->author->link}}/{{$page->link}}</a></span>
+							@samlib($page->author, $page)
 						</div>
-						<div class="text">{{$page->annotation}}</div>
-						<div class="text">
-							<a href="/pages/{{$page->id}}/version">все версии</a> | <span class="size">{{file_size($page->size * 1024, 1)}}</span> @if(array_search('group', $exclude) === false)| Группа: <a href="/groups/{{$page->group->id}}">{{$page->group->title}}</a>@endif
+						<div class="text">{{$page->annotation}}
 						</div>
+						<ul class="text">
+							<li><a href="{{ route('pages.versions', $page) }}">@lang('pages.pages.all-versions')</a></li>
+							<li><span class="size">{{file_size($page->size * 1024, 1)}}</span></li>
+@kept(group)
+							<li>@lang('pages.groups.group'):
+								<a href="{{ route('groups.show', $page->group) }}">{{$page->group->title}}</a>
+							</li>
+@endkept
+						</ul>
 					</div>
+

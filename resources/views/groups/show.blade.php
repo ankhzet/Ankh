@@ -25,7 +25,7 @@
 								@endmenu
 							</span>
 							<span class="link date">{{$author->updated_at->ago()}}</span>
-							@samlib($author, $group)
+							@if($group->link) @samlib($author, $group) @endif
 						</div>
 
 						<br /><br />

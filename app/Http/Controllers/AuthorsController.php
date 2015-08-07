@@ -100,4 +100,16 @@ class AuthorsController extends Controller {
 
 	}
 
+	public function getChronology(Author $author) {
+
+	}
+
+	public function getCheck(Author $author) {
+
+	}
+
+	public function getTraceUpdates(Author $author) {
+
+	}
+
 }

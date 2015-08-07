@@ -109,4 +109,9 @@ class PagesController extends Controller {
 	public function destroy(Page $page) {
 
 	}
+
+	public function getVersions(Author $author) {
+
+	}
+
 }

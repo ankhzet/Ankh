@@ -101,4 +101,9 @@ class GroupsController extends Controller {
 	public function destroy(Group $group) {
 
 	}
+
+	public function getChronology(Author $author) {
+
+	}
+
 }

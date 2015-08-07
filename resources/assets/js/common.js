@@ -61,7 +61,7 @@ $(function() {
 			$('<input>', {
 				'name': '_token',
 				'type': 'hidden',
-				'value': '<?php echo csrf_token(); ?>'
+				'value': $('meta[name="_token"]').attr('content')
 			});
 
 			return form.append(token, hiddenInput)

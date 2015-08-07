@@ -106,7 +106,10 @@ class GroupsController extends Controller {
 	 * @return Response
 	 */
 	public function destroy(Group $group) {
-
+		if ($group->delete())
+			return self::plain('Deleted');
+		else
+			throw new Exception("Deletion failed");
 	}
 
 	public function getChronology(Author $author) {

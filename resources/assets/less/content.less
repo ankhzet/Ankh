@@ -9,8 +9,8 @@
 	.content-header {
 		font-weight: bold;
 		color: @dark-font-color;
-		border-bottom: 1px solid #ddd;
-		background: #eee;
+		border-bottom: 1px solid darken(@grayed-color, 10%);
+		background: @grayed-color;
 		padding: 5px 2px;
 		margin-top: 5px;
 
@@ -35,9 +35,9 @@
 		padding: 0 2px;
 		font-weight: bold;
 		font-size: 10px;
-		color: #888;
-		background: #ddd;
-		border-bottom: 1px solid #ccc;
+		color: @dark-font-color;
+		background: darken(@grayed-color, 10%);
+		border-bottom: 1px solid darken(@grayed-color, 20%);
 
 		li {
 			display: inline-block;
@@ -99,8 +99,8 @@
 		text-align: center;
 		margin: 7px 0 2px;
 		padding: 5px 0;
-		background: #ddd;
-		border-bottom: 1px solid #ccc;
+		background: darken(@grayed-color, 10%);
+		border-bottom: 1px solid darken(@grayed-color, 20%);
 		white-space: nowrap;
 
 		li {
@@ -113,7 +113,7 @@
 
 			&.active *, &.disabled * {
 				text-decoration: none;
-				color: #aaa;
+				color: @common-font-color;
 			}
 
 			&.active * {
@@ -127,8 +127,8 @@
 	.cnt-item {
 		margin: 0 5px;
 		padding: 5px 0;
-		border-bottom: 1px solid #ccc;
-		border-top: 1px solid #fff;
+		border-bottom: 1px solid darken(@grayed-color, 20%);
+		border-top: 1px solid lighten(@grayed-color, 10%);
 		min-height: 16px;
 
 		.title {
@@ -151,7 +151,7 @@
 
 			a {
 				font-size: 11px;
-				color: #aaa;
+				color: @common-font-color;
 
 				&:hover {
 					color: #666;
@@ -184,7 +184,7 @@
 
 		.text {
 			font-size: 11px;
-			color: #aaa;
+			color: @common-font-color;
 
 			a {
 				font-size: 10px;

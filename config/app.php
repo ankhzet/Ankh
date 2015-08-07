@@ -144,6 +144,7 @@ return [
         Ankh\Providers\AppServiceProvider::class,
         Ankh\Providers\EventServiceProvider::class,
         Ankh\Providers\RouteServiceProvider::class,
+        Ankh\Providers\BladeServiceProvider::class,
 
 
         Illuminate\Html\HtmlServiceProvider::class,

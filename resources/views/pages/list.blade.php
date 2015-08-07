@@ -1,9 +1,9 @@
+
 @if (!$pages->isEmpty())
 	@foreach ($pages as $page)
-		@include('pages.item', ['page' => $page, 'exclude' => isset($exclude) ? $exclude : []])
+				@include('pages.item', ['page' => $page, 'exclude' => isset($exclude) ? $exclude : []])
 	@endforeach
-
-	{!!$pages->render()!!}
+				{!!$pages->render()!!}
 @else
-	No pages oO
+				@lang('pages.pages.no-pages')
 @endif

@@ -1,21 +1,18 @@
-
 				<div class="cnt-item group">
 					<div class="title">
 						<span class="head">
-							<a href="/groups/{{$group->id}}">{{$group->title}}</a>
+							<a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
 						</span>
-						<span class="link samlib"><a href="http://samlib.ru{{$group->author->link}}{{$group->link}}">{{$group->link}}</a></span>
+						@samlib($group->author, $group)
 					</div>
 					<div class="text">
 						{{$group->annotation}}
 
-						@if (($c = with($pages = $group->pages()->paginate($pagesShown = 4))->total()) > 0)
-							@foreach ($pages as $page)
-								<br />&rarr; <a href="/pages/{{$page->id}}">{{$page->title}}</a>
-							@endforeach
-							@if (($delta = ($c - $pagesShown)) > 0)
-								<br />&rarr; <a href="/groups/{{$group->id}}/pages">+ еще {!!$delta!!}...</a>
-							@endif
-						@endif
+@foreach ($group->peekPages(4, $delta) as $page)
+								<br />&rarr; <a href="{{ route('pages.versions', $page) }}">{{$page->title}}</a>
+@endforeach
+@if ($delta > 0)
+								<br />&rarr; <a href="{{ route('groups.pages.index', $group) }}">@lang('pages.pages.another', ['count' => $delta])</a>
+@endif
 					</div>
 				</div>

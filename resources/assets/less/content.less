@@ -8,6 +8,7 @@
 
 	.content-header {
 		font-weight: bold;
+		color: @dark-font-color;
 		border-bottom: 1px solid #ddd;
 		background: #eee;
 		padding: 5px 2px;
@@ -16,7 +17,7 @@
 		.filter {
 			display: inline;
 
-		  li {
+			li {
 				display: inline;
 				font-weight: normal;
 
@@ -48,6 +49,7 @@
 	}
 
 	.inline-menu {
+		display: inline;
 		font-weight: normal;
 		font-size: 70%;
 		line-height: 100%;
@@ -56,6 +58,20 @@
 		margin-left: 5px;
 		vertical-align: top;
 
+
+		li {
+			display: inline;
+			padding: 0 5px 0 4px;
+
+			border-right: 1px solid @common-font-color;
+
+			&:last-child {
+				border-right: none;
+				padding-right: 4px;
+			}
+		}
+
+
 		&::before {
 			content: '[';
 		}
@@ -63,9 +79,19 @@
 			content: ']';
 		}
 
-		&.admin a {
-			color: red;
+		&.admin {
+			a {
+				color: red;
+			}
+
+			display: none;
+
+
 		}
+	}
+
+	.cnt-item:hover .inline-menu.admin, .content-header:hover .inline-menu.admin {
+		display: inline;
 	}
 
 	.pagination {
@@ -114,46 +140,46 @@
 
 			.head {
 			}
-			.link {
-				float: right;
-				text-align: left;
-				font-weight: normal;
-				padding: 0 0 2px 16px;
-				white-space: nowrap;
+		}
 
-				a {
-					font-size: 11px;
-					color: #aaa;
+		.link {
+			float: right;
+			text-align: left;
+			font-weight: normal;
+			padding: 0 0 2px 16px;
+			white-space: nowrap;
 
-					&:hover {
-						color: #666;
-					}
-				}
+			a {
+				font-size: 11px;
+				color: #aaa;
 
-				&.samlib {
-					margin: -1px 5px 0 0;
-					background: url(@{image-root}/samlib.gif) no-repeat 0 4px;
-				}
-
-				&.past_since {
-					min-width: 40%;
-					width: 40%;
-					text-align: right;
-					white-space: nowrap;
-				}
-
-				&.size , &.size2, &.date {
-					padding-left: 0;
-					width: 80px;
-					font-size: 11px;
-					font-weight: bold;
-
-					&.u2 {
-						width: 160px;
-					}
+				&:hover {
+					color: #666;
 				}
 			}
 
+			&.samlib {
+				margin: -1px 5px 0 0;
+				background: url(@{image-root}/samlib.gif) no-repeat 0 4px;
+			}
+
+			&.past_since {
+				min-width: 40%;
+				width: 40%;
+				text-align: right;
+				white-space: nowrap;
+			}
+
+			&.size , &.size2, &.date {
+				padding-left: 0;
+				width: 80px;
+				font-size: 11px;
+				font-weight: bold;
+
+				&.u2 {
+					width: 160px;
+				}
+			}
 		}
 
 		.text {
@@ -162,6 +188,34 @@
 
 			a {
 				font-size: 10px;
+			}
+
+		}
+
+		ul.text {
+			overflow: hidden;
+
+			li {
+				display: inline;
+				float: left;
+				padding: 0 7px 0 6px;
+
+				border-right: 1px solid @common-font-color;
+
+				&:first-child {
+					padding-left: 0px;
+				}
+				&:last-child {
+					border-right: none;
+				}
+			}
+
+			.size {
+				display: inline-block;
+				width: 60px;
+				text-align: right;
+				font-weight: bold;
+				color: @dark-font-color;
 			}
 		}
 

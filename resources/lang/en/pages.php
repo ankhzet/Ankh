@@ -14,14 +14,20 @@ $pages = array(
 		'updates' => $updates,
 
 		'list' => 'list pages',
+		'all-versions' => 'all versions',
+		'another' => '+ another :count...',
+		'no-pages' => 'No pages',
 	);
 
 $groups = array(
 		'index' => 'Groups',
+		'group' => 'Group',
 		'show' => '{:title}',
 
 		'pages' => $pages,
 		'updates' => $updates,
+
+		'no-groups' => 'No groups',
 	);
 
 $authors = array(
@@ -29,6 +35,8 @@ $authors = array(
 	'show' => '{:fio}',
 	'create' => 'Add',
 	'edit' => 'Edit',
+	'trace-updates' => 'trace updates',
+	'details' => 'details',
 
 	'groups' => $groups,
 	'pages' => $pages,

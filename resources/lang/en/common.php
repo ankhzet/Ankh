@@ -8,4 +8,6 @@ return array(
 
 	'edit' => 'edit',
 	'delete' => 'delete',
+
+	'filter-by-name' => 'filter by name',
 	);

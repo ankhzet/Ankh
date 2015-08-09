@@ -9,6 +9,10 @@ use Illuminate\Routing\Router;
 use Ankh\Facades\Breadcrumbs as AnkhBreadcrumbsFacade;
 use Ankh\Crumbs;
 
+use Ankh\Facades\PageutilsFacade;
+use Ankh\PageUtils;
+
+
 class AppServiceProvider extends ServiceProvider
 {
 	/**
@@ -38,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
 			$loader->alias('Crumbs', AnkhBreadcrumbsFacade::class);
 		});
 
+		$this->registerPageUtilsFacade();
+		$this->registerHtmlCleaner();
+
 		if ($this->app->environment() == 'local') {
 
 			$this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
@@ -46,6 +53,21 @@ class AppServiceProvider extends ServiceProvider
 
 		}
 	}
+
+	function registerPageUtilsFacade() {
+		$this->app['pageutils'] = $this->app->share(function($app) {
+			return new PageUtils($app[\Ankh\Contracts\HtmlCleaner::class]);
+		});
+
+		$this->app->booting(function() {
+			$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+			$loader->alias('PageUtils', PageutilsFacade::class);
+		});
+	}
+
+	function registerHtmlCleaner() {
+	}
+
 }
 
 

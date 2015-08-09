@@ -111,8 +111,10 @@ class PagesController extends Controller {
 
 	}
 
-	public function getVersions(Author $author) {
+	public function getVersions(Page $page) {
+	}
 
+	public function getDownload(Page $page) {
 	}
 
 }

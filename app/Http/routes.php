@@ -37,6 +37,7 @@
 	Route::resource('pages', 'PagesController');
 	Route::group(['prefix' => 'pages/{pages}'], function () {
 		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
+		Route::get('download/{version}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
 	});
 
 	Route::resource('updates', 'UpdatesController');
@@ -56,4 +57,9 @@
 	});
 	Route::bind('pages', function ($id) {
 		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
+	});
+	Route::bind('version', function ($date) {
+		$version = new \Ankh\Version();
+		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
+		return $version;
 	});

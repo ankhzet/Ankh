@@ -1,8 +1,5 @@
 <?php namespace Ankh;
 
-	use Ankh\Author;
-	use Ankh\Page;
-
 	class Group extends Updateable {
 
 		protected $guarded = ['id'];

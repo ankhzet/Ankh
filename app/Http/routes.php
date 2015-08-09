@@ -35,7 +35,7 @@
 	});
 
 	Route::resource('pages', 'PagesController');
-	Route::group(['prefix' => 'pages/{page}'], function () {
+	Route::group(['prefix' => 'pages/{pages}'], function () {
 		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
 	});
 

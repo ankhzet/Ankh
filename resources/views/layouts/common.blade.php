@@ -56,7 +56,7 @@
 				</div>
 
 @if (isset($content))
-					{{$content}}
+					{!!$content!!}
 @else
 	@yield('content')
 @endif

@@ -37,7 +37,7 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 	}
 
 	public function updateWithIdAndInput($id, array $input) {
-		$entry = $this->faqModel->findOrFail($id);
+		$entry = $this->model->findOrFail($id);
 		return $entry->update($input);
 	}
 

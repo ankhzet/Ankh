@@ -1,8 +1,5 @@
 <?php namespace Ankh;
 
-	use Ankh\Group;
-	use Ankh\Page;
-
 	class Author extends Updateable {
 
 		protected $filterCollumn = 'fio';

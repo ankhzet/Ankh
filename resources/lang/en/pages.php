@@ -5,6 +5,8 @@ $updates = array(
 
 	'chronology' => 'chronology',
 	'check' => 'check new',
+	'today' => 'today',
+	'yesterday' => 'yesterday',
 	);
 
 $pages = array(

@@ -2,6 +2,7 @@
 
 	use Ankh\Author;
 	use Ankh\Group;
+	use Ankh\PageResolver;
 
 	class Page extends Entity {
 
@@ -14,6 +15,10 @@
 
 		public function group() {
 			return $this->belongsTo('Ankh\Group');
+		}
+
+		public function resolver() {
+			return with(new PageResolver)->setPage($this);
 		}
 
 	}

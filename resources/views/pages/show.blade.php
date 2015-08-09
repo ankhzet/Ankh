@@ -14,7 +14,7 @@
 @stop
 
 @section('reader')
-Reader: {!!$reader!!}
+{!!$reader!!}
 @stop
 
 @section('content')

@@ -21,7 +21,7 @@ class PageUtils {
 	 * @return string
 	 */
 	public function clean($html) {
-		return $this->cleaner->clean($html, 'utf8');
+		return $this->cleaner->clean($html, $this->used_enc);
 	}
 
 	/**
@@ -50,23 +50,22 @@ class PageUtils {
 			$data = @mb_convert_encoding($data, $this->used_enc, $storedEncoding);
 		}
 
-		return $data;
+		return $this->clean($data);
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function putContents(PageResolver $resolver, $contents) {
-		$cleanedContents = $this->clean($contents);
 		$path = $resolver->resolve();
 
 		if (!File::isDirectory($directory = dirname($path)))
 			File::makeDirectory($directory, $this->cache_dir_cmod, true);
 
 		if ($this->stored_enc != $this->used_enc)
-			$data = @mb_convert_encoding($data, $this->stored_enc, $this->used_enc);
+			$contents = @mb_convert_encoding($contents, $this->stored_enc, $this->used_enc);
 
-		$data = @gzcompress($cleanedContents);
+		$data = @gzcompress($contents);
 
 		return File::put($path, $data);
 	}

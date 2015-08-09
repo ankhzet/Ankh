@@ -11,6 +11,7 @@ use Ankh\Page;
 use Ankh\Contracts\PageRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
+use PageUtils;
 class PagesController extends Controller {
 	const PAGES_PER_PAGE = 10;
 	protected $m;
@@ -76,7 +77,7 @@ class PagesController extends Controller {
 	public function show(Author $author, Group $group, Page $page) {
 		$author = $page->author;
 		$group = $page->group;
-		$reader = (string)$page;
+		$reader = PageUtils::contents($page->resolver());
 		return view('pages.show', compact('author', 'group', 'page', 'reader'));
 	}
 

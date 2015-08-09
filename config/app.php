@@ -214,6 +214,7 @@ return [
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
 
+        'Date'      => Jenssegers\Date\Date::class,
     ],
 
 ];

@@ -3,7 +3,7 @@
 	use Ankh\Group;
 	use Ankh\Page;
 
-	class Author extends Entity {
+	class Author extends Updateable {
 
 		protected $filterCollumn = 'fio';
 		protected $guarded = ['id'];
@@ -21,6 +21,14 @@
 				$this->filterCollumn = $value;
 
 			return $this->filterCollumn;
+		}
+
+		protected function updateType() {
+			return AuthorUpdate::TYPE;
+		}
+
+		protected function updateClass() {
+			return AuthorUpdate::class;
 		}
 
 	}

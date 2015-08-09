@@ -4,7 +4,7 @@
 	use Ankh\Group;
 	use Ankh\PageResolver;
 
-	class Page extends Entity {
+	class Page extends Updateable {
 
 		protected $guarded = ['id'];
 		protected $fillable = ['title', 'link', 'annotation', 'size', 'author_id', 'group_id'];
@@ -19,6 +19,14 @@
 
 		public function resolver() {
 			return with(new PageResolver)->setPage($this);
+		}
+
+		protected function updateType() {
+			return PageUpdate::TYPE;
+		}
+
+		protected function updateClass() {
+			return PageUpdate::class;
 		}
 
 	}

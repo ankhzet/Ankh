@@ -27,7 +27,7 @@ return array(
      |
      */
     'storage' => array(
-        'enabled' => true,
+        'enabled' => false,
         'driver' => 'file', // redis, file, pdo
         'path' => storage_path() . '/debugbar', // For file driver
         'connection' => null,   // Leave null for default connection (Redis/PDO)
@@ -59,7 +59,7 @@ return array(
      |
      */
 
-    'capture_ajax' => true,
+    'capture_ajax' => false,
 
     /*
      |--------------------------------------------------------------------------
@@ -71,24 +71,24 @@ return array(
      */
 
     'collectors' => array(
-        'phpinfo'         => true,  // Php version
-        'messages'        => true,  // Messages
+        'phpinfo'         => false,  // Php version
+        'messages'        => false,  // Messages
         'time'            => true,  // Time Datalogger
-        'memory'          => true,  // Memory usage
+        'memory'          => false,  // Memory usage
         'exceptions'      => true,  // Exception displayer
-        'log'             => true,  // Logs from Monolog (merged in messages if enabled)
+        'log'             => false,  // Logs from Monolog (merged in messages if enabled)
         'db'              => true,  // Show database (PDO) queries and bindings
-        'views'           => true,  // Views with their data
-        'route'           => true,  // Current route information
-        'laravel'         => false, // Laravel version and environment
-        'events'          => false, // All events fired
-        'default_request' => false, // Regular or special Symfony request logger
+        'views'           => false,  // Views with their data
+        'route'           => false,  // Current route information
+        'laravel'         =>  false, // Laravel version and environment
+        'events'          =>  false, // All events fired
+        'default_request' =>  false, // Regular or special Symfony request logger
         'symfony_request' => true,  // Only one can be enabled..
-        'mail'            => true,  // Catch mail messages
-        'logs'            => false, // Add the latest log messages
-        'files'           => false, // Show the included files
-        'config'          => false, // Display config settings
-        'auth'            => false, // Display Laravel authentication status
+        'mail'            => false,  // Catch mail messages
+        'logs'            =>  false, // Add the latest log messages
+        'files'           =>  false, // Show the included files
+        'config'          =>  false, // Display config settings
+        'auth'            =>  false, // Display Laravel authentication status
         'session'         => true,  // Display session data
     ),
 
@@ -110,7 +110,7 @@ return array(
             'timeline'          => false,  // Add the queries to the timeline
             'backtrace'         => false,  // EXPERIMENTAL: Use a backtrace to find the origin of the query in your files.
             'explain' => array(            // EXPERIMENTAL: Show EXPLAIN output on queries
-                'enabled' => true,
+                'enabled' => false,
                 'types' => array('SELECT', 'INSERT', 'UPDATE', 'DELETE'), // array('SELECT', 'INSERT', 'UPDATE', 'DELETE'); for MySQL 5.6.3+
             ),
             'hints'             => true,    // Show hints for common mistakes
@@ -122,7 +122,7 @@ return array(
             'data' => false,    //Note: Can slow down the application, because the data can be quite large..
         ),
         'route' => array(
-            'label' => true  // show complete route on bar
+            'label' => false  // show complete route on bar
         ),
         'logs' => array(
             'file' => null

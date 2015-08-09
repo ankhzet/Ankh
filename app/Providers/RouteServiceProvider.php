@@ -27,6 +27,8 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+        $router->pattern('version', '[0-9]{1,2}-[0-9]{1,2}-[0-9]{4,4}-\+[0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2}');
+
     }
 
     /**

@@ -16,22 +16,21 @@
 
 @section('content')
 
-				<div class="author">
-					<div class="cnt-item">
-						<div class="title">
-							<span class="head">
-								@i-menu()
-									@m-item('pages.updates.chronology', route('groups.chronology', $group) )
-								@endmenu
-							</span>
-							<span class="link date">{{$author->updated_at->ago()}}</span>
-							@if($group->link) @samlib($author, $group) @endif
-						</div>
-
-						<br /><br />
+				<div class="cnt-item group">
+					<div class="title">
+						<span class="head">
+							@i-menu()
+								@m-item('pages.updates.chronology', route('groups.chronology', $group) )
+							@endmenu
+						</span>
+						<span class="link date">{{$author->updated_at->ago()}}</span>
+						@if($group->link) @samlib($author, $group) @endif
 					</div>
 
-					<div class="pages">
-						@include('pages.list', ['pages' => $group->pages()->orderBy('title')->paginate(10), 'exclude' => ['author', 'group']])
-					</div>
+					<br /><br />
+				</div>
+
+				<div class="pages">
+					@include('pages.list', ['pages' => $group->pages()->orderBy('title')->paginate(10), 'exclude' => ['author', 'group']])
+				</div>
 @stop

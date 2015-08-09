@@ -6,7 +6,7 @@
 
 	class AuthorsTableSeeder extends CommonSeeder {
 		protected $locales = ['ru_RU', 'en_US', 'de_DE'];
-		const AUTHORS_TO_SEED = 200;
+		const AUTHORS_TO_SEED = 50;
 
 		public function run() {
 			$this->iterate(self::AUTHORS_TO_SEED / 2, self::AUTHORS_TO_SEED, function () {

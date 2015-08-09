@@ -66,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
 	}
 
 	function registerHtmlCleaner() {
+		$this->app->bind(\Ankh\Contracts\HtmlCleaner::class, \Ankh\RegexpCleaner::class);
 	}
 
 }

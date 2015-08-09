@@ -17,6 +17,8 @@
 			$this->call('AuthorsTableSeeder');
 			$this->call('GroupsTableSeeder');
 			$this->call('PagesTableSeeder');
+
+			$this->call('UpdatesTableSeeder');
 		}
 
 	}

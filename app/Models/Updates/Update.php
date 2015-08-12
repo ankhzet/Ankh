@@ -45,6 +45,13 @@ class Update extends Entity {
 		return $str;
 	}
 
+	public function version() {
+		$version = new Version();
+		$version->setEntity($this->entity());
+		$version->setTimestamp($this->created_at);
+		return $version;
+	}
+
 	protected function getPivoted($column) {
 		if (!$this->cached_pivot) {
 			if (!$this->id)

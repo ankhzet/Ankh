@@ -2,7 +2,7 @@
 
 @section('title')<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a>@stop
 @section('title-plain'){{$author->fio}}@stop
-@section('rss')author={{$author->id}}@stop
+@section('rss')author/{{$author->id}}@stop
 
 @section('moderation')
 @admin()

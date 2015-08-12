@@ -1,5 +1,8 @@
 <?php
 
+	use Illuminate\Http\Request;
+	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 	Route::any('/', function() { return Redirect::to('/home'); });
 
 	Route::controller('home', 'HomeController', ['anyIndex' => 'home']);
@@ -63,3 +66,12 @@
 		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
 		return $version;
 	});
+
+	Route::get('rss/{chanel?}/{id?}', [function(Request $request) {
+		$chanel = FeedChanels::resolve($request);
+
+		if (!$chanel)
+			throw new NotFoundHttpException("RSS chanel not found");
+
+		 return Feed::make($chanel)->render();
+	}, 'as' => 'rss']);

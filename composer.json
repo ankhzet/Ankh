@@ -14,7 +14,8 @@
         "barryvdh/laravel-debugbar": "^2.0@dev",
         "filp/whoops": "^1.2@dev",
         "davejamesmiller/laravel-breadcrumbs": "dev-master",
-        "jenssegers/date": "^3.0@dev"
+        "jenssegers/date": "^3.0@dev",
+        "roumen/feed": "~2.9"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*",

@@ -69,13 +69,16 @@ class UpdatesPaginator extends LengthAwarePaginator {
 		$r_type = $update->updateType();
 
 		$class = $update->entityClass();
-		if ($class == \Ankh\Entity::class)
+		if ($class == \Ankh\Entity::class) {
 			foreach ($this->known() as $model) {
 				if ($model->updateType() == $r_type)
-					return $model->find($update->id);
+					return $model->newFromBuilder($update->getAttributes());
 			}
 
-		throw new \Exception("Unknown update type for entity class [$class]");
+			throw new \Exception("Unknown update type [$r_type] for entity class [$class]");
+		}
+
+		return $update;
 	}
 
 	public function daily() {

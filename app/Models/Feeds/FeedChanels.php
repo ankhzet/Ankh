@@ -19,6 +19,9 @@ class FeedChanels {
 	public function resolve(Request $request) {
 		$chanel = $request->route('chanel') ?: array_keys($this->chanels)[0];
 
+		if (!isset($this->chanels[$chanel]))
+			return null;
+
 		return $this->chanels[$chanel]->of(intval($request->route('id')));
 	}
 

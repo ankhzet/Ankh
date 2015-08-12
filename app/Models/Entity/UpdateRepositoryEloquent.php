@@ -14,12 +14,19 @@ use Jenssegers\Date\Date;
 
 class UpdateRepositoryEloquent extends EntityRepositoryEloquent implements UpdateRepositoryContract {
 
+	protected $entity;
+
 	public function __construct(\Ankh\Update $model) {
 		$this->setModel($model);
 	}
 
-	public function subRepository($id) {
-		throw new Exception(get_class($this) . ' has no subrepositories');
+	public function setEntity(\Ankh\Entity $entity) {
+		$this->entity = $entity;
+
+		if ($this->entity) {
+			$this->setModel(app($entity->updateClass()));
+			$this->model->underlyingQuery()->where('entity_id', $this->entity->id);
+		}
 	}
 
 	public function paginate($perPage = 15, $columns = array('*')) {

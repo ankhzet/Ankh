@@ -27,7 +27,7 @@ class UpdatesController extends Controller {
 	 */
 	public function index(Request $request, Entity $entity) {
 		if ($entity->id)
-			$this->m->setModel(app($entity->updateClass()));
+			$this->m->setEntity($entity);
 
 		$updates = $this->m->paginate(self::UPDATES_PER_PAGE);
 

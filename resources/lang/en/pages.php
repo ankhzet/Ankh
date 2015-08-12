@@ -58,4 +58,7 @@ return array(
 		'profile' => 'Profile',
 		),
 
+	'rss' => array(
+		),
+
 	);

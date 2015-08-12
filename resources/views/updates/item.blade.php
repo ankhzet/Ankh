@@ -1,34 +1,37 @@
 
-					<div class="title update dotted">
+					<div class="title update @if(!$last) dotted @endif ">
 
 @if ($group = $update->relatedGroup())
 						<span class="head">
-							<a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
+							<a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>@if ($update->relatedPage()):@endif
 						</span>
 @endif
 
 @if ($page = $update->relatedPage())
-						<span class="head">
-							: <a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>
-						</span>
+						<span class="head"><a href="{{ route('pages.show', $page) }}">{{$page->title}}</a></span>
 @endif
 
 						<div class="head small">
 @if     ($update->type == \Ankh\Update::U_ADDED)
-							<span class="delta green"><b>занесено в БД @if($update->delta) ({{diff_size($update->delta)}})@endif</b></span>
+							<b class="delta green">занесено в БД {!! $update->diffString('(:delta)') !!}</b>
 @elseif ($update->type == \Ankh\Update::U_DELETED)
-							<span class="delta red"><b>удалено из БД @if($update->delta) ({{diff_size($update->delta)}})@endif</b></span>
+							<b class="delta red">удалено из БД {!! $update->diffString('(:delta)') !!}</b>
 @elseif ($update->type == \Ankh\Update::U_RENAMED)
-							<span class="delta teal"><b>переименовано</b></span>
+							<b class="delta teal">переименовано</b>
 @elseif ($update->type == \Ankh\GroupUpdate::U_INFO)
-							<span class="delta olive"><b>информация изменилась</b></span>
+							<b class="delta olive">информация изменилась</b>
 @elseif ($update->type == \Ankh\PageUpdate::U_MOVED)
-							<span class="delta blue"><b>перенесено</b></span>
+							<b class="delta blue">перенесено</b>
 @elseif ($update->type == \Ankh\PageUpdate::U_DIFF)
-							@if($update->delta != 0)<span class="delta green"><b>{{diff_size($update->delta)}}</b></span>@endif
+							{!! $update->diffString('<b class="delta :color">:delta</b>', ['red', 'green']) !!}
 @else
-							<span class="delta"><b>{{ $update->changed }}</b></span>
+							<b class="delta">{{ $update->changed }}</b>
 @endif
+							@admin()
+								@i-menu(right)
+									@m-item('common.delete', route('updates.destroy', $update) )
+								@endmenu
+							@endadmin
 							<span class="link time">{{$update->created_at}}</span>
 						</div>
 					</div>

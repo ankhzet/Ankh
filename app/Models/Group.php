@@ -12,6 +12,10 @@
 			return $this->hasMany('Ankh\Page');
 		}
 
+		public function absoluteLink() {
+			return $this->link ? $this->author->absoluteLink() . '/' . trim($this->link, '/') : null;
+		}
+
 		public function peekPages($amount, &$delta) {
 			$paginator = $this->pages()->take($amount)->orderBy('updated_at', 'desc');
 			$delta = $paginator->count() - $amount;

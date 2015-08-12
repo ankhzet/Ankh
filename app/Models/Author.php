@@ -13,6 +13,10 @@
 			return $this->hasMany('Ankh\Page');
 		}
 
+		public function absoluteLink() {
+			return '/' . trim($this->link, '/');
+		}
+
 		public function collumn($value = null) {
 			if ($value !== null)
 				$this->filterCollumn = $value;

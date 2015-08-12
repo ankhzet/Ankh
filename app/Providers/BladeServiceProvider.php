@@ -67,16 +67,14 @@ class BladeServiceProvider extends ServiceProvider {
 		Blade::extend(function($view, $compiler) {
 			return preg_replace_callback($this->openMatcherPattern('samlib'), function($matches) {
 				static $rel = 0;
-				$keys = explode(',', $matches[4]);
-				$r = [];
-				foreach ($keys as $key)
-					$r[] = 'trim(' . trim($key) . '->link, \'/\')';
-
-				$relative = count($r) ? '\'/\'.' . join('.\'/\'.', $r) : '';
+				$entity = trim($matches[4]);
 				$var = '$_relative_' . (++$rel);
-				$link = '<span class="link samlib">'
-				. '<?php echo \'<a href="\' . \URL::to(\'http://samlib.ru\'.(' . $var . '=(' . $relative . '))) . \'" target="_blank">\' . ' . $var . ' . \'</a>\'; ?>'
-				. '</span>';
+
+				$link = "<?php if ({$var} = ({$entity}->absoluteLink())) : echo '"
+				. "<span class=\"link samlib\">"
+				. "<a href=\"http://samlib.ru'. {$var} . '\" target=\"_blank\">' . {$var} . '</a>"
+				. "</span>'; endif ?>";
+
 				return $link;
 			}, $view);
 		});

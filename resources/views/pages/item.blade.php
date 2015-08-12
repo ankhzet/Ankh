@@ -14,7 +14,7 @@
 									@endmenu
 								@endadmin
 							</span>
-							@samlib($page->author, $page)
+							@samlib($page)
 						</div>
 						<div class="text">{{$page->annotation}}
 						</div>

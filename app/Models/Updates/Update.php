@@ -34,6 +34,17 @@ class Update extends Entity {
 		return $entity;
 	}
 
+	public function diffString($format = ':delta', $colors = []) {
+		if (!$this->delta)
+			return '';
+
+		$delta = diff_size($this->delta);
+		$str = str_replace(':delta', $delta, $format);
+		if ($colors)
+			$str = str_replace(':color', $colors[$delta >= 0], $str);
+		return $str;
+	}
+
 	protected function getPivoted($column) {
 		if (!$this->cached_pivot) {
 			if (!$this->id)

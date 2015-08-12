@@ -13,6 +13,10 @@
 			return $this->belongsTo('Ankh\Group');
 		}
 
+		public function absoluteLink() {
+			return $this->author->absoluteLink() . '/' . trim($this->link, '/');
+		}
+
 		public function resolver() {
 			return with(new PageResolver)->setPage($this);
 		}

@@ -17,7 +17,7 @@
 						<a href="{{ route('authors.show', $author = $updates->authorOrigin($aid)) }}">{{$author->fio}}</a>
 					</div>
 			@foreach ($authored as $update)
-					@include('updates.item', ['update' => $update])
+					@include('updates.item', ['update' => $update, 'last' => $update == last($authored)])
 			@endforeach
 				</div>
 		@endforeach

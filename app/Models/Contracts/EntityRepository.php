@@ -12,6 +12,8 @@ interface EntityRepository {
 
 	public function find($id, $columns = array('*'));
 
+	public function findEvenTrashed($id);
+
 	public function updateWithIdAndInput($id, array $input);
 
 	public function destroy($id);

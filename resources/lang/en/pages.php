@@ -58,4 +58,13 @@ return array(
 		'profile' => 'Profile',
 		),
 
+	'rss' => array(
+		'description' => 'Ankh RSS feeder',
+
+		'updates' => 'Updates',
+		'author' => 'Updates of author &amp;laquo;:param&amp;raquo;',
+		'group' => 'Updates of group &amp;laquo;:param&amp;raquo;',
+		'page' => 'Updates of page &amp;laquo;:param&amp;raquo;',
+		),
+
 	);

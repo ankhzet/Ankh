@@ -3,7 +3,7 @@
 @section('title')<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a> - <a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
 @stop
 @section('title-plain'){{$author->fio}} - {{$group->title}}@stop
-@section('rss')group={{$group->id}}@stop
+@section('rss')group/{{$group->id}}@stop
 
 @section('moderation')
 @admin()
@@ -24,7 +24,7 @@
 							@endmenu
 						</span>
 						<span class="link date">{{$author->updated_at->ago()}}</span>
-						@if($group->link) @samlib($author, $group) @endif
+						@samlib($group)
 					</div>
 
 					<br /><br />

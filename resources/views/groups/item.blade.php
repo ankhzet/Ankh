@@ -3,7 +3,7 @@
 						<span class="head">
 							<a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
 						</span>
-						@samlib($group->author, $group)
+						@samlib($group)
 					</div>
 					<div class="text">
 						{{$group->annotation}}

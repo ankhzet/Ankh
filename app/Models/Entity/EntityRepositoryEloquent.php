@@ -1,10 +1,12 @@
 <?php namespace Ankh\Entity;
 
+use Config;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use Ankh\Contracts\EntityRepository as EntityRepositoryContract;
 
 use Ankh\Contracts\Filter;
 use Ankh\Contracts\OrderingDescriptor;
-use Config;
 
 class EntityRepositoryEloquent implements EntityRepositoryContract {
 
@@ -34,6 +36,17 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 
 	public function find($id, $columns = array('*')) {
 		return $this->model->withTrashed()->findOrFail($id, $columns);
+	}
+
+	public function findEvenTrashed($id) {
+		$model = $this->model();
+
+		$entity = $model->newQuery()->where('id', $id)->withTrashed()->first();
+
+		if (!$entity)
+			throw (new ModelNotFoundException)->setModel(get_class($model));
+
+		return $entity;
 	}
 
 	public function updateWithIdAndInput($id, array $input) {

@@ -8,15 +8,21 @@ use Ankh\Feeds\Feed;
 use Ankh\Facades\FeedChanelsFacade;
 use Ankh\Feeds\FeedChanels;
 
+use Ankh\Feeds\UpdatesFeedChanel;
 class FeedServiceProvider extends ServiceProvider {
 
 	public function register() {
+		$this->app['feedcommonchanel'] = $this->app->share(function($app) {
+			return new UpdatesFeedChanel();
+		});
+
 		$this->registerFacade('Feed', FeedFacade::class, $this->app->share(function($app) {
 			return new Feed();
 		}));
 
 		$this->registerFacade('FeedChanels', FeedChanelsFacade::class, $this->app->share(function($app) {
 			$c = new FeedChanels();
+			$c->register($app['feedcommonchanel']);
 			return $c;
 		}));
 	}

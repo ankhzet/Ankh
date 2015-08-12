@@ -59,6 +59,7 @@ return array(
 		),
 
 	'rss' => array(
+		'description' => 'Ankh RSS feeder',
 		),
 
 	);

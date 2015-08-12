@@ -159,6 +159,8 @@ return [
         Jenssegers\Date\DateServiceProvider::class,
 
         Roumen\Feed\FeedServiceProvider::class,
+
+        Ankh\Providers\FeedServiceProvider::class,
     ],
 
     /*

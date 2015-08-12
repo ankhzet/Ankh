@@ -20,11 +20,11 @@
 			return $this->filterCollumn;
 		}
 
-		protected function updateType() {
+		public function updateType() {
 			return AuthorUpdate::TYPE;
 		}
 
-		protected function updateClass() {
+		public function updateClass() {
 			return AuthorUpdate::class;
 		}
 

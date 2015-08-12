@@ -15,22 +15,45 @@ class Update extends Entity {
 	public $timestamps = ['created_at'];
 
 	protected $cached_pivot;
-	protected $cached_entity;
+	protected $cached_related = [];
 
 	public function entity() {
-		if (!$this->cached_entity) {
-			$this->cached_entity = $this->belongsToMany($this->entityClass(), 'entity_update', 'update_id', 'entity_id')
+		$type = $this->updateType();
+		$id = $this->entityId();
+
+		$entity = StaticCache::cached($type, $id);
+
+		if (!$entity) {
+			$entity = $this->belongsToMany($this->entityClass(), 'entity_update', 'update_id', 'entity_id')
 			->withPivot(['r_type'])
-			->where('entity_update.r_type', $this->updateType())->first();
+			->where('entity_update.r_type', $type)->withTrashed()->first();
+
+			StaticCache::cached($type, $id, $entity);
 		}
-		return $this->cached_entity;
+
+		return $entity;
 	}
 
 	protected function getPivoted($column) {
-		if (!$this->cached_pivot)
+		if (!$this->cached_pivot) {
+			if (!$this->id)
+				return 0;
+
 			$this->cached_pivot = \DB::table('entity_update')->where('update_id', $this->id)->first(['r_type', 'entity_id']);
+		}
 
 		return $this->cached_pivot->{$column};
+	}
+
+	public function newQuery() {
+		$query = parent::newQuery();
+
+		if ((!($type = $this->updateType())))
+			return $query;
+
+		return $query->join('entity_update', function ($query) use ($type) {
+			return $query->on('update_id', '=', 'id');
+		})->where('r_type', $type);
 	}
 
 	public function updateType() {
@@ -59,20 +82,80 @@ class Update extends Entity {
 
 	public function __call($method, $args) {
 		if (Str::startsWith($method, 'related')) {
-			$method = lcfirst(substr($method, 7));
-			if (method_exists($this, $method))
-				return $this->$method($args);
+			$property = lcfirst(substr($method, 7));
 
-			$entity = $this->entity();
-			try {
-				return $entity->{$method};
-			} catch (Exception $e) {
+			if (!isset($this->cached_related[$property])) {
+				$type = null;
+				$related = null;
+				$id = 0;
+				$cached = null;
+				$entity = null;
+
+				if (($type = StaticCache::map($property)) != null) {
+					$entity = $this->entity();
+
+					if ($entity && array_search($property, get_object_vars($entity)) !== false) {
+						$id = intval($entity->{"{$property}_id"});
+						if (!$id) {
+							if ($entity->updateType() == $type) {
+								$related = $cached = $entity;
+								$id = $entity->id;
+							}
+						}
+
+						if (!$related)
+							$related = $cached = StaticCache::cached($type, $id);
+					}
+				}
+
+				if (!$related) {
+					if (method_exists($this, $property))
+						$related = $this->$property($args);
+				}
+
+				if (!$related) {
+					$related = with($entity ?: $this->entity())->{$property};
+				}
+
+				if ($related && !$cached) {
+					$type = ($type !== null) ? $type : $related->getModel()->updateType();
+					StaticCache::map($property, $type);
+					$id = $id ?: ($related ? $related->id : 0);
+					StaticCache::cached($type, $id, $related);
+				}
+
+				$this->cached_related[$property] = $related;
 			}
 
-			return null;
+			return $this->cached_related[$property];
 		}
 
 		return parent::__call($method, $args);
 	}
+
+}
+
+
+class StaticCache {
+
+	protected static $cache = [];
+	protected static $mapping = [];
+
+	public static function map($property, $type = null) {
+		if ($type !== null)
+			return self::$mapping[$property] = $type;
+
+		return isset(self::$mapping[$property]) ? self::$mapping[$property] : null;
+	}
+
+	public static function cached($k1, $k2, $value = null) {
+		if ($value !== null)
+			self::$cache[$k1][$k2] = $value;
+		else
+			$value = isset(self::$cache[$k1]) ? isset(self::$cache[$k1][$k2]) ? self::$cache[$k1][$k2] : null : null;
+
+		return $value;
+	}
+
 
 }

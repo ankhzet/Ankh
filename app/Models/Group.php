@@ -18,11 +18,11 @@
 			return $paginator->get();
 		}
 
-		protected function updateType() {
+		public function updateType() {
 			return GroupUpdate::TYPE;
 		}
 
-		protected function updateClass() {
+		public function updateClass() {
 			return GroupUpdate::class;
 		}
 

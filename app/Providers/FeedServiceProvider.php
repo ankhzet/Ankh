@@ -9,11 +9,27 @@ use Ankh\Facades\FeedChanelsFacade;
 use Ankh\Feeds\FeedChanels;
 
 use Ankh\Feeds\UpdatesFeedChanel;
+use Ankh\Feeds\AuthorFeedChanel;
+use Ankh\Feeds\GroupFeedChanel;
+use Ankh\Feeds\PageFeedChanel;
+
 class FeedServiceProvider extends ServiceProvider {
 
 	public function register() {
 		$this->app['feedcommonchanel'] = $this->app->share(function($app) {
 			return new UpdatesFeedChanel();
+		});
+
+		$this->app['feedauthorchanel'] = $this->app->share(function($app) {
+			return new AuthorFeedChanel();
+		});
+
+		$this->app['feedgroupchanel'] = $this->app->share(function($app) {
+			return new GroupFeedChanel();
+		});
+
+		$this->app['feedpagechanel'] = $this->app->share(function($app) {
+			return new PageFeedChanel();
 		});
 
 		$this->registerFacade('Feed', FeedFacade::class, $this->app->share(function($app) {
@@ -23,6 +39,9 @@ class FeedServiceProvider extends ServiceProvider {
 		$this->registerFacade('FeedChanels', FeedChanelsFacade::class, $this->app->share(function($app) {
 			$c = new FeedChanels();
 			$c->register($app['feedcommonchanel']);
+			$c->register($app['feedauthorchanel']);
+			$c->register($app['feedgroupchanel']);
+			$c->register($app['feedpagechanel']);
 			return $c;
 		}));
 	}
@@ -48,4 +67,3 @@ class FeedServiceProvider extends ServiceProvider {
 	}
 
 }
-

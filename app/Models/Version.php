@@ -3,7 +3,7 @@
 class Version {
 
 	protected $entity;
-	protected $timestamp;
+	protected $time;
 
 	public function setEntity($entity) {
 		$this->entity = $entity;
@@ -14,15 +14,18 @@ class Version {
 	}
 
 	public function timestamp() {
-		return $this->timestamp;
+		return $this->time ? $this->time->timestamp : 0;
 	}
 
 	public function setTimestamp($timestamp) {
-		$this->timestamp = $timestamp;
+		if (is_object($timestamp))
+			$this->time = $timestamp;
+		else
+			$this->time = \Carbon\Carbon::createFromTimestamp($timestamp);
 	}
 
 	public function encode() {
-		return \Carbon\Carbon::createFromTimestamp($this->timestamp)->format('d-m-Y/H-i-s');
+		return $this->time->format('d-m-Y+H-i-s');
 	}
 
 	public function __toString() {

@@ -17,9 +17,9 @@
 		}
 
 		public function peekPages($amount, &$delta) {
-			$paginator = $this->pages()->take($amount)->orderBy('updated_at', 'desc');
+			$paginator = $this->pages()->take($amount);
 			$delta = $paginator->count() - $amount;
-			return $paginator->get();
+			return $paginator->orderBy('updated_at', 'desc')->get();
 		}
 
 		public function updateType() {

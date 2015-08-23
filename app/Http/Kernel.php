@@ -29,6 +29,7 @@ class Kernel extends HttpKernel
         'auth' => \Ankh\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Ankh\Http\Middleware\RedirectIfAuthenticated::class,
+        'subdomens' => \Ankh\Http\Middleware\Subdomens::class,
     ];
 }
 

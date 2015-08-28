@@ -99,7 +99,7 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 	}
 
 	public function filter($name) {
-		return $this->filters[$name];
+		return isset($this->filters[$name]) ? $this->filters[$name] : null;
 	}
 
 	public function filters() {

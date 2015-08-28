@@ -16,3 +16,12 @@ function diff_size($kilobytes, $dec = 0) {
 
 	return $size;
 }
+
+function view_excludes($exclude) {
+	$result = [];
+	foreach ($exclude as $key => $value)
+		if ($value !== null)
+			$result[] = $key;
+
+	return $result;
+}

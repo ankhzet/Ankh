@@ -25,6 +25,7 @@
 	});
 
 
+Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{author}'], function () {
 		Route::get('chronology', ['uses' => 'AuthorsController@getChronology', 'as' => 'authors.chronology']);
@@ -66,6 +67,7 @@
 		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
 		return $version;
 	});
+});
 
 	Route::get('rss/{chanel?}/{id?}', [function(Request $request) {
 		$chanel = FeedChanels::resolve($request);

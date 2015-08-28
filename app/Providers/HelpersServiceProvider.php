@@ -5,7 +5,8 @@ use Illuminate\Support\ServiceProvider;
 class HelpersServiceProvider extends ServiceProvider
 {
 	protected $helpers = [
-		'view'
+		'view',
+        'common'
 	];
 
     /**

@@ -21,7 +21,7 @@
 
 							@i-menu()
 								@m-item('pages.pages.list', route('authors.pages.index', $author))
-								@m-item('pages.updates.chronology', route('authors.chronology', $author))
+								@m-item('pages.updates.chronology', route('authors.updates.index', $author))
 								@m-item('pages.updates.check', route('authors.check', $author))
 							@endmenu
 						</span>

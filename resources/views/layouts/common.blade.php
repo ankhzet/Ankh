@@ -12,7 +12,7 @@
 		{!! asset_link('less/style.less') !!}
 
 	</head>
-	<body class="{{Request::segments(0)[0]}}-page">
+	<body class="{{ uri_slug() }}-page">
 
 	<div class="wrapper">
 		<header>

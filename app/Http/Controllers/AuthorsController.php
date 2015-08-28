@@ -80,10 +80,6 @@ class AuthorsController extends RestfulController {
 		return $this->_update($request, pick_arg(Author::class));
 	}
 
-	public function getChronology(Author $author) {
-
-	}
-
 	public function getCheck(Author $author) {
 
 	}

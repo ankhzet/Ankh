@@ -26,6 +26,14 @@ function view_excludes($exclude) {
 	return $result;
 }
 
+function uri_slug() {
+	$segments = Request::segments(0);
+	if (isset($segments[0]))
+		return $segments[0];
+
+	return 'home';
+}
+
 function common_title() {
 	$picked = null;
 	$route = Request::route();

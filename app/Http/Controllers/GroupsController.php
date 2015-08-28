@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-use Ankh\Http\Requests;
+use Ankh\Http\Requests\GroupRequest;
 
 use Ankh\Author;
 use Ankh\Group;
@@ -46,8 +46,8 @@ class GroupsController extends RestfulController {
 	 *
 	 * @return Response
 	 */
-	public function store() {
-
+	public function store(GroupRequest $request) {
+		return parent::_store($request);
 	}
 
 	/**
@@ -83,16 +83,13 @@ class GroupsController extends RestfulController {
 	}
 
 	/**
-	 * Remove the specified group entity from storage.
+	 * Update the specified group entity in storage.
 	 *
 	 * @param  Group $group
 	 * @return Response
 	 */
-	public function destroy(Group $group) {
-		if ($group->delete())
-			return self::plain('Deleted');
-		else
-			throw new Exception("Deletion failed");
+	public function update(GroupRequest $request) {
+		return $this->_update($request, pick_arg(Group::class));
 	}
 
 	public function getChronology(Author $author) {

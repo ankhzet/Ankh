@@ -56,6 +56,9 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::bind('pages', function ($id) {
 		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
 	});
+	Route::bind('updates', function ($id) {
+		return \App::make(\Ankh\Contracts\UpdateRepository::class)->find($id);
+	});
 	Route::bind('version', function ($date) {
 		$version = new \Ankh\Version();
 		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));

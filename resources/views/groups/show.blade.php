@@ -20,6 +20,7 @@
 					<div class="title">
 						<span class="head">
 							@i-menu()
+								@m-item('pages.pages.list', route('groups.pages.index', $group) )
 								@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
 							@endmenu
 						</span>

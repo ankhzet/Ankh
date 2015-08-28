@@ -7,8 +7,8 @@
 @section('moderation')
 @admin()
 @i-menu(admin)
-	@m-item('common.edit', route('updates.edit', $group) )
-	@m-delete('common.delete', route('updates.destroy', $group) )
+	@m-item('common.edit', route('updates.edit', $update) )
+	@m-delete('common.delete', route('updates.destroy', $update) )
 @endmenu
 @endadmin
 @stop
@@ -17,12 +17,7 @@
 
 				<div class="cnt-item page">
 					<div class="title">
-						<span class="head">
-							@i-menu()
-								@m-item('pages.updates.chronology', route('updates.show', $update) )
-							@endmenu
-						</span>
-						<span class="link date">{{$update->created_at->ago()}}</span>
+						<span class="link date">{{with($update->created_at ?: \Date::now())->ago()}}</span>
 					</div>
 				</div>
 

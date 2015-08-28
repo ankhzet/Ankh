@@ -47,7 +47,8 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 	- [ ] Author entity admin-UI
 	- [x] Authors listing page
 	- [x] Author info page
-	- [ ] Author submit page
+	- [x] Author submit page
+	- [x] Author edit page
 	- [x] Author-related updates page
 
 - [x] Group entity
@@ -55,6 +56,7 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 	- [x] Groups listing page
 		- [x] Author-groups listing page
 	- [x] Group info page
+	- [x] Group edit page
 	- [x] Group-related updates page
 
 - [x] Page entity
@@ -63,8 +65,9 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 		- [x] Author-pages listing page
 		- [x] Group-pages listing page
 	- [x] Page info page
+	- [x] Page edit page
 	- [x] Page-related updates page
-	- [] Page versions page
+	- [ ] Page versions page
 		- [ ] Page version view
 		- [ ] Page version diff
 		- [ ] Page version download
@@ -85,10 +88,10 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 	- [ ] Cron command
 		- [ ] Cron command admin-UI
 
-- [ ] REST'ful service API
-	- [ ] Author API
-	- [ ] Group API
-	- [ ] Page API
+- [x] REST'ful service API
+	- [x] Author API
+	- [x] Group API
+	- [x] Page API
 	- [ ] Pages collection API
 	- [ ] Update API
 	- [ ] Update watch API
@@ -101,3 +104,4 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 - 0.2 Basic UI
 - 0.3 Basic Updates functionality implementation
 - 0.4 Added RSS feeds
+- 0.5 Basic forms

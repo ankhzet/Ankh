@@ -5,7 +5,7 @@
 		protected $guarded = ['id'];
 
 		public function author() {
-			return $this->belongsTo('Ankh\Author');
+			return $this->belongsTo('Ankh\Author')->withTrashed();
 		}
 
 		public function pages() {

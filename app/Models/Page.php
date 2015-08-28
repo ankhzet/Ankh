@@ -6,11 +6,11 @@
 		protected $fillable = ['title', 'link', 'annotation', 'size', 'author_id', 'group_id'];
 
 		public function author() {
-			return $this->belongsTo('Ankh\Author');
+			return $this->belongsTo('Ankh\Author')->withTrashed();
 		}
 
 		public function group() {
-			return $this->belongsTo('Ankh\Group');
+			return $this->belongsTo('Ankh\Group')->withTrashed();
 		}
 
 		public function absoluteLink() {

@@ -1,0 +1,124 @@
+/* popup form */
+
+.up-back, .up-form {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.8);
+	opacity: 0.8;
+}
+
+.up-form {
+	top: -5%;
+	width: 50%;
+	min-width: 400px;
+	height: auto;
+	opacity: 1.0;
+
+	@background: darken(@background-color, 10%);
+	background: @background;
+	border: 1px solid #fff;
+	round-border(5px);
+
+	margin: 25% 25%;
+	box-shadow: 0 0 15px #000, 0 0 10px #000, 0 0 10px #000, 0 0 5px #000;
+	-webkit-box-shadow: 0 0 15px #000, 0 0 10px #000, 0 0 10px #000, 0 0 5px #000;
+
+	color: @dark-font-color;
+
+	&.dialog {
+		width: 40%;
+		margin: 25% 30%;
+	}
+
+	.contents {
+		padding: 5px;
+	}
+
+	.title {
+		display: none;
+		padding: 5px 5px 0 5px;
+		text-align: center;
+		color: lighten(@dark-font-color, 10%);
+		font-weight: bold;
+		text-shadow: 0 1px 1px #fff;
+	}
+
+	.ctls {
+		border: 1px solid #fff;
+		round-border(3px);
+		padding: 10px 5px;
+		text-align: right;
+		margin: -1px;
+		clear: both;
+
+		@c-background: lighten(@background, 20%);
+		background-color: @c-background;
+
+		.button {
+			margin: 1px 0 1px 3px;
+			padding: 4px 15px;
+
+			@b-background: darken(@c-background, 20%);
+			@b-color: darken(@b-background, 60%);
+			@border-color: #aaa;
+
+			background: @b-background;
+			color: @b-color;
+
+			border: 1px solid @border-color;
+			round-border(4px);
+
+			text-decoration: none;
+			font-weight: bold;
+			text-shadow: 0 1px 1px #fff;
+
+			&.disabled {
+				color: lighten(@b-color, 50%);
+				background-color: @c-background;
+				border-color: darken(@c-background, 10%);
+				cursor: default;
+
+				&:hover {
+					border-color: darken(@c-background, 15%);
+					color: darken(lighten(@b-color, 50%), 5%);
+				}
+			}
+
+			&:hover {
+				background: white;
+				border-color: darken(@border-color, 10%);
+				color: @dark-font-color;
+			}
+		}
+
+
+	}
+
+	.banners-list {
+		margin: 5px;
+		border: 1px solid #aaa;
+		round-border(4px);
+		background: #fff;
+
+		li {
+			list-style: none;
+			display: inline;
+
+			img {
+				width: 23%;
+				margin: 5px 1% 0 1%;
+			}
+		}
+	}
+
+	input, textarea {
+		width: 97%;
+		margin-left: 1%;
+	}
+
+}

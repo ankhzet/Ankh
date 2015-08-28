@@ -72,6 +72,14 @@
 
 	{!! asset_link('js/jquery.js') !!}
 	{!! asset_link('js/common.js') !!}
+	{!! asset_link('js/upform.js') !!}
 
+@if ($message = Session::get('message'))
+	<script language="javascript">
+		$(function() {
+			show_message('{{ common_title() }}', '{!! urlencode($message) !!}');
+		});
+	</script>
+@endif
 	</body>
 </html>

@@ -12,12 +12,19 @@ use Ankh\Contracts\PageRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
 use PageUtils;
-class PagesController extends Controller {
-	const PAGES_PER_PAGE = 10;
+
+class PagesController extends RestfulController {
 	protected $m;
+
+	protected $filters = ['letter', 'author', 'group'];
+	protected $filtersMapping = ['author' => 'authors', 'group' => 'groups'];
 
 	public function __construct(PageRepository $pages, Breadcrumbs $breadcrumbs) {
 		$this->m = $pages;
+	}
+
+	protected function repository() {
+		return $this->m;
 	}
 
 	/**
@@ -25,47 +32,15 @@ class PagesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request, Author $author, Group $group) {
-		$isAjax = $request->ajax();
+	public function index() {
+		$pages = parent::index();
 
-		$this->m->addRelationFilter('author', $author->id);
-		$this->m->addRelationFilter('group', $group->id);
-		$this->m->addLetterFilter($request->get('letter'));
-		$this->m->applyFilters();
-		if (!$isAjax)
-			$letters = $this->m->lettersUsage();
+		if (self::isApiCall())
+			return response()->json($pages);
 
-		$this->m->order();
+		$exclude = $this->hasFilters($this->filters);
 
-		$pages = $this->m->paginate(self::PAGES_PER_PAGE);
-
-		if ($isAjax)
-			return $pages;
-
-		$this->m->appendFiltersToPaginator($pages);
-
-		$exclude = [];
-		if ($author->id) $exclude[] = 'author';
-		if ($group->id) $exclude[] = 'group';
-
-		return view('pages.index', compact('author', 'group', 'pages', 'letters', 'exclude'));
-	}
-
-	/**
-	 * Show the form for creating a new page entity.
-	 *
-	 * @return Response
-	 */
-	public function create() {
-	}
-
-	/**
-	 * Store a newly created page entity in storage.
-	 *
-	 * @return Response
-	 */
-	public function store() {
-
+		return $this->viewIndex(compact('pages', 'exclude'));
 	}
 
 	/**
@@ -74,11 +49,13 @@ class PagesController extends Controller {
 	 * @param  Page $page
 	 * @return Response
 	 */
-	public function show(Author $author, Group $group, Page $page) {
-		$author = $page->author;
-		$group = $page->group;
-		$reader = PageUtils::contents($page->resolver());
-		return view('pages.show', compact('author', 'group', 'page', 'reader'));
+	public function show() {
+		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
+		$exclude = view_excludes(['author' => $author, 'group' => $group]);
+
+		$content = PageUtils::contents($page->resolver());
+
+		return $this->viewShow(compact('page', 'content', 'exclude'));
 	}
 
 	/**
@@ -87,29 +64,16 @@ class PagesController extends Controller {
 	 * @param  Page $page
 	 * @return Response
 	 */
-	public function edit(Page $page) {
+	public function edit($page) {
 
 	}
 
 	/**
 	 * Update the specified page entity in storage.
 	 *
-	 * @param  Page $page
+	 * @param  PageRequest $request
 	 * @return Response
 	 */
-	public function update(Page $page) {
-
-	}
-
-	/**
-	 * Remove the specified page entity from storage.
-	 *
-	 * @param  Page $page
-	 * @return Response
-	 */
-	public function destroy(Page $page) {
-
-	}
 
 	public function getVersions(Page $page) {
 	}

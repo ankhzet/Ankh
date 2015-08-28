@@ -1,67 +1,40 @@
-@extends('layouts.common')
+@extends('entities.edit', ['entity' => $group, 'route' => [!$group->exists ? "authors.groups.store" : "authors.groups.update", $group->author, $group]])
 
-@section('content')
-
-{!! Form::model($group, ['route' => ['groups.update', $group], 'method' => 'patch'] ) !!}
-{{-- {!! Form::hidden('_method', 'patch') !!} --}}
-<div class="edit">
-	<div class="header">
-		<span style="position: absolute; float: right; color: gray;">
-			{!! Form::checkbox('deleted', 1, $group->deleted_at !== null, ['class' => 'field', 'id' => 'deleted']) !!}
-			{!! Form::label('deleted', \Lang::get('common.deleted')) !!}
-		</span>
-		<div>
-			@lang('common.edit'): {{$group->title}}
-		</div>
-	</div>
+@section('form.content')
 
 	<div class="option">
 		<div class="label">
 			{!! Form::label('author', \Lang::get('pages.authors.author') . ':') !!}
 		</div>
-		{!! Form::label('', $group->author->fio, ['class' => 'field label']) !!}
+		{!! HTML::link(route('authors.show', $group->author), $group->author->fio, ['class' => 'field label', 'target' => '_blank']) !!}
 	</div>
 
 	<div class="option">
 		<div class="label">
 			{!! Form::label('title', \Lang::get('pages.groups.group') . ':') !!}
 		</div>
-		{!! Form::text('title', null, ['placeholder' => 'group title', 'class' => 'field']) !!}
-	</div>
-
-	<div class="option">
-		<div class="label">{!! Form::label(\Lang::get('common.created-updated') . ':') !!}</div>
-		{!! Form::input('datetime', 'updated_at', null, ['class' => 'field half']) !!}
-		{!! Form::input('datetime', 'created_at', null, ['disabled', 'class' => 'field half']) !!}
+		{!! Form::text('title', $group->title, ['placeholder' => 'group title', 'class' => 'field']) !!}
 	</div>
 
 	<div class="option">
 		<div class="label">
 			{!! Form::label('link', \Lang::get('common.link') . ':') !!}
 		</div>
-		{!! Form::text('link', null, ['placeholder' => 'group link', 'class' => 'field']) !!}
+		{!! Form::text('link', $group->link, ['placeholder' => 'group link', 'class' => 'field']) !!}
 	</div>
 
 	<div class="option">
 		<div class="label">
 			{!! Form::label('annotation', \Lang::get('common.annotation') . ':') !!}
 		</div>
-		{!! Form::textarea('annotation', null, ['placeholder' => 'group annotation', 'class' => 'field']) !!}
+		{!! Form::textarea('annotation', $group->annotation, ['placeholder' => 'group annotation', 'class' => 'field']) !!}
 	</div>
 
 	<div class="option">
 		<div class="label">
 			{!! Form::label('inline', \Lang::get('common.inline') . ':') !!}
 		</div>
-		{!! Form::checkbox('inline', null, ['class' => 'field']) !!}
+		{!! Form::checkbox('inline', 1, $group->inline, ['class' => 'field']) !!}
 	</div>
-
-	<div class="option">
-		<div class="label">&nbsp;</div>
-		{!! Form::submit() !!}
-	</div>
-
-</div>
-{!! Form::close() !!}
 
 @stop

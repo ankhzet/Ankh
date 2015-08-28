@@ -28,15 +28,11 @@
 Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{author}'], function () {
-		Route::get('chronology', ['uses' => 'AuthorsController@getChronology', 'as' => 'authors.chronology']);
 		Route::get('check', ['uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);
 	});
 
 	Route::resource('groups', 'GroupsController');
-	Route::group(['prefix' => 'groups/{group}'], function () {
-		Route::get('chronology', ['uses' => 'GroupsController@getChronology', 'as' => 'groups.chronology']);
-	});
 
 	Route::resource('pages', 'PagesController');
 	Route::group(['prefix' => 'pages/{pages}'], function () {

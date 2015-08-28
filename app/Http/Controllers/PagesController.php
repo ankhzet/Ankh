@@ -1,8 +1,6 @@
 <?php namespace Ankh\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Ankh\Http\Requests;
+use Ankh\Http\Requests\PageRequest;
 
 use Ankh\Author;
 use Ankh\Group;
@@ -74,6 +72,9 @@ class PagesController extends RestfulController {
 	 * @param  PageRequest $request
 	 * @return Response
 	 */
+	public function update(PageRequest $request) {
+		return $this->_update($request, pick_arg(Page::class));
+	 }
 
 	public function getVersions(Page $page) {
 	}

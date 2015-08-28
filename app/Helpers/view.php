@@ -25,3 +25,27 @@ function view_excludes($exclude) {
 
 	return $result;
 }
+
+function uri_slug() {
+	$segments = Request::segments(0);
+	if (isset($segments[0]))
+		return $segments[0];
+
+	return 'home';
+}
+
+function common_title() {
+	$picked = null;
+	$route = Request::route();
+	if ($route) {
+		$routeName = $route->getName();
+		$page = Lang::get("pages.{$routeName}");
+		if ($page != $routeName)
+			$picked = $page;
+	}
+
+	if ($picked == null)
+		$picked = Lang::get('pages.home');
+
+	return is_array($picked) ? @$picked['index'] ?: first($picked) : $picked;
+}

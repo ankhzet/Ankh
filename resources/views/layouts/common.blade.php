@@ -12,7 +12,7 @@
 		{!! asset_link('less/style.less') !!}
 
 	</head>
-	<body class="{{Request::segments(0)[0]}}-page">
+	<body class="{{ uri_slug() }}-page">
 
 	<div class="wrapper">
 		<header>
@@ -72,6 +72,14 @@
 
 	{!! asset_link('js/jquery.js') !!}
 	{!! asset_link('js/common.js') !!}
+	{!! asset_link('js/upform.js') !!}
 
+@if ($message = Session::get('message'))
+	<script language="javascript">
+		$(function() {
+			show_message('{{ common_title() }}', '{!! urlencode($message) !!}');
+		});
+	</script>
+@endif
 	</body>
 </html>

@@ -41,6 +41,7 @@ $authors = array(
 	'trace-updates' => 'trace updates',
 	'details' => 'details',
 
+	'cant-parse-link' => 'Can\'t parse link',
 	'groups' => $groups,
 	'pages' => $pages,
 	'updates' => $updates,

@@ -32,4 +32,17 @@
 			return AuthorUpdate::class;
 		}
 
+		public static function matchLink($link) {
+			$link = trim(trim(str_replace('\\', '/', $link)), '/');
+
+			if (preg_match('"^./[^/]+$"i', $link, $matches))
+				return $link;
+
+			if (preg_match('"^https?://([^/]+)/(editors/)?(./[^/]+)"i', $link, $matches))
+				if (array_search(strtolower($matches[1]), ['budclub.ru', 'samlib.ru']) !== false)
+					return trim(trim($matches[3]), '/');
+
+			return false;
+		}
+
 	}

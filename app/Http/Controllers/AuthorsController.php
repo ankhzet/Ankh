@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-use Ankh\Http\Requests;
+use Ankh\Http\Requests\AuthorRequest;
 
 use Ankh\Author;
 
@@ -71,21 +71,11 @@ class AuthorsController extends RestfulController {
 	/**
 	* Update the specified author entry in storage.
 	*
-	* @param  Author  $author
+	* @param  AuthorRequest  $request
 	* @return Response
 	*/
-	public function update(Author $author) {
-
-	}
-
-	/**
-	* Remove the specified author entry from storage.
-	*
-	* @param  Author  $author
-	* @return Response
-	*/
-	public function destroy(Author $author) {
-
+	public function update(AuthorRequest $request) {
+		return $this->_update($request, pick_arg(Author::class));
 	}
 
 	public function getChronology(Author $author) {

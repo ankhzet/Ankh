@@ -3,9 +3,7 @@
 	use Illuminate\Http\Request;
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-	Route::any('/', function() { return Redirect::to('/home'); });
-
-	Route::controller('home', 'HomeController', ['anyIndex' => 'home']);
+	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
 
 	Route::controller('password', 'Auth\PasswordController');
 
@@ -25,17 +23,14 @@
 	});
 
 
+Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{author}'], function () {
-		Route::get('chronology', ['uses' => 'AuthorsController@getChronology', 'as' => 'authors.chronology']);
 		Route::get('check', ['uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);
 	});
 
 	Route::resource('groups', 'GroupsController');
-	Route::group(['prefix' => 'groups/{group}'], function () {
-		Route::get('chronology', ['uses' => 'GroupsController@getChronology', 'as' => 'groups.chronology']);
-	});
 
 	Route::resource('pages', 'PagesController');
 	Route::group(['prefix' => 'pages/{pages}'], function () {
@@ -61,17 +56,14 @@
 	Route::bind('pages', function ($id) {
 		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
 	});
+	Route::bind('updates', function ($id) {
+		return \App::make(\Ankh\Contracts\UpdateRepository::class)->find($id);
+	});
 	Route::bind('version', function ($date) {
 		$version = new \Ankh\Version();
 		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
 		return $version;
 	});
+});
 
-	Route::get('rss/{chanel?}/{id?}', [function(Request $request) {
-		$chanel = FeedChanels::resolve($request);
-
-		if (!$chanel)
-			throw new NotFoundHttpException("RSS chanel not found");
-
-		 return Feed::make($chanel)->render();
-	}, 'as' => 'rss']);
+	Route::get('rss/{chanel?}/{id?}', ['uses' => 'HomeController@getRSS', 'as' => 'rss']);

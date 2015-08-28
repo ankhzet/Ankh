@@ -1,18 +1,11 @@
 <?php namespace Ankh\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Ankh\Http\Requests;
-
 use Ankh\Entity;
-use Ankh\Author;
-use Ankh\Group;
-use Ankh\Page;
 
 use Ankh\Contracts\UpdateRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
-class UpdatesController extends Controller {
+class UpdatesController extends RestfulController {
 	const UPDATES_PER_PAGE = 15;
 	protected $m;
 
@@ -25,8 +18,9 @@ class UpdatesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request, Entity $entity) {
-		if ($entity->id)
+	public function index() {
+		$entity = pick_arg(Entity::class);
+		if ($entity)
 			$this->m->setEntity($entity);
 
 		$updates = $this->m->paginate(self::UPDATES_PER_PAGE);
@@ -34,46 +28,8 @@ class UpdatesController extends Controller {
 		return view('updates.index', compact('updates'));
 	}
 
-	/**
-	 * Display the specified update entity.
-	 *
-	 * @param  Update $update
-	 * @return Response
-	 */
-	public function show(Update $update) {
-		return view('updates.show', compact('update'));
+	protected function innerRedirect($action, $entity = null) {
+		return parent::innerRedirect('index', $entity);
 	}
 
-	/**
-	 * Show the form for editing the specified update entity.
-	 *
-	 * @param  Update $update
-	 * @return Response
-	 */
-	public function edit(Update $update) {
-
-	}
-
-	/**
-	 * Update the specified update entity in storage.
-	 *
-	 * @param  Update $update
-	 * @return Response
-	 */
-	public function update(Update $update) {
-
-	}
-
-	/**
-	 * Remove the specified update entity from storage.
-	 *
-	 * @param  Uodate $update
-	 * @return Response
-	 */
-	public function destroy(Update $update) {
-		if ($update->delete())
-			return Redirect::back(302)->withMessage('Deleted');
-		else
-			throw new Exception("Deletion failed");
-	}
 }

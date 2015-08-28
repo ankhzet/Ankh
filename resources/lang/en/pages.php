@@ -7,11 +7,15 @@ $updates = array(
 	'check' => 'check new',
 	'today' => 'today',
 	'yesterday' => 'yesterday',
+
+	'no-updates' => 'No updates',
 	);
 
 $pages = array(
 		'index' => 'Pages',
 		'show' => '{:title}',
+		'create' => 'Add',
+		'edit' => 'Edit',
 
 		'updates' => $updates,
 
@@ -24,7 +28,9 @@ $pages = array(
 $groups = array(
 		'index' => 'Groups',
 		'group' => 'Group',
+		'create' => 'Add',
 		'show' => '{:title}',
+		'edit' => 'Edit',
 
 		'pages' => $pages,
 		'updates' => $updates,
@@ -38,8 +44,12 @@ $authors = array(
 	'author' => 'Author',
 	'create' => 'Add',
 	'edit' => 'Edit',
+
 	'trace-updates' => 'trace updates',
 	'details' => 'details',
+
+	'cant-parse-link' => 'Can\'t parse link',
+	'already-has' => 'Author is already in DB',
 
 	'groups' => $groups,
 	'pages' => $pages,

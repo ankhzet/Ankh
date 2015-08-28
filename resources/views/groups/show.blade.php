@@ -20,7 +20,8 @@
 					<div class="title">
 						<span class="head">
 							@i-menu()
-								@m-item('pages.updates.chronology', route('groups.chronology', $group) )
+								@m-item('pages.pages.list', route('groups.pages.index', $group) )
+								@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
 							@endmenu
 						</span>
 						<span class="link date">{{$author->updated_at->ago()}}</span>

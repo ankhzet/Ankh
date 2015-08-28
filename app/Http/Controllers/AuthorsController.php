@@ -2,19 +2,26 @@
 
 use Illuminate\Http\Request;
 
-use Ankh\Http\Requests;
+use Ankh\Http\Requests\AuthorRequest;
+use Ankh\Http\Requests\AuthorCreateRequest;
 
 use Ankh\Author;
 
 use Ankh\Contracts\AuthorRepository;
 use Ankh\Crumbs as Breadcrumbs;
+use Ankh\Http\Requests\AdminRoleRequest;
 
-class AuthorsController extends Controller {
-	const AUTHORS_PER_PAGE = 20;
+class AuthorsController extends RestfulController {
 	protected $m;
+
+	protected $filters = ['letter'];
 
 	public function __construct(AuthorRepository $authors, Breadcrumbs $crumbs) {
 		$this->m = $authors;
+	}
+
+	protected function repository() {
+		return $this->m;
 	}
 
 	/**
@@ -22,42 +29,23 @@ class AuthorsController extends Controller {
 	*
 	* @return Response
 	*/
-	public function index(Request $request) {
-		$isAjax = $request->ajax();
+	public function index() {
+		$authors = parent::index();
 
-		$this->m->addLetterFilter($request->get('letter'));
-		$this->m->applyFilters();
-		if (!$isAjax)
-			$letters = $this->m->lettersUsage();
+		if (self::isApiCall())
+			return response()->json($authors);
 
-		$this->m->order();
-
-		$authors = $this->m->paginate(self::AUTHORS_PER_PAGE);
-
-		if ($isAjax)
-			return $authors;
-
-		$this->m->appendFiltersToPaginator($authors);
-
-		return view('authors.index', compact('authors', 'letters'));
-	}
-
-	/**
-	* Show the form for creating a new author entry.
-	*
-	* @return Response
-	*/
-	public function create() {
-
+		return $this->viewIndex(compact('authors'));
 	}
 
 	/**
 	* Store a newly created author entry in storage.
 	*
+	* @param  AuthorCreateRequest $request
 	* @return Response
 	*/
-	public function store() {
-
+	public function store(AuthorCreateRequest $request) {
+		return $this->_store($request);
 	}
 
 	/**
@@ -66,8 +54,9 @@ class AuthorsController extends Controller {
 	* @param  Author  $author
 	* @return Response
 	*/
-	public function show(Author $author) {
-		return view('authors.show', compact('author'));
+	public function show() {
+		$author = pick_arg(Author::class);
+		return $this->viewShow(compact('author'));
 	}
 
 	/**
@@ -76,32 +65,19 @@ class AuthorsController extends Controller {
 	* @param  Author  $author
 	* @return Response
 	*/
-	public function edit(Author $author) {
-
+	public function edit() {
+		$author = pick_arg(Author::class) ?: new Author;
+		return $this->viewEdit(compact('author'));
 	}
 
 	/**
 	* Update the specified author entry in storage.
 	*
-	* @param  Author  $author
+	* @param  AuthorRequest  $request
 	* @return Response
 	*/
-	public function update(Author $author) {
-
-	}
-
-	/**
-	* Remove the specified author entry from storage.
-	*
-	* @param  Author  $author
-	* @return Response
-	*/
-	public function destroy(Author $author) {
-
-	}
-
-	public function getChronology(Author $author) {
-
+	public function update(AuthorRequest $request) {
+		return $this->_update($request, pick_arg(Author::class));
 	}
 
 	public function getCheck(Author $author) {

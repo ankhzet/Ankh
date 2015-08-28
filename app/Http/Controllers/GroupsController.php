@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-use Ankh\Http\Requests;
+use Ankh\Http\Requests\GroupRequest;
 
 use Ankh\Author;
 use Ankh\Group;
@@ -10,12 +10,18 @@ use Ankh\Group;
 use Ankh\Contracts\GroupRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
-class GroupsController extends Controller {
-	const GROUPS_PER_PAGE = 5;
+class GroupsController extends RestfulController {
 	protected $m;
+
+	protected $filters = ['letter', 'author'];
+	protected $filtersMapping = ['author' => 'authors'];
 
 	public function __construct(GroupRepository $groups, Breadcrumbs $breadcrumbs) {
 		$this->m = $groups;
+	}
+
+	protected function repository() {
+		return $this->m;
 	}
 
 	/**
@@ -23,33 +29,16 @@ class GroupsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request, Author $author) {
-		$isAjax = $request->ajax();
+	public function index() {
+		$groups = parent::index();
 
-		$this->m->addRelationFilter('author', $author->id);
-		$this->m->addLetterFilter($request->get('letter'));
-		$this->m->applyFilters();
-		if (!$isAjax)
-			$letters = $this->m->lettersUsage();
+		if (self::isApiCall())
+			return response()->json($pages);
 
-		$this->m->order();
+		$exclude = $this->hasFilters($this->filters);
 
-		$groups = $this->m->paginate(self::GROUPS_PER_PAGE);
-
-		if ($isAjax)
-			return $groups;
-
-		$this->m->appendFiltersToPaginator($groups);
-
-		return view('groups.index', compact('author', 'groups', 'letters'));
-	}
-
-	/**
-	 * Show the form for creating a new group entity.
-	 *
-	 * @return Response
-	 */
-	public function create() {
+		$author = pick_arg(Author::class);
+		return $this->viewIndex(compact('groups', 'exclude', 'author'));
 	}
 
 	/**
@@ -57,8 +46,8 @@ class GroupsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store() {
-
+	public function store(GroupRequest $request) {
+		return parent::_store($request);
 	}
 
 	/**
@@ -67,9 +56,10 @@ class GroupsController extends Controller {
 	 * @param  Group $group
 	 * @return Response
 	 */
-	public function show(Group $group) {
+	public function show() {
+		$group = pick_arg(Group::class);
 		$author = $group->author;
-		return view('groups.show', compact('author', 'group'));
+		return $this->viewShow(compact('author', 'group'));
 	}
 
 	/**
@@ -78,8 +68,18 @@ class GroupsController extends Controller {
 	 * @param  Group $group
 	 * @return Response
 	 */
-	public function edit(Group $group) {
-		return view('groups.edit', compact('group'));
+	public function edit() {
+		$group = pick_arg(Group::class) ?: new Group;
+		if (!$group->author) {
+			$author = pick_arg(Author::class);
+
+			if (!$author)
+				throw new \Exception('Group can be created only if author is specified');
+
+			$group->author = $author;
+		}
+
+		return $this->viewEdit(compact('group'));
 	}
 
 	/**
@@ -88,28 +88,8 @@ class GroupsController extends Controller {
 	 * @param  Group $group
 	 * @return Response
 	 */
-	public function update(Request $request, Group $group) {
-
-		if ($group->trashed() && !intval($request->get('deleted')))
-			$group->restore();
-
-		if ($group->update(array_except($request->input(), 'deleted')))
-			return Redirect::to(route('groups.show', $group));
-		else
-			;
-	}
-
-	/**
-	 * Remove the specified group entity from storage.
-	 *
-	 * @param  Group $group
-	 * @return Response
-	 */
-	public function destroy(Group $group) {
-		if ($group->delete())
-			return self::plain('Deleted');
-		else
-			throw new Exception("Deletion failed");
+	public function update(GroupRequest $request) {
+		return $this->_update($request, pick_arg(Group::class));
 	}
 
 	public function getChronology(Author $author) {

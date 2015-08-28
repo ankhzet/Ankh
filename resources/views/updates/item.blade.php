@@ -29,7 +29,7 @@
 @endif
 							@admin()
 								@i-menu(right)
-									@m-item('common.delete', route('updates.destroy', $update) )
+									@m-delete('common.delete', route('updates.destroy', $update) )
 								@endmenu
 							@endadmin
 							<span class="link time">{{$update->created_at}}</span>

@@ -15,7 +15,8 @@ trait LetterFilterTrait {
 	}
 
 	public function lettersUsage() {
-		return $this->letterFilter()->lettersUsage($this->model(), $this->filters());
+		$filter = $this->letterFilter();
+		return $filter ? $filter->lettersUsage($this->model(), $this->filters()) : [];
 	}
 
 }

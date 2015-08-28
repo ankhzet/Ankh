@@ -29,6 +29,12 @@ class Crumbs {
 
 			$parts = explode('.', $routeName);
 
+			if (last($parts) == 'edit') {
+				array_pop($parts);
+				array_push($parts, '!');
+				array_push($parts, 'edit');
+			}
+
 			$parent = null;
 			while ($part = array_shift($parts)) {
 
@@ -46,10 +52,10 @@ class Crumbs {
 				$specifier = null;
 				switch ($part) {
 					case 'show':
+					case 'edit':
 						if (!$this->lastIs('index'))
 							$this->pushBreadcrumb($this->traversed($resolved, 'index'), $specific);
 					case 'create':
-					case 'edit':
 					case 'delete':
 						$specifier = array_shift($specifiers);
 						$specific[] = $specifier;
@@ -65,10 +71,14 @@ class Crumbs {
 				$parent = $current;
 			}
 
+			$unique = [];
 			$parent = null;
 			foreach ($this->crumbs as $route) {
+				if (array_search($route[0], $unique) !== false)
+					continue;
+
 				$this->pushRoute($breadcrumbs, $parent, $route[0], $route[1]);
-				$parent = $route[0];
+				$unique[] = $parent = $route[0];
 			}
 
 		});
@@ -84,7 +94,7 @@ class Crumbs {
 		if ($this->routeExists($current)) {
 			$label = $this->breadcrumbLabel($current, last($specific));
 
-			$route = route($current, $specific);
+			$route = route($current, array_filter($specific));
 			$breadcrumbs->push($label, $route);
 		} else
 			throw new \Exception("Route [{$current}] don't exists");
@@ -106,9 +116,15 @@ class Crumbs {
 		return $this->lastPushedBreadcrumb()[0];
 	}
 
-	function lastIs($action) {
-		$action = ".{$action}";
-		return substr($this->lastPushedRoute(), -strlen($action)) == $action;
+	function lastIs($actions) {
+		$actions = is_array($actions) ? $actions : func_get_args();
+		foreach ($actions as $arg) {
+			$action = ".{$arg}";
+			if (substr($this->lastPushedRoute(), -strlen($action)) == $action)
+				return $arg;
+		}
+
+		return false;
 	}
 
 	function traversed($route, $action = 'index') {
@@ -126,8 +142,9 @@ class Crumbs {
 		$solved = $route ?: static::HOME_ROUTE;
 
 		if (!$this->routeExists($solved)) {
-			if ($this->lastIs('index'))
-				$solved = $this->traversed($this->lastPushedRoute(), 'show');
+			$traverse = ['index' => 'show', 'show' => 'edit'];
+			if ($t = $this->lastIs(array_keys($traverse)))
+				$solved = $this->traversed($this->lastPushedRoute(), @$traverse[$t] ?: 'show');
 			else
 				$solved = "{$solved}.index";
 		}

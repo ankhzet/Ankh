@@ -1,5 +1,5 @@
-@section('title')@lang('pages.home')@stop
-@section('title-plain')@lang('pages.home')@stop
+@section('title'){{ common_title() }}@stop
+@section('title-plain'){{ common_title() }}@stop
 
 		<title>@yield('title-plain') - @lang('common.site')</title>
 

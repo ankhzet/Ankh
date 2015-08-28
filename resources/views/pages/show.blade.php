@@ -1,7 +1,7 @@
 @extends('layouts.common')
 
-@section('title')<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a> - <a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>@stop
-@section('title-plain'){{$author->fio}}. {{$group->title}}: {{$page->title}}@stop
+@section('title')@kept(author)<a href="{{ route('authors.show', $page->author) }}">{{$page->author->fio}}</a> - @endkept<a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>@stop
+@section('title-plain'){{$page->author->fio}}. {{$page->group->title}}: {{$page->title}}@stop
 @section('rss')page/{{$page->id}}@stop
 
 @section('moderation')
@@ -13,17 +13,12 @@
 @endadmin
 @stop
 
-@section('reader')
-{!!$reader!!}
-@stop
-
 @section('content')
-
 
 <div class="page">
   <div class="text reader">
     <div class="pre">
-      @yield('reader')
+      {!!$content!!}
     </div>
     <div class="terminator"></div>
   </div>

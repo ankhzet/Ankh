@@ -49,6 +49,16 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 		return $entity;
 	}
 
+	public function updateEvenTrashed($model, $data) {
+		array_forget($data, $model::UPDATED_AT);
+
+		if (!$model->exists)
+			$model = $model->newQuery()->where('id', $model->id)->withTrashed();
+
+		// dd($model, $data);
+		return $model->update($data) !== false;
+	}
+
 	public function updateWithIdAndInput($id, array $input) {
 		$entry = $this->model->findOrFail($id);
 		return $entry->update($input);

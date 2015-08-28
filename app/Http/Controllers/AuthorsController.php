@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 
 use Ankh\Http\Requests\AuthorRequest;
+use Ankh\Http\Requests\AuthorCreateRequest;
 
 use Ankh\Author;
 
@@ -40,10 +41,11 @@ class AuthorsController extends RestfulController {
 	/**
 	* Store a newly created author entry in storage.
 	*
+	* @param  AuthorCreateRequest $request
 	* @return Response
 	*/
-	public function store() {
-
+	public function store(AuthorCreateRequest $request) {
+		return $this->_store($request);
 	}
 
 	/**

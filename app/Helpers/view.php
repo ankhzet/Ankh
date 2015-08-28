@@ -25,3 +25,19 @@ function view_excludes($exclude) {
 
 	return $result;
 }
+
+function common_title() {
+	$picked = null;
+	$route = Request::route();
+	if ($route) {
+		$routeName = $route->getName();
+		$page = Lang::get("pages.{$routeName}");
+		if ($page != $routeName)
+			$picked = $page;
+	}
+
+	if ($picked == null)
+		$picked = Lang::get('pages.home');
+
+	return is_array($picked) ? @$picked['index'] ?: first($picked) : $picked;
+}

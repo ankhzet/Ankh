@@ -51,9 +51,9 @@ class PagesController extends RestfulController {
 		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$content = PageUtils::contents($page->resolver());
+		$text = PageUtils::contents($page->resolver());
 
-		return $this->viewShow(compact('page', 'content', 'exclude'));
+		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}
 
 	/**

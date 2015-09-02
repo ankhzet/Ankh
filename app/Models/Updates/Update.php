@@ -64,24 +64,25 @@ class Update extends Entity {
 		if (is_string($change))
 			$change = ['a' => $change, 'old' => null, 'new' => null];
 
-		if (!isset($change['a']))
-			$change['a'] = 'any';
-
 		if ($replacements)
 			if (!($change = $replacements($change)))
 				return '';
 
 		if (!$format) {
 			$class = strtolower(class_basename($this));
-			$attr = @$change['a'] ?: 'any';
 			$types = [self::U_ADDED => 'add', self::U_DELETED => 'delete'];
 			$type = @$types[$this->type] ?: 'change';
-			$path = ["updates.{$attr}", "updates.{$class}.{$type}.{$attr}"];
+
+			$path = [$class, $type];
+			if ($attr = @$change['a'])
+				$path[] = $attr;
+
 			while ($path) {
-				if (Lang::has($key = array_pop($path)))
+				if (Lang::has($key = "updates." . join('.', $path)))
 					break;
 				else
 					$key = null;
+				array_shift($path);
 			}
 
 			$format = Lang::get($key ?: "updates.change");

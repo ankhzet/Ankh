@@ -1,7 +1,10 @@
 <?php
 
 return array(
+	'add' => 'added to DB',
+	'delete' => 'removed from DB',
 	'change' => 'changed [:a]: :old -> :new',
+
 	'annotation' => 'annotation changed',
 	'authorupdate' => array(
 		'change' => array (

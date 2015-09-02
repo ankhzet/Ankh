@@ -28,6 +28,17 @@ class UpdatesController extends RestfulController {
 		return view('updates.index', compact('updates'));
 	}
 
+	/**
+	 * Display the specified page entity.
+	 *
+	 * @param  Page $page
+	 * @return Response
+	 */
+	public function show() {
+		$update = pick_arg(\Ankh\Update::class);
+		return $this->viewShow(compact('update'));
+	}
+
 	protected function innerRedirect($action, $entity = null) {
 		return parent::innerRedirect('index', $entity);
 	}

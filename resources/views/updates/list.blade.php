@@ -17,7 +17,7 @@
 @if($author = $updates->authorOrigin($aid))
 						<a href="{{ route('authors.show', $author = $updates->authorOrigin($aid)) }}">{{$author->fio}}</a>
 @else
-						Unknown author@if($aid) (ID: {{ $aid }})@endif
+						Unknown author @if($aid) (ID: {{ $aid }})@endif
 @endif
 					</div>
 			@foreach ($authored as $update)

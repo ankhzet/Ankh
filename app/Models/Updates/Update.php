@@ -33,7 +33,7 @@ class Update extends Entity {
 
 		$entity = StaticCache::cached($type, $id);
 
-		if (!$entity) {
+		if ($type && !$entity) {
 			$entity = $this->belongsToMany($this->entityClass(), 'entity_update', 'update_id', 'entity_id')
 			->withPivot(['r_type'])
 			->where('entity_update.r_type', $type)->withTrashed()->first();
@@ -117,6 +117,10 @@ class Update extends Entity {
 				return 0;
 
 			$this->cached_pivot = \DB::table('entity_update')->where('update_id', $this->id)->first(['r_type', 'entity_id']);
+			if (!$this->cached_pivot) {
+				debug("Err get pivot for " . $this->entityClass() . " $this->id");
+				return 0;
+			}
 		}
 
 		return $this->cached_pivot->{$column};
@@ -191,7 +195,8 @@ class Update extends Entity {
 				}
 
 				if (!$related) {
-					$related = with($entity ?: $this->entity())->{$property};
+					if ($entity ?: $entity = $this->entity())
+						$related = $entity->{$property};
 				}
 
 				if ($related && !$cached) {

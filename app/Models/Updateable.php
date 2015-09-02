@@ -8,6 +8,8 @@ class Updateable extends Entity {
 
 	const DELETED_AT = 'deleted_at';
 
+	const RENAME_FIELD = 'title';
+
 	protected static function boot() {
 		parent::boot();
 
@@ -43,6 +45,7 @@ class Updateable extends Entity {
 
 	protected function infoUpdateCapture() {
 		return [
+			static::RENAME_FIELD => Update::U_RENAMED,
 		];
 	}
 

@@ -2,6 +2,8 @@
 
 	class Author extends Updateable {
 
+		const RENAME_FIELD = 'fio';
+
 		protected $filterCollumn = 'fio';
 		protected $guarded = ['id'];
 

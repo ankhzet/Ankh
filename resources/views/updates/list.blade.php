@@ -14,7 +14,11 @@
 		@foreach ($updates->authorly($groupped) as $aid => $authored)
 				<div class="cnt-item" style="overflow: hidden;">
 					<div class="title">
+@if($author = $updates->authorOrigin($aid))
 						<a href="{{ route('authors.show', $author = $updates->authorOrigin($aid)) }}">{{$author->fio}}</a>
+@else
+						Unknown author @if($aid) (ID: {{ $aid }})@endif
+@endif
 					</div>
 			@foreach ($authored as $update)
 					@include('updates.item', ['update' => $update, 'last' => $update == last($authored)])

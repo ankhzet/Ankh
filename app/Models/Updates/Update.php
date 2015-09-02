@@ -2,20 +2,30 @@
 
 use Illuminate\Support\Str;
 use BadMethodCallException;
+use Lang;
 
 class Update extends Entity {
 
 	const U_ADDED   = 1;
 	const U_DELETED = 2;
 	const U_RENAMED = 3;
+	const U_INFO    = 4;
 
 	protected $table = 'updates';
 	protected $guarded = ['id'];
-	protected $fillable = ['type', 'value', 'delta', 'change'];
+	protected $fillable = ['type', 'change'];
 	public $timestamps = ['created_at'];
 
 	protected $cached_pivot;
 	protected $cached_related = [];
+
+	public function getChangeAttribute($value) {
+		return ($value != null) ? (@json_decode($value, true) ?: $value) : null;
+	}
+
+	public function setChangeAttribute($value) {
+		$this->attributes['change'] = ($value != null) ? json_encode($value, JSON_UNESCAPED_UNICODE) : null;
+	}
 
 	public function entity() {
 		$type = $this->updateType();
@@ -23,7 +33,7 @@ class Update extends Entity {
 
 		$entity = StaticCache::cached($type, $id);
 
-		if (!$entity) {
+		if ($type && !$entity) {
 			$entity = $this->belongsToMany($this->entityClass(), 'entity_update', 'update_id', 'entity_id')
 			->withPivot(['r_type'])
 			->where('entity_update.r_type', $type)->withTrashed()->first();
@@ -34,15 +44,65 @@ class Update extends Entity {
 		return $entity;
 	}
 
-	public function diffString($format = ':delta', $colors = []) {
-		if (!$this->delta)
-			return '';
+	public function diffString($format = '{:delta}', $colors = []) {
+		return $this->changeString($format, function ($change) use ($colors) {
+			$delta = intval(@$change['new']) - intval(@$change['old']);
+			if (!$delta)
+				return false;
 
-		$delta = diff_size($this->delta);
-		$str = str_replace(':delta', $delta, $format);
-		if ($colors)
-			$str = str_replace(':color', $colors[$delta >= 0], $str);
-		return $str;
+			$change['delta'] = diff_size($delta);
+			if ($colors)
+				$change['color'] = $colors[$delta >= 0];
+
+			return $change;
+		});
+	}
+
+	public function changeString($format = null, \Closure $replacements = null) {
+		$change = $this->change;
+
+		if (is_string($change))
+			$change = ['a' => $change, 'old' => null, 'new' => null];
+
+		if ($replacements)
+			if (!($change = $replacements($change)))
+				return '';
+
+		if (!$format) {
+			$class = strtolower(class_basename($this));
+			$types = [self::U_ADDED => 'add', self::U_DELETED => 'delete'];
+			$type = @$types[$this->type] ?: 'change';
+
+			$path = [$class, $type];
+			if ($attr = @$change['a'])
+				$path[] = $attr;
+
+			while ($path) {
+				if (Lang::has($key = "updates." . join('.', $path)))
+					break;
+				else
+					$key = null;
+				array_shift($path);
+			}
+
+			$format = Lang::get($key ?: "updates.change");
+		}
+
+		return preg_replace_callback(['"\{:([\w\d_]+)\}"', '":([\w\d_]+)"'], function ($match) use ($change) {
+			return isset($change[$match[1]]) ? $change[$match[1]] : null;
+		}, $format);
+	}
+
+	public function __toString() {
+		switch ($this->type) {
+		case self::U_ADDED:
+		case self::U_DELETED:
+			return $this->changeString(null, function ($change) {
+				$change['delta'] = $this->diffString('({:delta})');
+				return $change;
+			});
+		}
+		return $this->changeString();
 	}
 
 	public function version() {
@@ -58,6 +118,10 @@ class Update extends Entity {
 				return 0;
 
 			$this->cached_pivot = \DB::table('entity_update')->where('update_id', $this->id)->first(['r_type', 'entity_id']);
+			if (!$this->cached_pivot) {
+				debug("Err get pivot for " . $this->entityClass() . " $this->id");
+				return 0;
+			}
 		}
 
 		return $this->cached_pivot->{$column};
@@ -132,7 +196,8 @@ class Update extends Entity {
 				}
 
 				if (!$related) {
-					$related = with($entity ?: $this->entity())->{$property};
+					if ($entity ?: $entity = $this->entity())
+						$related = $entity->{$property};
 				}
 
 				if ($related && !$cached) {

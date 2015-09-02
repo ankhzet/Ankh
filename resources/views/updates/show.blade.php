@@ -7,7 +7,6 @@
 @section('moderation')
 @admin()
 @i-menu(admin)
-	@m-item('common.edit', route('updates.edit', $update) )
 	@m-delete('common.delete', route('updates.destroy', $update) )
 @endmenu
 @endadmin
@@ -17,6 +16,7 @@
 
 				<div class="cnt-item page">
 					<div class="title">
+						{!! $update !!}
 						<span class="link date">{{with($update->created_at ?: \Date::now())->ago()}}</span>
 					</div>
 				</div>

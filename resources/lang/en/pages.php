@@ -2,6 +2,7 @@
 
 $updates = array(
 	'index' => 'Updates',
+	'show' => 'Update #{:id}',
 
 	'chronology' => 'chronology',
 	'check' => 'check new',

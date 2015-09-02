@@ -75,7 +75,7 @@ class UpdatesPaginator extends LengthAwarePaginator {
 					return $model->newFromBuilder($update->getAttributes());
 			}
 
-			throw new \Exception("Unknown update type [$r_type] for entity class [$class]");
+			// throw new \Exception("Unknown update type [$r_type] for entity class [$class]");
 		}
 
 		return $update;
@@ -99,8 +99,14 @@ class UpdatesPaginator extends LengthAwarePaginator {
 		$idx = 0;
 		foreach ($group as $date => $update) {
 			$author = $update->relatedAuthor();
-			$this->authors[$author->id] = $author;
-			$r[$author->fio . ' ' . $author->id][] = $update;
+			if ($author) {
+				$this->authors[$author->id] = $author;
+				$r[$author->fio . ' ' . $author->id][] = $update;
+			} else {
+				$this->authors[0] = new Author(['fio' => 'Unknown author']);
+				$r['error'][] = $update;
+			}
+
 		}
 		krsort($r);
 		return $r;
@@ -120,7 +126,7 @@ class UpdatesPaginator extends LengthAwarePaginator {
 
 	public function authorOrigin($origin) {
 		preg_match('/(\d+)$/', $origin, $m);
-		return $this->authors[intval($m[1])];
+		return @$this->authors[intval($m[1])];
 	}
 
 }

@@ -38,12 +38,54 @@ class Updateable extends Entity {
 	}
 
 	protected function wasCreated(Closure $callback = null) {
+		$this->newUpdate(Update::U_ADDED, $callback);
+	}
+
+	protected function infoUpdateCapture() {
+		return [
+		];
 	}
 
 	protected function willBeUpdated($dirty) {
+		foreach ($this->infoUpdateCapture() as $field => $type)
+			$this->checkChange(ltrim($field, '-'), $dirty, $type, !(strpos($field, '-') === 0));
 	}
 
 	protected function willBeDeleted(Closure $callback = null) {
+		$this->newUpdate(Update::U_DELETED, $callback);
+	}
+
+	protected function changedAttribute($attribute, array $dirty, $fromNull = false)  {
+		if (!isset($dirty[$attribute]))
+			return false;
+
+		$was = $this->getOriginal($attribute);
+
+		if (!$fromNull && $was == null)
+			return false;
+
+		return ($dirty[$attribute] != $was) ? [$was, $dirty[$attribute]] : false;
+	}
+
+	protected function pickDiff($a, array $dirty, $fromNull = false) {
+		$changed = $this->changedAttribute($a, $dirty, $fromNull);
+
+		if (is_array($changed) && (list($old, $new) = $changed)) {
+			return compact('a', 'old', 'new');
+		}
+
+		return [];
+	}
+
+	public function checkChange($attribute, array $dirty, $type, $capture = true, $fromNull = false) {
+		if ($change = $this->pickDiff($attribute, $dirty, $fromNull)) {
+			$change = $capture ? $change : $attribute;
+			$this->newUpdate($type, function ($update) use ($change) {
+				$update->change = $change;
+			});
+		}
+
+		return !!$change;
 	}
 
 	public function newUpdate($type, Closure $callback = null) {

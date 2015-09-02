@@ -17,6 +17,14 @@ class Update extends Entity {
 	protected $cached_pivot;
 	protected $cached_related = [];
 
+	public function getChangeAttribute($value) {
+		return ($value != null) ? (@json_decode($value, true) ?: $value) : null;
+	}
+
+	public function setChangeAttribute($value) {
+		$this->attributes['change'] = ($value != null) ? json_encode($value, JSON_UNESCAPED_UNICODE) : null;
+	}
+
 	public function entity() {
 		$type = $this->updateType();
 		$id = $this->entityId();

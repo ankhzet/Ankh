@@ -13,7 +13,7 @@ class Update extends Entity {
 
 	protected $table = 'updates';
 	protected $guarded = ['id'];
-	protected $fillable = ['type', 'value', 'delta', 'change'];
+	protected $fillable = ['type', 'change'];
 	public $timestamps = ['created_at'];
 
 	protected $cached_pivot;

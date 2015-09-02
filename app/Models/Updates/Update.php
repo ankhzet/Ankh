@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use BadMethodCallException;
+use Lang;
 
 class Update extends Entity {
 
@@ -43,15 +44,64 @@ class Update extends Entity {
 		return $entity;
 	}
 
-	public function diffString($format = ':delta', $colors = []) {
-		if (!$this->delta)
-			return '';
+	public function diffString($format = '{:delta}', $colors = []) {
+		return $this->changeString($format, function ($change) use ($colors) {
+			$delta = intval(@$change['new']) - intval(@$change['old']);
+			if (!$delta)
+				return false;
 
-		$delta = diff_size($this->delta);
-		$str = str_replace(':delta', $delta, $format);
-		if ($colors)
-			$str = str_replace(':color', $colors[$delta >= 0], $str);
-		return $str;
+			$change['delta'] = diff_size($delta);
+			if ($colors)
+				$change['color'] = $colors[$delta >= 0];
+
+			return $change;
+		});
+	}
+
+	public function changeString($format = null, \Closure $replacements = null) {
+		$change = $this->change;
+
+		if (is_string($change))
+			$change = ['a' => $change, 'old' => null, 'new' => null];
+
+		if (!isset($change['a']))
+			$change['a'] = 'any';
+
+		if ($replacements)
+			if (!($change = $replacements($change)))
+				return '';
+
+		if (!$format) {
+			$class = strtolower(class_basename($this));
+			$attr = @$change['a'] ?: 'any';
+			$types = [self::U_ADDED => 'add', self::U_DELETED => 'delete'];
+			$type = @$types[$this->type] ?: 'change';
+			$path = ["updates.{$attr}", "updates.{$class}.{$type}.{$attr}"];
+			while ($path) {
+				if (Lang::has($key = array_pop($path)))
+					break;
+				else
+					$key = null;
+			}
+
+			$format = Lang::get($key ?: "updates.change");
+		}
+
+		return preg_replace_callback(['"\{:([\w\d_]+)\}"', '":([\w\d_]+)"'], function ($match) use ($change) {
+			return isset($change[$match[1]]) ? $change[$match[1]] : null;
+		}, $format);
+	}
+
+	public function __toString() {
+		switch ($this->type) {
+		case self::U_ADDED:
+		case self::U_DELETED:
+			return $this->changeString(null, function ($change) {
+				$change['delta'] = $this->diffString('({:delta})');
+				return $change;
+			});
+		}
+		return $this->changeString();
 	}
 
 	public function version() {

@@ -39,4 +39,8 @@
 			);
 		}
 
+		public function __toString() {
+			return \HTML::link(route('groups.show', $this), $this->title, ['target' => '_blank']);
+		}
+
 	}

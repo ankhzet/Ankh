@@ -22,4 +22,19 @@ class PageUpdate extends Update {
 		return $query->whereType(self::U_DIFF);
 	}
 
+	public function __toString() {
+		switch ($this->type) {
+		case self::U_DIFF:
+			return $this->diffString('<b class="delta {:color}">{:delta}</b>', ['red', 'green']);
+		case self::U_MOVED:
+			return $this->changeString(null, function ($change) {
+				$g = app(\Ankh\Contracts\GroupRepository::class);
+				$change['new'] = $g->findEvenTrashed(intval($change['new']), ['id', 'title']);
+				$change['old'] = $g->findEvenTrashed(intval($change['old']), ['id', 'title']);
+				return $change;
+			});
+		}
+		return parent::__toString();
+	}
+
 }

@@ -3,7 +3,6 @@
 class PageUpdate extends Update {
 	const TYPE = 3;
 
-	const U_INFO    = 4;
 	const U_DIFF    = 5;
 	const U_MOVED   = 6;
 

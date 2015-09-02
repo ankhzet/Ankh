@@ -70,6 +70,12 @@ class Updateable extends Entity {
 		return ($dirty[$attribute] != $was) ? [$was, $dirty[$attribute]] : false;
 	}
 
+	protected function pickAttr($a, array $dirty = []) {
+		$old = $this->getOriginal($a);
+		$new = @$dirty[$a];
+		return compact('a', 'old', 'new');
+	}
+
 	protected function pickDiff($a, array $dirty, $fromNull = false) {
 		$changed = $this->changedAttribute($a, $dirty, $fromNull);
 

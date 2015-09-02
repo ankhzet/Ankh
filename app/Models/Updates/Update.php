@@ -8,6 +8,7 @@ class Update extends Entity {
 	const U_ADDED   = 1;
 	const U_DELETED = 2;
 	const U_RENAMED = 3;
+	const U_INFO    = 4;
 
 	protected $table = 'updates';
 	protected $guarded = ['id'];

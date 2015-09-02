@@ -47,4 +47,13 @@
 			return false;
 		}
 
+		protected function infoUpdateCapture(array $over = []) {
+			return array_merge_recursive(
+				parent::infoUpdateCapture(),
+				[
+					'link' => Update::U_INFO
+				]
+			);
+		}
+
 	}

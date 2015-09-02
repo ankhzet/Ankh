@@ -38,10 +38,10 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 		return $this->model->withTrashed()->findOrFail($id, $columns);
 	}
 
-	public function findEvenTrashed($id) {
+	public function findEvenTrashed($id, array $attributes = ['*']) {
 		$model = $this->model();
 
-		$entity = $model->newQuery()->where('id', $id)->withTrashed()->first();
+		$entity = $model->newQuery()->where('id', $id)->withTrashed()->first($attributes);
 
 		if (!$entity)
 			throw (new ModelNotFoundException)->setModel(get_class($model));

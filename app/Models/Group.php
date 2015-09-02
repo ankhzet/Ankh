@@ -30,4 +30,17 @@
 			return GroupUpdate::class;
 		}
 
+		protected function infoUpdateCapture(array $over = []) {
+			return array_merge_recursive(
+				parent::infoUpdateCapture(),
+				[
+					'-annotation' => Update::U_INFO,
+				]
+			);
+		}
+
+		public function __toString() {
+			return \HTML::link(route('groups.show', $this), $this->title, ['target' => '_blank']);
+		}
+
 	}

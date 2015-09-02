@@ -2,6 +2,8 @@
 
 	class Author extends Updateable {
 
+		const RENAME_FIELD = 'fio';
+
 		protected $filterCollumn = 'fio';
 		protected $guarded = ['id'];
 
@@ -43,6 +45,15 @@
 					return trim(trim($matches[3]), '/');
 
 			return false;
+		}
+
+		protected function infoUpdateCapture(array $over = []) {
+			return array_merge_recursive(
+				parent::infoUpdateCapture(),
+				[
+					'link' => Update::U_INFO
+				]
+			);
 		}
 
 	}

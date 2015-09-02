@@ -63,7 +63,18 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function edit($page) {
+		$group = pick_arg(Page::class) ?: new Page;
+		if (!$page->group) {
+			$group = pick_arg(Group::class);
 
+			if (!$group)
+				throw new \Exception('Page can be created only if group is specified');
+
+			$page->group = $group;
+			$page->author = $group->author;
+		}
+
+		return $this->viewEdit(compact('page'));
 	}
 
 	/**

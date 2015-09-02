@@ -2,7 +2,7 @@
 
 function pick_arg() {
 	$stack = debug_backtrace(0, 2);
-	$classes = func_get_args();
+	$classes = $stack[0]['args'];
 
 	$vars = [];
 	$args = array_reverse($stack[1]['args']);

@@ -4,6 +4,52 @@ use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
+function wrap($node, callable $wrapper = null) {
+	if ($node instanceof Crawler) {
+		if (!count($node))
+			return [];
+
+		return $node->each(function (Crawler $node) use ($wrapper) {
+			return $wrapper ? $wrapper($node) : $node;
+		});
+
+	}
+
+	if ($wrapper) {
+		$r = [];
+		foreach ($node as $s)
+			$r[] = $wrapper($s);
+
+		$node = $r;
+	}
+
+	return $node;
+}
+
+function firstNode($nodes, callable $filter) {
+	return Arr::first(wrap($nodes), function ($i, Crawler $node) use ($filter) {
+		return $filter($node);
+	});
+}
+
+function firstTag($nodes, $tag) {
+	$tag = strtolower($tag);
+	return firstNode($nodes, function (Crawler $node) use ($tag) {
+		return strtolower($node->nodeName()) == $tag;
+	});
+}
+
+function tag($nodes, $tag) {
+	$tag = strtolower($tag);
+
+	$r = [];
+	foreach (wrap($nodes) as $node)
+		if (strtolower($node->nodeName()) == $tag)
+			$r[] = $node;
+
+	return $r;
+}
+
 class Parser {
 
 	public function parseAuthor($html) {
@@ -14,8 +60,14 @@ class Parser {
 		$infoTbl = $crawler->filter('table')->first();
 
 		$info = $this->authorInfo($infoTbl);
-		$about = trim($infoTbl->nextAll()->filter('font > i')->first()->html());
-		$groups = $this->authorGroups($g = $crawler->filter('j'));
+
+		$font = firstTag($infoTbl->nextAll(), 'font');
+		$i = firstTag($font->children(), 'i');
+
+		$about = trim($i ? $i->html() : null);
+		$groups = $this->authorGroups(wrap($crawler->filter('j'), function ($node) {
+			return tag($node->children(), 'dl');
+		}));
 
 		$info = array_merge($info, $this->authorCredentials($crawler));
 		$info = array_merge($info, ['about' => $about]);
@@ -97,23 +149,19 @@ class Parser {
 		return $result;
 	}
 
-	function authorGroups(Crawler $nodes) {
+	function authorGroups(array $nodes) {
 		$groups = [];
+		$genred = [];
 
-		$nodes->each(function (Crawler $node) use (&$groups) {
+		foreach ($nodes as $node) {
+			$group = $this->authorGroup($node[0]);
+			if ($idx = $group['idx'])
+				$groups[$idx] = $group;
+			else
+				$genred[] = $group;
+		};
 
-			$groupNodes = $node->filter('j')->each(function (Crawler $node) {
-				return $node;
-			});
-
-			foreach ($groupNodes as $node) {
-				$group = $this->authorGroup($node);
-				$groups[$group['idx']] = $group;
-			};
-
-		});
-
-		return $groups;
+		return $groups + $genred;
 	}
 
 	public function parseGroup($html) {
@@ -130,38 +178,43 @@ class Parser {
 	function authorGroup(Crawler $node) {
 		$data = ['link' => ''];
 
-		$p = $node->filter('p>font>b');
-		$p = $p->parents()->each(function (Crawler $node) {
-			return $node;
-		});
-		$p = Arr::first($p, function ($id, $node) {
-			return strtolower($node->nodeName()) == 'p';
-		});
-		$p->filter('a')->each(function (Crawler $node) use (&$data) {
-			if ($name = $node->attr('name'))
-				$data['idx'] = intval(str_replace('gr', '', $name));
+		$p = firstTag($node->filter('p>font>b')->parents(), 'p');
 
-			if ($text = $node->text())
-				$data['title'] = trim($text, ' :');
+		$links = $p->filter('b a');
 
-			if ($link = $node->attr('href'))
-				$data['link'] = $link;
+		$name = firstNode($links, function (Crawler $node) {
+			return trim($node->attr('name')) != '';
 		});
+		$title = firstNode($links, function (Crawler $node) {
+			return trim($node->text()) != '';
+		});
+		$link = firstNode($links, function (Crawler $node) {
+			return trim($node->attr('href')) != '';
+		});
+
+		$data['idx'] = intval(str_replace('gr', '', $name->attr('name')));
+		$data['title'] = trim($title->text(), ' :');
+		$data['link'] = $link ? $link->attr('href') : null;
+
 
 		$about = $node->filter('font i')->first();
 		$data['annotation'] = trim($about->html());
 
 
-		$pages = $node->filter('dl')->each(function (Crawler $node) {
+		$pages = array_filter(wrap(tag($node->children(), 'dl'), function ($node) {
 			return $this->groupPage($node);
-		});
+		}));
 		$data['pages'] = $pages;
 
 		return $data;
 	}
 
-	function groupPage(Crawler $node) {
-		$node = $node->filter('dt')->first();
+	function groupPage(Crawler $node1) {
+		$node = $node1->filter('dt')->first();
+
+		if (!count($node)) {
+			return false;
+		}
 
 		$data = [];
 
@@ -169,10 +222,15 @@ class Parser {
 		$data['link'] = $link->attr('href');
 		$data['title'] = $link->text();
 
-		$data['size'] = intval($node->filter('li>b')->first()->text()) * 1024;
+		$size = $node->filter('li>b')->first();
 
-		if (!$data['size'])
-			$data['size'] = intval($node->filter('li>b')->eq(1)->text()) * 1024;
+		if (!count($size) || !preg_match('"\d+k"i', $size->text())) {
+			$size = $node->filter('li>b')->eq(1);
+			if (!count($size) || !preg_match('"\d+k"i', $size->text())) {
+				dd($node->html());
+			}
+		}
+		$data['size'] = intval($size->text()) * 1024;
 
 		$data['rating'] = (count($b = $node->filter('li>small>b'))) ? $b->text() : '';
 

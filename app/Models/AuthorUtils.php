@@ -39,7 +39,7 @@ class AuthorUtils {
 	}
 
 	function fixHTML($html) {
-		$html = str_replace('</small><p><font', '</j><j><small></small><p><font', $html);
+		$html = str_replace('</small><p><font', '</dl></j><j><dl><p><font', $html);
 		$html = strip_unwanted_tags($html, ['div']);
 		return $html;
 	}
@@ -81,8 +81,10 @@ class AuthorUtils {
 			else
 				$pagesData = $this->check($group);
 
-			if (!is_array($pagesData))
-				dd($pagesData, $group->inline);
+			if (!is_array($pagesData)) {
+				debug($pagesData, $group->inline);
+				continue;
+			}
 
 			$data = array_map(function (&$value) use (&$data) {
 				$value['group'] = $data;

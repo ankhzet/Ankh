@@ -16,11 +16,10 @@
 							</span>
 							@samlib($page)
 						</div>
-						<div class="text">{{$page->annotation}}
-						</div>
+						<div class="text">{!! strlen($a = strip_unwanted_tags($page->annotation, ['font'])) ? $a : "&nbsp;" !!}</div>
 						<ul class="text">
 							<li><a href="{{ route('pages.versions', $page) }}">@lang('pages.pages.all-versions')</a></li>
-							<li><span class="size">{{file_size($page->size * 1024, 1)}}</span></li>
+							<li><span class="size">{{file_size($page->size, 1)}}</span></li>
 @kept(group)
 							<li>@lang('pages.groups.group'):
 								<a href="{{ route('groups.show', $page->group) }}">{{$page->group->title}}</a>

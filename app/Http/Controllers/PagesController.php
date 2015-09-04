@@ -51,9 +51,9 @@ class PagesController extends RestfulController {
 		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$content = PageUtils::contents($page->resolver());
+		$text = PageUtils::contents($page->resolver());
 
-		return $this->viewShow(compact('page', 'content', 'exclude'));
+		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}
 
 	/**
@@ -63,7 +63,18 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function edit($page) {
+		$group = pick_arg(Page::class) ?: new Page;
+		if (!$page->group) {
+			$group = pick_arg(Group::class);
 
+			if (!$group)
+				throw new \Exception('Page can be created only if group is specified');
+
+			$page->group = $group;
+			$page->author = $group->author;
+		}
+
+		return $this->viewEdit(compact('page'));
 	}
 
 	/**

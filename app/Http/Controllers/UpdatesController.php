@@ -1,16 +1,20 @@
 <?php namespace Ankh\Http\Controllers;
 
 use Ankh\Entity;
+use Ankh\Update;
 
 use Ankh\Contracts\UpdateRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
 class UpdatesController extends RestfulController {
-	const UPDATES_PER_PAGE = 15;
 	protected $m;
 
 	public function __construct(UpdateRepository $updates, Breadcrumbs $breadcrumbs) {
 		$this->m = $updates;
+	}
+
+	protected function repository() {
+		return $this->m;
 	}
 
 	/**
@@ -23,19 +27,22 @@ class UpdatesController extends RestfulController {
 		if ($entity)
 			$this->m->setEntity($entity);
 
-		$updates = $this->m->paginate(self::UPDATES_PER_PAGE);
+		$updates = parent::index();
+		if (self::isApiCall())
+			return response()->json($updates);
 
-		return view('updates.index', compact('updates'));
+		$exclude = $this->hasFilters($this->filters);
+
+		return $this->viewIndex(compact('updates', 'exclude'));
 	}
 
 	/**
-	 * Display the specified page entity.
+	 * Display the specified update entity.
 	 *
-	 * @param  Page $page
 	 * @return Response
 	 */
 	public function show() {
-		$update = pick_arg(\Ankh\Update::class);
+		$update = pick_arg(Update::class);
 		return $this->viewShow(compact('update'));
 	}
 

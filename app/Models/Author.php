@@ -16,7 +16,7 @@
 		}
 
 		public function absoluteLink() {
-			return '/' . trim($this->link, '/');
+			return '/' . trim($this->link, '/') . '/';
 		}
 
 		public function collumn($value = null) {

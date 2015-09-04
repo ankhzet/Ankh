@@ -29,8 +29,11 @@ class UpdateRepositoryEloquent extends EntityRepositoryEloquent implements Updat
 		}
 	}
 
+	public function order() {
+	}
+
 	public function paginate($perPage = 15, $columns = array('*')) {
-		$this->model->underlyingQuery()->orderBy('created_at', 'desc');
+		$this->model->underlyingQuery()->orderBy('created_at', 'desc')->orderBy('id', 'desc');
 
 		$perPage = $perPage ?: $this->entriesPerPage();
 		$pageName = 'page';
@@ -103,7 +106,7 @@ class UpdatesPaginator extends LengthAwarePaginator {
 				$this->authors[$author->id] = $author;
 				$r[$author->fio . ' ' . $author->id][] = $update;
 			} else {
-				$this->authors[0] = new Author(['fio' => 'Unknown author']);
+				$this->authors[0] = new \Ankh\Author(['fio' => 'Unknown author']);
 				$r['error'][] = $update;
 			}
 

@@ -74,10 +74,10 @@
 	{!! asset_link('js/common.js') !!}
 	{!! asset_link('js/upform.js') !!}
 
-@if ($message = Session::get('message'))
+@if ($message = session('message'))
 	<script language="javascript">
 		$(function() {
-			show_message('{{ common_title() }}', '{!! urlencode($message) !!}');
+			show_message('@yield('title')', '{!! urlencode($message) !!}');
 		});
 	</script>
 @endif

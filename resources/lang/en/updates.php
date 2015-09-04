@@ -5,10 +5,13 @@ return array(
 	'delete' => 'removed from DB',
 	'change' => 'changed [:a]: :old -> :new',
 
+	'title' => 'renamed from "{:old}" to "{:new}"',
 	'annotation' => 'annotation changed',
+
 	'authorupdate' => array(
 		'change' => array (
-			'fio' => 'author {:old} has changed name to "{:new}"',
+			'fio' => 'author "{:old}" has changed name to "{:new}"',
+			'link' => 'author page moved to [<a href="http://samlib.ru/{:new}">{:new}</a>]',
 			),
 		),
 	'pageupdate' => array(
@@ -20,7 +23,6 @@ return array(
 			),
 		'change' => array (
 			'size' => '{:delta}',
-			'title' => 'renamed from {:old} to {:new}',
 			'group_id' => 'moved from {:old} to {:new}',
 			),
 		),

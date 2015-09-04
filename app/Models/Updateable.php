@@ -31,12 +31,19 @@ class Updateable extends Entity {
 		});
 	}
 
-	protected function diffAttributes() {
+	public function diffAttributes() {
 		$timestamps = [static::CREATED_AT, static::UPDATED_AT, static::DELETED_AT];
 		$original = array_except($this->getOriginal(), $timestamps);
 		$dirty    = array_except($this->getAttributes(), $timestamps);
 
-		return array_diff($dirty, $original);
+		$diff = [];
+		foreach ($dirty as $key => &$value) {
+			if (!isset($original[$key]) || ($original[$key] != $value))
+				$diff[$key] = $value;
+
+		}
+
+		return $diff; //array_diff($dirty, $original);
 	}
 
 	protected function wasCreated(Closure $callback = null) {

@@ -3,6 +3,7 @@
 	class Group extends Updateable {
 
 		protected $guarded = ['id'];
+		protected $fillable = ['title', 'link', 'annotation', 'inline', 'author_id'];
 
 		public function author() {
 			return $this->belongsTo('Ankh\Author')->withTrashed();
@@ -13,7 +14,7 @@
 		}
 
 		public function absoluteLink() {
-			return $this->link ? $this->author->absoluteLink() . '/' . trim($this->link, '/') : null;
+			return $this->link ? '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/') : null;
 		}
 
 		public function peekPages($amount, &$delta) {

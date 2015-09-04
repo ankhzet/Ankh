@@ -14,9 +14,9 @@
 
 			$this->call('RolesTableSeeder');
 			$this->call('UsersTableSeeder');
-			$this->call('AuthorsTableSeeder');
-			$this->call('GroupsTableSeeder');
-			$this->call('PagesTableSeeder');
+			// $this->call('AuthorsTableSeeder');
+			// $this->call('GroupsTableSeeder');
+			// $this->call('PagesTableSeeder');
 		}
 
 	}

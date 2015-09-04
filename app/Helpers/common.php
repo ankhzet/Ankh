@@ -20,3 +20,17 @@ function pick_arg() {
 
 	return (count($classes) > 1) ? $vars : last($vars);
 }
+
+function strip_unwanted_tags($text, $tags = []) {
+	foreach ($tags as $tag) {
+		if (preg_match_all('/<'.$tag.'[^>]*>(.*)<\/'.$tag.'>/iU', $text, $found)) {
+			$text = str_replace($found[0], $found[1], $text);
+		}
+
+		if (preg_match_all('/<'.$tag.'[^>]*\/>/iU', $text, $found))
+			$text = str_replace($found[0], '', $text);
+	}
+
+	return $text;
+
+}

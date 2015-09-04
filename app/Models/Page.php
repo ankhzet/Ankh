@@ -18,7 +18,7 @@
 		}
 
 		public function absoluteLink() {
-			return $this->author->absoluteLink() . '/' . trim($this->link, '/');
+			return '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/');
 		}
 
 		public function resolver() {

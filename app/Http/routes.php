@@ -25,7 +25,7 @@
 
 Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('authors', 'AuthorsController');
-	Route::group(['prefix' => 'authors/{author}'], function () {
+	Route::group(['prefix' => 'authors/{authors}'], function () {
 		Route::get('check', ['uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);
 	});

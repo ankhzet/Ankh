@@ -10,10 +10,6 @@ class AuthorRepositoryEloquent extends EntityRepositoryEloquent implements Autho
 		$this->setModel($model);
 	}
 
-	public function subRepository($id) {
-		throw new Exception(get_class($this) . ' has no subrepositories');
-	}
-
 	public function order() {
 		$this->applyOrdering(new AuthorOrderingDescriptor());
 	}

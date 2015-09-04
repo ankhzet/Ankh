@@ -82,10 +82,34 @@ class AuthorsController extends RestfulController {
 	}
 
 	public function getCheck(Author $author) {
+		$toCheck = session('to_check') ?: [];
+		if (!$toCheck) {
+			$toCheck = Author::all()->pluck(['id'])->all();
+			session()->set('to_check', $toCheck);
+			session()->save();
+		}
+
 		$util = new AuthorUtils;
 		$stats = $util->check($author);
 
-		return view('home', ['content' => json_encode($util->check($author), JSON_UNESCAPED_UNICODE)]);
+		dump($stats);
+
+		$toCheck = array_merge(array_diff($toCheck, [$author->id]), []);
+		session()->set('to_check', $toCheck);
+		session()->save();
+
+		$next = @$toCheck[0];
+
+		$content = 'Pending: ' . join(', ', $toCheck);
+		if ($next) {
+
+			$next = Author::find($next);
+			if ($next) {
+				$content .= '<br/><br/><center>Continue [check ' . \HTML::link(route('authors.check', $next), $next->fio) . ']</center>';
+			}
+		}
+
+		return view('home', compact('content'));
 	}
 
 	public function getTraceUpdates(Author $author) {

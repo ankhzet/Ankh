@@ -37,11 +37,9 @@ class Updateable extends Entity {
 		$dirty    = array_except($this->getAttributes(), $timestamps);
 
 		$diff = [];
-		foreach ($dirty as $key => &$value) {
-			if (!isset($original[$key]) || ($original[$key] != $value))
+		foreach ($dirty as $key => &$value)
+			if (@$original[$key] != $value)
 				$diff[$key] = $value;
-
-		}
 
 		return $diff; //array_diff($dirty, $original);
 	}

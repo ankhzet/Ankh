@@ -21,6 +21,9 @@ class AuthorUtils {
 		if ($data === false || trim($data) == '')
 			return false;
 
+
+		$data = $this->fixHTML($data);
+
 		$class = ucfirst(class_basename($entity));
 
 		$parser = new Parser;
@@ -35,6 +38,12 @@ class AuthorUtils {
 		throw new \Exception('Doesn\'t know, how to parse' . $class . ' html');
 	}
 
+	function fixHTML($html) {
+		$html = str_replace('</small><p><font', '</j><j><small></small><p><font', $html);
+		$html = strip_unwanted_tags($html, ['div']);
+		return $html;
+	}
+
 
 	public function checkAuthor(Author $author, array $data) {
 		$stats = [];
@@ -47,8 +56,10 @@ class AuthorUtils {
 
 		$author->save();
 
-		if ($groups = $this->synkGroups($author, $data['groups']))
+		if ($groups = $this->synkGroups($author, $data['groups'])) {
 			$authors['groups'] = $groups;
+			$authors['id'] = $author->id;
+		}
 
 		if ($authors)
 			$stats['authors'][] = $authors;
@@ -70,15 +81,22 @@ class AuthorUtils {
 			else
 				$pagesData = $this->check($group);
 
-			$pages = array_merge($pages, array_map(function (&$value) use (&$data) {
+			if (!is_array($pagesData))
+				dd($pagesData, $group->inline);
+
+			$data = array_map(function (&$value) use (&$data) {
 				$value['group'] = $data;
 				return $value;
-			}, $pagesData));
+			}, $pagesData);
+
+			$pages = array_merge($pages, $data);
 		}
 
 		if ($pages)
-			if ($pages = with(new PageSynker($group->author))->synk($pages))
+			if ($pages = with(new PageSynker($group->author))->synk($pages)) {
 				$stats['pages'] = $pages;
+				$stats['id'] = $group->id;
+			}
 
 		return $stats;
 	}

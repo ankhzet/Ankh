@@ -83,7 +83,7 @@ class AuthorsController extends RestfulController {
 
 	public function getCheck(Author $author) {
 		$util = new AuthorUtils;
-		return response()->json($util->check($author));
+		return response(json_encode($util->check($author), JSON_UNESCAPED_UNICODE), 200, ['Content-Type' => 'application/json']);
 	}
 
 	public function getTraceUpdates(Author $author) {

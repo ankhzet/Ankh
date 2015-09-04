@@ -55,6 +55,7 @@ $authors = array(
 	'groups' => $groups,
 	'pages' => $pages,
 	'updates' => $updates,
+	'no-authors' => 'No authors',
 	);
 
 return array(

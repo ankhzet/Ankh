@@ -69,6 +69,11 @@ class Synker {
 	}
 
 	protected function log($type, $value) {
+		if (is_array($value))
+			$value = array_filter(array_filter($value, function ($property) {
+				return !is_array($property);
+			}));
+
 		$this->statistics[$type][] = $value;
 	}
 
@@ -78,18 +83,19 @@ class Synker {
 			$entity->{$this->associate}()->associate($this->parent);
 			$entity->save();
 
-			$this->log(static::CREATED, $entity);
+			$this->log(static::CREATED, array_merge(['id' => $entity->id], $data));
 		}
 	}
 
 	function update(Entity $entity, array $data) {
-		if ($this->updateEntity($entity, $data))
-			$this->log(static::UPDATED, $entity);
+		if ($diff = $this->updateEntity($entity, $data)) {
+			$this->log(static::UPDATED, array_merge(['id' => $entity->id], $diff));
+		}
 	}
 
 	function delete(Entity $entity) {
 		if ($this->deleteEntity($entity))
-			$this->log(static::DELETED, $entity);
+			$this->log(static::DELETED, ['id' => $entity->id]);
 	}
 
 	protected function createEntity(array $data) {
@@ -100,7 +106,13 @@ class Synker {
 		$entity = $entity->fill($data);
 		$shouldSave = !!($diff = $entity->diffAttributes());
 
-		return $entity->trashed() ? $entity->restore() : ($shouldSave ? $entity->save() : false);
+		if ($entity->trashed())
+			return $entity->restore() ? ['deleted' => null] : false;
+		else
+			if ($shouldSave)
+				return $entity->save() ? $diff : false;
+			else
+				return false;
 	}
 
 	protected function deleteEntity(Entity $entity) {

@@ -12,7 +12,6 @@ class UpdateTablesForSynks extends Migration
      */
     public function up()
     {
-        Schema::drop('administrators');
         Schema::table('authors', function (Blueprint $table) {
             $table->text('info')->nullable();
          });

@@ -6,6 +6,7 @@ use Ankh\Http\Requests\AuthorRequest;
 use Ankh\Http\Requests\AuthorCreateRequest;
 
 use Ankh\Author;
+use Ankh\AuthorUtils;
 
 use Ankh\Contracts\AuthorRepository;
 use Ankh\Crumbs as Breadcrumbs;
@@ -81,7 +82,8 @@ class AuthorsController extends RestfulController {
 	}
 
 	public function getCheck(Author $author) {
-
+		$util = new AuthorUtils;
+		return response()->json($util->check($author));
 	}
 
 	public function getTraceUpdates(Author $author) {

@@ -1,8 +1,6 @@
-<?php namespace Ankh\Parsing;
+<?php namespace Ankh\Synk\Parsing;
 
 use Symfony\Component\DomCrawler\Crawler;
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 
 function wrap($node, callable $wrapper = null) {
 	if ($node instanceof Crawler) {
@@ -27,7 +25,7 @@ function wrap($node, callable $wrapper = null) {
 }
 
 function firstNode($nodes, callable $filter) {
-	return Arr::first(wrap($nodes), function ($i, Crawler $node) use ($filter) {
+	return array_first(wrap($nodes), function ($i, Crawler $node) use ($filter) {
 		return $filter($node);
 	});
 }

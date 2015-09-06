@@ -1,26 +1,22 @@
-<?php namespace Ankh;
+<?php namespace Ankh\Synk;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
+use Ankh\Synk\Parsing\Parser;
 
-use Ankh\Parsing\Parser;
-use Ankh\Parsing\Fetcher;
+use Ankh\Entity;
+use Ankh\Author;
 
-use Ankh\Synker\GroupSynker;
-use Ankh\Synker\PageSynker;
+use Ankh\Contracts\Synk\Fetch;
 
 class AuthorUtils {
 
 	public function check(Entity $entity) {
 		$link = $entity->absoluteLink();
-		$params = [];
 
-		$fetcher = new Fetcher;
-		$data = $fetcher->pull($link, $params);
+		$fetch = app(Fetch::class);
+		$data = $fetch->pull($link);
 
-		if ($data === false || trim($data) == '')
-			return false;
-
+		if (!$fetch->isOk())
+			throw new CheckError($entity, $fetch->code());
 
 		$data = $this->fixHTML($data);
 
@@ -29,13 +25,14 @@ class AuthorUtils {
 		$parser = new Parser;
 		if (method_exists($parser, $method = "parse{$class}")) {
 			$data = $parser->{$method}($data);
+
 			if (method_exists($this, $method = 'check' . $class)) {
 				return $this->{$method}($entity, $data);
 			} else
 				return $data;
 		}
 
-		throw new \Exception('Doesn\'t know, how to parse' . $class . ' html');
+		throw new CheckError($entity, 'Doesn\'t know, how to parse supplied html');
 	}
 
 	function fixHTML($html) {

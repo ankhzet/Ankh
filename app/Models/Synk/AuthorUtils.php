@@ -25,13 +25,14 @@ class AuthorUtils {
 		$parser = new Parser;
 		if (method_exists($parser, $method = "parse{$class}")) {
 			$data = $parser->{$method}($data);
+
 			if (method_exists($this, $method = 'check' . $class)) {
 				return $this->{$method}($entity, $data);
 			} else
 				return $data;
 		}
 
-		throw new \Exception('Doesn\'t know, how to parse' . $class . ' html');
+		throw new CheckError($entity, 'Doesn\'t know, how to parse supplied html');
 	}
 
 	function fixHTML($html) {

@@ -1,7 +1,5 @@
 <?php namespace Ankh\Synk;
 
-use Illuminate\Support\Arr;
-
 use Ankh\Entity;
 
 class Synker {
@@ -9,6 +7,9 @@ class Synker {
 	const CREATED = 'created';
 	const UPDATED = 'updated';
 	const DELETED = 'deleted';
+	const RESTORED= 'restored';
+
+	const OLD     = '_old';
 
 	protected $parent;
 	protected $attribute;
@@ -56,7 +57,7 @@ class Synker {
 				if ($found |= static::same($entity, $data, $strictMatch)) {
 					$this->update($entity, $this->dataToEntityData($data));
 
-					$unbound = Arr::where($unbound, function ($k, $v) use ($entity) {
+					$unbound = array_where($unbound, function ($k, $v) use ($entity) {
 						return $v != $entity;
 					});
 					break;
@@ -106,13 +107,24 @@ class Synker {
 		$entity = $entity->fill($data);
 		$shouldSave = !!($diff = $entity->diffAttributes());
 
-		if ($entity->trashed())
-			return $entity->restore() ? ['deleted' => null] : false;
-		else
-			if ($shouldSave)
-				return $entity->save() ? $diff : false;
-			else
-				return false;
+		if ($diff) {
+			$old = $entity->getOriginal();
+			$diff[static::OLD] = array_intersect_assoc($old, $diff);
+		}
+
+		if ($entity->trashed()) {
+			if ($entity->restore()) {
+				$diff[static::RESTORED] = true;
+				$shouldSave = false;
+			}
+		}
+
+		$diff = $diff ?: false;
+
+		if ($shouldSave && !$entity->save())
+			$diff = false;
+
+		return $diff;
 	}
 
 	protected function deleteEntity(Entity $entity) {
@@ -124,13 +136,13 @@ class Synker {
 	}
 
 	public static function pick(Entity $entity, array $data) {
-		return Arr::first($data, function ($k, $data) use ($entity) {
+		return array_first($data, function ($k, $data) use ($entity) {
 				return static::same($entity, $data);
 			});
 	}
 
 	public static function select($entities, array $data) {
-		return Arr::first($entities, function ($k, $entity) use ($data) {
+		return array_first($entities, function ($k, $entity) use ($data) {
 				return static::same($entity, $data);
 			});
 	}

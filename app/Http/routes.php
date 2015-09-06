@@ -5,23 +5,26 @@
 
 	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
 
-	Route::controller('password', 'Auth\PasswordController');
-
-	Route::group(['prefix' => 'password', 'namespace' => 'Auth'], function () {
-		Route::get('email', ['uses' => 'PasswordController@getEmail', 'as' => 'password.email']);
-		Route::post('email', ['uses' => 'PasswordController@postEmail', 'as' => 'password.email']);
-		Route::get('reset/{token?}', ['uses' => 'PasswordController@getReset', 'as' => 'password.reset']);
-	});
-
-	Route::controller('auth', 'Auth\AuthController', [
-			'getLogin' => 'login',
-			'getLogout' => 'logout',
+	Route::controller('home', 'HomeController', [
+			'anyIndex' => 'home',
+			'getTermsOfUse' => 'terms-of-use',
 		]);
 
-	Route::get('/auth', function() {
-		return Redirect::to('/user');
-	});
 
+	Route::group(['namespace' => 'Auth'], function () {
+		Route::controller('auth', 'AuthController', [
+			'getLogin' => 'login',
+			'getLogout' => 'logout',
+			]);
+
+		Route::controller('password', 'PasswordController', [
+			'getEmail' => 'password.email',
+			'postEmail' => 'password.email',
+			'getReset' => 'password.reset',
+			'postReset' => 'password.reset',
+			]);
+
+	});
 
 Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('authors', 'AuthorsController');

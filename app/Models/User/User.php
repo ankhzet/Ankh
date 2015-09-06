@@ -35,7 +35,9 @@ class User extends Entity implements AuthenticatableContract, CanResetPasswordCo
 	}
 
 	public function isAdmin() {
-		return $this->roles->contains(Role::find(Role::ADMIN));
+		return \Cache::remember("u_{$this->id}_roles", 5, function () {
+		  return $this->roles->contains(Role::find(Role::ADMIN));
+		 });
 	}
 
 }

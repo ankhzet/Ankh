@@ -70,6 +70,11 @@ return array(
 		'profile' => 'Profile',
 		),
 
+	'password' => array(
+		'email' => 'Pasword resetting form',
+		'reset' => 'Resetting pasword',
+		),
+
 	'rss' => array(
 		'description' => 'Ankh RSS feeder',
 

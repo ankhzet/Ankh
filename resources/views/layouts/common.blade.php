@@ -74,7 +74,7 @@
 	{!! asset_link('js/common.js') !!}
 	{!! asset_link('js/upform.js') !!}
 
-@if ($message = session('message'))
+@if (($message = session('message')) || ($message = session('status')))
 	<script language="javascript">
 		$(function() {
 			show_message('@yield('title')', '{!! urlencode($message) !!}');

@@ -10,13 +10,11 @@
 	use Ankh\Contracts\UpdateRepository;
 	use Ankh\Version;
 
-	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
-
 	Route::controller('home', 'HomeController', [
-			'anyIndex' => 'home',
 			'getTermsOfUse' => 'terms-of-use',
 		]);
 
+	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
 
 	Route::group(['namespace' => 'Auth'], function () {
 		Route::controller('auth', 'AuthController', [

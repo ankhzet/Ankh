@@ -56,7 +56,7 @@ class FeedServiceProvider extends ServiceProvider {
 		$this->app[$resource] = $builder;
 
 		// bind facade alias
-		$this->app->booting(function() use($alias, $class) {
+		$this->app->booting(function() use ($alias, $class) {
 			$loader = \Illuminate\Foundation\AliasLoader::getInstance();
 			$loader->alias($alias, $class);
 		});

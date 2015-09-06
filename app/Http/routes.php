@@ -2,6 +2,13 @@
 
 	use Illuminate\Http\Request;
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+	use Carbon\Carbon;
+
+	use Ankh\Contracts\AuthorRepository;
+	use Ankh\Contracts\GroupRepository;
+	use Ankh\Contracts\PageRepository;
+	use Ankh\Contracts\UpdateRepository;
+	use Ankh\Version;
 
 	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
 
@@ -51,20 +58,20 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('pages.updates', 'UpdatesController');
 
 	Route::bind('authors', function ($id) {
-		return \App::make(\Ankh\Contracts\AuthorRepository::class)->find($id);
+		return App::make(AuthorRepository::class)->find($id);
 	});
 	Route::bind('groups', function ($id) {
-		return \App::make(\Ankh\Contracts\GroupRepository::class)->find($id);
+		return App::make(GroupRepository::class)->find($id);
 	});
 	Route::bind('pages', function ($id) {
-		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
+		return App::make(PageRepository::class)->find($id);
 	});
 	Route::bind('updates', function ($id) {
-		return \App::make(\Ankh\Contracts\UpdateRepository::class)->find($id);
+		return App::make(UpdateRepository::class)->find($id);
 	});
 	Route::bind('version', function ($date) {
-		$version = new \Ankh\Version();
-		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
+		$version = new Version();
+		$version->setTimestamp(Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
 		return $version;
 	});
 });

@@ -7,6 +7,7 @@ use Ankh\Contracts\UpdateRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
 class UpdatesController extends RestfulController {
+	const ENTITIES_PER_PAGE = 40;
 	protected $m;
 
 	public function __construct(UpdateRepository $updates, Breadcrumbs $breadcrumbs) {

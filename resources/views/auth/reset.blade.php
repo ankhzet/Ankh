@@ -7,16 +7,18 @@
 	$e = $errors;
 	function isOk($field) {
 		global $e;
-		return $e->has($field) ? 'error' : '';
+		return $e->has($field) ? ' error' : '';
 	}
 ?>
 
-{!! Form::open(['route' => 'login', 'method' => 'post'] ) !!}
+{!! Form::open(['route' => 'password.reset', 'method' => 'post'] ) !!}
 
-<div class="login">
+{!! Form::hidden('token', $token) !!}
+
+<div class="registraion">
 	<div class="header">
 		<div>
-			{{ trans('common.user-login') }}
+			{{ trans('common.user-reset-password') }}
 		</div>
 	</div>
 
@@ -30,11 +32,10 @@
 		{!! Form::password('password', ['class' => 'field']) !!}
 	</div>
 
-	<div class="option {{isOk('remember')}}">
-		<div class="label">{!! Form::label('remember', trans('common.remember') . ':') !!}</div>
-		{!! Form::checkbox('remember', 1, old('remember'), ['class' => 'field']) !!}
+	<div class="option {{isOk('password_confirmation')}}">
+		<div class="label">{!! Form::label('password_confirmation', trans('common.confirm-password') . ':') !!}</div>
+		{!! Form::password('password_confirmation', ['class' => 'field']) !!}
 	</div>
-
 
 	<div class="option">
 @foreach ($errors->all() as $key => $error)
@@ -44,9 +45,7 @@
 
 	<div class="option">
 		<div class="label">&nbsp;</div>
-		{!! Form::submit(trans('common.login')) !!}
-
-		<a href="{{ route('password.email') }}" class="right">{!! trans('common.forgot-password') !!}</a>
+		{!! Form::submit(trans('common.password-reset')) !!}
 	</div>
 
 </div>

@@ -57,9 +57,10 @@ class GroupsController extends RestfulController {
 	 * @return Response
 	 */
 	public function show() {
-		$group = pick_arg(Group::class);
-		$author = $group->author;
-		return $this->viewShow(compact('author', 'group'));
+		list($author, $group) = pick_arg(Author::class, Group::class);
+		$exclude = view_excludes(['author' => $author]);
+
+		return $this->viewShow(compact('group', 'exclude'));
 	}
 
 	/**

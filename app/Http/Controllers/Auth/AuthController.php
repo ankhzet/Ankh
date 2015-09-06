@@ -22,6 +22,8 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers;
 
+    protected $redirectTo;
+
     /**
      * Create a new authentication controller instance.
      *
@@ -30,6 +32,8 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);
+
+        $this->redirectTo = route('home');
     }
 
     /**
@@ -44,6 +48,7 @@ class AuthController extends Controller
             'name' => 'required|max:255|unique:users',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
+            'agreed' => 'accepted',
         ]);
     }
 
@@ -61,4 +66,5 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
 }

@@ -26,7 +26,7 @@ class RemoveRedundantFromUpdatesTable extends Migration
     public function down()
     {
         Schema::table('updates', function (Blueprint $table) {
-            $table->integer('type');
+            $table->integer('delta');
             $table->integer('value');
             $table->string('change')->change();
         });

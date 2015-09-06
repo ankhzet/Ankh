@@ -15,13 +15,16 @@ class HomeController extends Controller {
 		return view('admin.home');
 	}
 
+	public function getTermsOfUse() {
+	}
+
 	public function getRSS(Request $request) {
 		$chanel = FeedChanels::resolve($request);
 
 		if (!$chanel)
 			throw new NotFoundHttpException("RSS chanel not found");
 
-		 return Feed::make($chanel)->render();
+		return Feed::make($chanel)->render();
 	}
 
 }

@@ -55,10 +55,13 @@ $authors = array(
 	'groups' => $groups,
 	'pages' => $pages,
 	'updates' => $updates,
+	'no-authors' => 'No authors',
 	);
 
 return array(
 	'home' => 'Home',
+
+	'login' => 'Login form',
 
 	'authors' => $authors,
 	'groups' => $groups,
@@ -67,6 +70,11 @@ return array(
 
 	'user' => array(
 		'profile' => 'Profile',
+		),
+
+	'password' => array(
+		'email' => 'Pasword resetting form',
+		'reset' => 'Resetting pasword',
 		),
 
 	'rss' => array(

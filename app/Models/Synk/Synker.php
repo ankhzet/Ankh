@@ -1,6 +1,4 @@
-<?php namespace Ankh\Synker;
-
-use Illuminate\Support\Arr;
+<?php namespace Ankh\Synk;
 
 use Ankh\Entity;
 
@@ -9,6 +7,9 @@ class Synker {
 	const CREATED = 'created';
 	const UPDATED = 'updated';
 	const DELETED = 'deleted';
+	const RESTORED= 'restored';
+
+	const OLD     = '_old';
 
 	protected $parent;
 	protected $attribute;
@@ -56,7 +57,7 @@ class Synker {
 				if ($found |= static::same($entity, $data, $strictMatch)) {
 					$this->update($entity, $this->dataToEntityData($data));
 
-					$unbound = Arr::where($unbound, function ($k, $v) use ($entity) {
+					$unbound = array_where($unbound, function ($k, $v) use ($entity) {
 						return $v != $entity;
 					});
 					break;
@@ -69,6 +70,11 @@ class Synker {
 	}
 
 	protected function log($type, $value) {
+		if (is_array($value))
+			$value = array_filter(array_filter($value, function ($property) {
+				return !is_array($property);
+			}));
+
 		$this->statistics[$type][] = $value;
 	}
 
@@ -78,18 +84,19 @@ class Synker {
 			$entity->{$this->associate}()->associate($this->parent);
 			$entity->save();
 
-			$this->log(static::CREATED, $entity);
+			$this->log(static::CREATED, array_merge(['id' => $entity->id], $data));
 		}
 	}
 
 	function update(Entity $entity, array $data) {
-		if ($this->updateEntity($entity, $data))
-			$this->log(static::UPDATED, $entity);
+		if ($diff = $this->updateEntity($entity, $data)) {
+			$this->log(static::UPDATED, array_merge(['id' => $entity->id], $diff));
+		}
 	}
 
 	function delete(Entity $entity) {
 		if ($this->deleteEntity($entity))
-			$this->log(static::DELETED, $entity);
+			$this->log(static::DELETED, ['id' => $entity->id]);
 	}
 
 	protected function createEntity(array $data) {
@@ -100,7 +107,24 @@ class Synker {
 		$entity = $entity->fill($data);
 		$shouldSave = !!($diff = $entity->diffAttributes());
 
-		return $entity->trashed() ? $entity->restore() : ($shouldSave ? $entity->save() : false);
+		if ($diff) {
+			$old = $entity->getOriginal();
+			$diff[static::OLD] = array_intersect_assoc($old, $diff);
+		}
+
+		if ($entity->trashed()) {
+			if ($entity->restore()) {
+				$diff[static::RESTORED] = true;
+				$shouldSave = false;
+			}
+		}
+
+		$diff = $diff ?: false;
+
+		if ($shouldSave && !$entity->save())
+			$diff = false;
+
+		return $diff;
 	}
 
 	protected function deleteEntity(Entity $entity) {
@@ -112,13 +136,13 @@ class Synker {
 	}
 
 	public static function pick(Entity $entity, array $data) {
-		return Arr::first($data, function ($k, $data) use ($entity) {
+		return array_first($data, function ($k, $data) use ($entity) {
 				return static::same($entity, $data);
 			});
 	}
 
 	public static function select($entities, array $data) {
-		return Arr::first($entities, function ($k, $entity) use ($data) {
+		return array_first($entities, function ($k, $entity) use ($data) {
 				return static::same($entity, $data);
 			});
 	}

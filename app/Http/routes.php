@@ -2,31 +2,41 @@
 
 	use Illuminate\Http\Request;
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+	use Carbon\Carbon;
+
+	use Ankh\Contracts\AuthorRepository;
+	use Ankh\Contracts\GroupRepository;
+	use Ankh\Contracts\PageRepository;
+	use Ankh\Contracts\UpdateRepository;
+	use Ankh\Version;
 
 	Route::any('/', ['uses' => 'HomeController@anyIndex', 'as' => 'home']);
 
-	Route::controller('password', 'Auth\PasswordController');
-
-	Route::group(['prefix' => 'password', 'namespace' => 'Auth'], function () {
-		Route::get('email', ['uses' => 'PasswordController@getEmail', 'as' => 'password.email']);
-		Route::post('email', ['uses' => 'PasswordController@postEmail', 'as' => 'password.email']);
-		Route::get('reset/{token?}', ['uses' => 'PasswordController@getReset', 'as' => 'password.reset']);
-	});
-
-	Route::controller('auth', 'Auth\AuthController', [
-			'getLogin' => 'login',
-			'getLogout' => 'logout',
+	Route::controller('home', 'HomeController', [
+			'anyIndex' => 'home',
+			'getTermsOfUse' => 'terms-of-use',
 		]);
 
-	Route::get('/auth', function() {
-		return Redirect::to('/user');
+
+	Route::group(['namespace' => 'Auth'], function () {
+		Route::controller('auth', 'AuthController', [
+			'getLogin' => 'login',
+			'getLogout' => 'logout',
+			]);
+
+		Route::controller('password', 'PasswordController', [
+			'getEmail' => 'password.email',
+			'postEmail' => 'password.email',
+			'getReset' => 'password.reset',
+			'postReset' => 'password.reset',
+			]);
+
 	});
 
-
 Route::group(['middleware' => 'subdomens'], function() {
+	Route::get('authors/check', ['middleware' => ['admin', 'api'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{authors}'], function () {
-		Route::get('check', ['uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);
 	});
 
@@ -48,20 +58,20 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('pages.updates', 'UpdatesController');
 
 	Route::bind('authors', function ($id) {
-		return \App::make(\Ankh\Contracts\AuthorRepository::class)->find($id);
+		return App::make(AuthorRepository::class)->find($id);
 	});
 	Route::bind('groups', function ($id) {
-		return \App::make(\Ankh\Contracts\GroupRepository::class)->find($id);
+		return App::make(GroupRepository::class)->find($id);
 	});
 	Route::bind('pages', function ($id) {
-		return \App::make(\Ankh\Contracts\PageRepository::class)->find($id);
+		return App::make(PageRepository::class)->find($id);
 	});
 	Route::bind('updates', function ($id) {
-		return \App::make(\Ankh\Contracts\UpdateRepository::class)->find($id);
+		return App::make(UpdateRepository::class)->find($id);
 	});
 	Route::bind('version', function ($date) {
-		$version = new \Ankh\Version();
-		$version->setTimestamp(\Carbon\Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
+		$version = new Version();
+		$version->setTimestamp(Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
 		return $version;
 	});
 });

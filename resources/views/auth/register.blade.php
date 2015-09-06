@@ -10,41 +10,55 @@
 		return $e->has($field) ? ' error' : '';
 	}
 ?>
-<div id="registraion">
-	<h4>User registration:</h4>
 
-	<form action="{{ action('Auth\AuthController@postRegister') }}" method="POST">
-		<input type="hidden" name="_token" value="{{csrf_token()}}" />
-		<div class="field{{isOk('email')}}">
-			<input type="email" name="email" value="{{Input::old('email')}}" />
-			<label>E-mail:</label>
-		</div>
-		<div class="field{{isOk('password')}}">
-			<input type="password" name="password" value="{{Input::old('password')}}" />
-			<label>Password:</label>
-		</div>
-		<div class="field{{isOk('password_confirmation')}}">
-			<input type="password" name="password_confirmation" value="{{Input::old('password_confirmation')}}" />
-			<label>Repeat password:</label>
-		</div>
-		<div class="field{{isOk('name')}}">
-			<input type="text" name="name" value="{{Input::old('name')}}" />
-			<label>User name:</label>
-		</div>
-		<div class="field checkbox{{isOk('agreed')}}">
-			<input type="checkbox" name="agreed" value="1" @if(Input::old('agreed')) checked="checked" @endif />
-			<label>I'm accepting the <a href="">terms of use</a></label>
-		</div>
-		<div class="field">
-		</div>
-		<div class="field">
-			<input type="submit" value="Register">
-		</div>
-	</form>
+{!! Form::open(['route' => 'register', 'method' => 'post'] ) !!}
 
-	@foreach ($errors->all() as $field => $error)
-		<span class="error-label">Error: {{$error}}</span><br/>
-	@endforeach
+<div class="registraion">
+	<div class="header">
+		<div>
+			{{ trans('common.user-registration') }}
+		</div>
+	</div>
+
+	<div class="option {{isOk('email')}}">
+		<div class="label">{!! Form::label('email', trans('common.email') . ':') !!}</div>
+		{!! Form::email('email', old('email'), ['class' => 'field']) !!}
+	</div>
+
+	<div class="option {{isOk('password')}}">
+		<div class="label">{!! Form::label('password', trans('common.password') . ':') !!}</div>
+		{!! Form::password('password', ['class' => 'field']) !!}
+	</div>
+
+	<div class="option {{isOk('password_confirmation')}}">
+		<div class="label">{!! Form::label('password_confirmation', trans('common.confirm-password') . ':') !!}</div>
+		{!! Form::password('password_confirmation', ['class' => 'field']) !!}
+	</div>
+
+	<div class="option {{isOk('name')}}">
+		<div class="label">{!! Form::label('name', trans('common.user-name') . ':') !!}</div>
+		{!! Form::text('name', old('name'), ['class' => 'field']) !!}
+	</div>
+
+	<div class="option {{isOk('agreed')}}">
+		<div class="label">&nbsp;</div><?php Form::label('agreed') ?>
+		{!! Form::checkbox('agreed', 1, old('agreed'), ['class' => 'field']) !!}
+		<label for="agreed">{!! trans('common.agreed', ['terms' => trans('common.terms-of-use', ['url' => route('terms-of-use')])]) !!}</label>
+	</div>
+
+	<div class="option">
+@foreach ($errors->all() as $key => $error)
+		<span class="field error">{{ $error }}</span>
+@endforeach
+	</div>
+
+	<div class="option">
+		<div class="label">&nbsp;</div>
+		{!! Form::submit(trans('common.register')) !!}
+	</div>
 
 </div>
+
+{!! Form::close() !!}
+
 @stop

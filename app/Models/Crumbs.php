@@ -6,10 +6,16 @@ use Breadcrumbs;
 
 class Crumbs {
 	const HOME_ROUTE = 'home';
+	const INDEX_ROUTE = 'index';
+	const SHOW_ROUTE = 'show';
+
+	const ENT_DELIM = '!';
 
 	protected $route = null;
 	protected $routes = null;
 	protected $crumbs = [];
+	protected $entitied = ['create', 'edit', 'show', 'delete', 'check'];
+	protected $sole = ['create'];
 
 	public function __construct(Router $routes, Route $route) {
 		$this->route = $route;
@@ -27,40 +33,29 @@ class Crumbs {
 			array_shift($specifiers);
 			$specific = [];
 
-			$parts = explode('.', $routeName);
-
-			if (last($parts) == 'edit') {
-				array_pop($parts);
-				array_push($parts, '!');
-				array_push($parts, 'edit');
-			}
+			$parts = $this->expandRoute($routeName);
 
 			$parent = null;
 			while ($part = array_shift($parts)) {
 
-				if (strpos($parent, '.index') !== false)
-					$parentRoute = str_replace('.index', '', $parent);
+				if (strpos($parent, '.' . static::INDEX_ROUTE) !== false)
+					$parentRoute = str_replace('.' . static::INDEX_ROUTE, '', $parent);
 				else
 					$parentRoute = $parent;
 
-				$current = $parent ? "{$parentRoute}.{$part}" : "{$part}.index";
+				$current = $parent ? "{$parentRoute}.{$part}" : $part . '.' . static::INDEX_ROUTE;
 
 				$resolved = $this->resolveRoute($current, $part);
 				$route = explode('.', $resolved);
 				$part = array_pop($route);
 
 				$specifier = null;
-				switch ($part) {
-					case 'show':
-					case 'edit':
-						if (!$this->lastIs('index'))
-							$this->pushBreadcrumb($this->traversed($resolved, 'index'), $specific);
-					case 'create':
-					case 'delete':
-						$specifier = array_shift($specifiers);
-						$specific[] = $specifier;
-					default:
-					break;
+				if (str_contains($part, $this->entitied)) {
+					if (!$this->lastIs(static::INDEX_ROUTE))
+						$this->pushBreadcrumb($this->traversed($resolved, static::INDEX_ROUTE), $specific);
+
+					$specifier = array_shift($specifiers);
+					$specific[] = $specifier;
 				}
 
 				if ($this->routeExists($resolved))
@@ -82,6 +77,23 @@ class Crumbs {
 			}
 
 		});
+	}
+
+	function expandRoute($routeName) {
+		$parts = explode('.', $routeName);
+
+		if (str_contains(last($parts), $this->entitied)) {
+			$last = array_pop($parts);
+
+			if (array_search($last, $this->sole) !== false)
+				array_push($parts, static::ENT_DELIM);
+			else
+				$parts = array_pad($parts, count($parts) * 2, static::ENT_DELIM);
+
+			array_push($parts, $last);
+		}
+
+		return $parts;
 	}
 
 	function pushRoute($breadcrumbs, $parent, $current, $specific) {
@@ -127,7 +139,7 @@ class Crumbs {
 		return false;
 	}
 
-	function traversed($route, $action = 'index') {
+	function traversed($route, $action = self::INDEX_ROUTE) {
 		$parts = explode('.', $route);
 		array_pop($parts);
 		array_push($parts, $action);
@@ -142,15 +154,29 @@ class Crumbs {
 		$solved = $route ?: static::HOME_ROUTE;
 
 		if (!$this->routeExists($solved)) {
-			$traverse = ['index' => 'show', 'show' => 'edit'];
-			if ($t = $this->lastIs(array_keys($traverse)))
-				$solved = $this->traversed($this->lastPushedRoute(), @$traverse[$t] ?: 'show');
-			else
-				$solved = "{$solved}.index";
-		}
+			$traversable = array_merge($this->entitied, [static::INDEX_ROUTE]);
+			if ($t = $this->lastIs($traversable)) {
+				$traversed = ($t == static::INDEX_ROUTE) ? static::SHOW_ROUTE : $part;
+				$solved = $this->traversed($p = $this->lastPushedRoute(), $traversed);
 
-		if (!$this->routeExists($solved))
-			throw new \Exception("Route [{$route}] don't exists");
+				if (!$this->routeExists($solved)) {
+					$part = ($part != static::ENT_DELIM) ? ".{$part}" : '';
+					$solved = str_replace('.' . static::ENT_DELIM, $part . '.' . static::INDEX_ROUTE, $route);
+
+					$solved = $this->resolveRoute($solved, $part);
+
+					if (!$this->routeExists($solved)) {
+						$solved = str_replace(static::ENT_DELIM, static::INDEX_ROUTE, $route);
+						$solved = $this->resolveRoute($solved, $part);
+					}
+				}
+			} else {
+				$solved = $solved . '.' . static::INDEX_ROUTE;
+			}
+
+			if (!$this->routeExists($solved))
+				throw new \Exception("Route [{$route}] don't exists ($solved -> $t)");
+		}
 
 		return $solved;
 	}
@@ -159,7 +185,7 @@ class Crumbs {
 		$label = \Lang::get("pages.{$route}");
 
 		while (is_array($label))
-			$label = $label[array_key_exists('index', $label) ? 'index' : array_keys($label)[0]];
+			$label = $label[array_key_exists(static::INDEX_ROUTE, $label) ? static::INDEX_ROUTE : array_keys($label)[0]];
 
 		if (!$specifier)
 			return $label;
@@ -168,10 +194,7 @@ class Crumbs {
 			return $specifier;
 
 		return preg_replace_callback('/\{:([\w_][\w\d_]*)\}/i', function ($match) use ($specifier) {
-			$method = $match[1];
-			// $method = studly_case($match[1]);
-			// $method = "getAttribute({$method})";
-			return $specifier->getAttribute($method);
+			return $specifier->getAttribute($match[1]);
 		}, $label);
 	}
 }

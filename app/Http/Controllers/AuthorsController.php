@@ -6,7 +6,7 @@ use Ankh\Http\Requests\AuthorRequest;
 use Ankh\Http\Requests\AuthorCreateRequest;
 
 use Ankh\Author;
-use Ankh\AuthorUtils;
+use Ankh\Synk\AuthorUtils;
 
 use Ankh\Contracts\AuthorRepository;
 use Ankh\Crumbs as Breadcrumbs;
@@ -81,9 +81,34 @@ class AuthorsController extends RestfulController {
 		return $this->_update($request, pick_arg(Author::class));
 	}
 
-	public function getCheck(Author $author) {
-		$util = new AuthorUtils;
-		return response()->json($util->check($author));
+	public function getCheck() {
+		$stats = [];
+
+		$queue = session('to_check') ?: [];
+
+		$check = intval(array_shift($queue));
+		if (!($queue || $check))
+			$queue = Author::all()->pluck(['id'])->all();
+
+		sort($queue);
+
+		session()->set('to_check', $queue);
+		session()->save();
+
+		$stats['pending'] = $queue;
+
+		if ($check) {
+			$author = Author::find($check);
+
+			if ($author) {
+				$util = new AuthorUtils;
+				$stats['changes'] = $util->check($author);
+				$stats['check'] = array_only($author->attributesToArray(), ['id', 'link']);
+				$stats['link'] = \HTML::link(route('authors.show', $author), $stats['check']['link']);
+			}
+		}
+
+		return response()->json($stats);
 	}
 
 	public function getTraceUpdates(Author $author) {

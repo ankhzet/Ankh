@@ -35,6 +35,6 @@ class Subdomens {
 	}
 
 	public static function is($subdomen) {
-		return Str::is($subdomen, static::subdomen());
+		return ($s = static::subdomen()) ? Str::is($subdomen, $s) : null;
 	}
 }

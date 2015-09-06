@@ -1,11 +1,15 @@
 @extends('layouts.common')
 
-@section('title')<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a> - <a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
+@section('title')<a href="{{ route('authors.show', $group->author) }}">{{$group->author->fio}}</a> - <a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>
 @stop
-@section('title-plain'){{$author->fio}} - {{$group->title}}@stop
+@section('title-plain'){{$group->author->fio}} - {{$group->title}}@stop
 @section('rss')group/{{$group->id}}@stop
 
 @section('moderation')
+@i-menu()
+	@m-item('pages.pages.list', route('groups.pages.index', $group) )
+	@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
+@endmenu
 @admin()
 @i-menu(admin)
 	@m-item('common.edit', route('groups.edit', $group) )
@@ -19,19 +23,14 @@
 				<div class="cnt-item group">
 					<div class="title">
 						<span class="head">
-							@i-menu()
-								@m-item('pages.pages.list', route('groups.pages.index', $group) )
-								@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
-							@endmenu
 						</span>
-						<span class="link date">{{$author->updated_at->ago()}}</span>
+						<span class="link date">{{$group->updated_at->ago()}}</span>
 						@samlib($group)
 					</div>
-
-					<br /><br />
+					<div class="text quote">{!! $group->annotation !!}</div>
 				</div>
 
 				<div class="pages">
-					@include('pages.list', ['pages' => $group->pages()->orderBy('title')->paginate(10), 'exclude' => ['author', 'group']])
+					@include('pages.list', ['pages' => $group->peekPages($delta, 10, true), 'exclude' => array_merge($exclude, ['group'])])
 				</div>
 @stop

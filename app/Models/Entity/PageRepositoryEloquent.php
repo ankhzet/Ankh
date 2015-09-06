@@ -8,8 +8,4 @@ class PageRepositoryEloquent extends EntityRepositoryEloquent implements PageRep
 		$this->setModel($model);
 	}
 
-	public function subRepository($id) {
-		throw new Exception(get_class($this) . ' has no subrepositories');
-	}
-
 }

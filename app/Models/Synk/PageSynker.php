@@ -1,4 +1,4 @@
-<?php namespace Ankh\Synker;
+<?php namespace Ankh\Synk;
 
 use Illuminate\Support\Str;
 

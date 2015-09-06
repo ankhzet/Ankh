@@ -1,13 +1,10 @@
-<?php namespace Ankh;
+<?php namespace Ankh\Synk;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
-use Ankh\Parsing\Parser;
-use Ankh\Parsing\Fetcher;
-
-use Ankh\Synker\GroupSynker;
-use Ankh\Synker\PageSynker;
+use Ankh\Synk\Parsing\Parser;
+use Ankh\Synk\Fetching\Fetcher;
 
 class AuthorUtils {
 

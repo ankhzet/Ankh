@@ -6,7 +6,7 @@ use Ankh\Http\Requests\AuthorRequest;
 use Ankh\Http\Requests\AuthorCreateRequest;
 
 use Ankh\Author;
-use Ankh\AuthorUtils;
+use Ankh\Synk\AuthorUtils;
 
 use Ankh\Contracts\AuthorRepository;
 use Ankh\Crumbs as Breadcrumbs;

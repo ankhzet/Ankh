@@ -1,4 +1,4 @@
-<?php namespace Ankh\Parsing;
+<?php namespace Ankh\Synk\Parsing;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Str;

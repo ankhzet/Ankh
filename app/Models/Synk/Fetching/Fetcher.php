@@ -1,4 +1,4 @@
-<?php namespace Ankh\Parsing;
+<?php namespace Ankh\Synk\Fetching;
 
 use Cache;
 use Exception;

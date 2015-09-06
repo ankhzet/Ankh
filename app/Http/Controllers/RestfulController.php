@@ -148,7 +148,7 @@ class RestfulController extends Controller {
 	* @return Response
 	*/
 	public function destroy(AdminRoleRequest $request) {
-		$entity = pick_arg(Entity::class);
+		$entity = pick_arg(get_class($this->repository()->model()));
 		if ($entity->delete())
 			return $this->innerRedirect('show', $entity)->withMessage('Deleted');
 
@@ -172,8 +172,25 @@ class RestfulController extends Controller {
 
 	public function __call($method, $args) {
 		if (substr($method, 0, 4) == 'view') {
+			$arg = @$args[0] ?: [];
+
+			if (self::isApiCall()) {
+				$relations = !!\Request::get('relations');
+
+				if (is_array($arg)) {
+					$entity = pick_arg($arg, get_class($this->repository()->model()));
+					if ($entity) {
+						if ($relations)
+							pick_relations($entity);
+
+						$arg = $entity;
+					}
+				}
+				return response()->json(remap_for_json($arg, $relations));
+			}
+
 			$view = strtolower(substr($method, 4));
-			return view("{$this->viewsRoot()}.{$view}", isset($args[0]) ? $args[0] : []);
+			return view("{$this->viewsRoot()}.{$view}", $arg);
 		}
 
 		return parent::__call($method, $args);
@@ -183,4 +200,39 @@ class RestfulController extends Controller {
 		return view("{$this->viewsRoot()}.index", array_merge($this->filterStatistics(), $arguments));
 	}
 
+}
+
+function pick_relations(Entity $entity) {
+	$stack = debug_backtrace(0, 4);
+
+	foreach (array_slice($stack, 1) as $frame)
+		if (starts_with($frame['function'], ['__call', 'view'])) {
+			continue;
+		} else {
+			array_filter(array_map(function ($arg) use ($entity) {
+				if (($arg == $entity) || !($arg instanceof Entity))
+					return null;
+
+				$name = strtolower(class_basename($arg));
+				if (method_exists($entity, $name))
+					$entity->{$name} = $arg;
+
+				return $arg;
+			}, $frame['args']));
+			break;
+		}
+}
+
+function remap_for_json($output, $withRelations = false) {
+	if (!isset($output))
+		return false;
+
+	$methods = [false => 'attributesToArray', true => 'toArray'];
+	if (method_exists($output, ($arrayable = $methods[!!$withRelations]))) {
+		$output = $output->{$arrayable}();
+	}
+
+	return is_array($output) ? array_filter(array_map(function ($param) use ($withRelations) {
+		return remap_for_json($param, $withRelations);
+	}, $output)) : $output;
 }

@@ -2,12 +2,16 @@
 
 use Illuminate\Support\Str;
 
-function pick_arg() {
+function pick_arg($variables, $class = null) {
 	$stack = debug_backtrace(0, 2);
 	$classes = $stack[0]['args'];
 
 	$vars = [];
-	$args = array_reverse($stack[1]['args']);
+
+	if (is_array($classes[0]))
+		$args = array_shift($classes);
+	else
+		$args = array_reverse($stack[1]['args']);
 
 	foreach ($classes as $index => $class) {
 		foreach ($args as $arg)

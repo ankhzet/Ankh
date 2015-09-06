@@ -1,113 +1,98 @@
 <?php namespace Ankh\Synk\Fetching;
 
-use Cache;
 use Exception;
 
-class Fetcher {
+use Ankh\Contracts\Synk\Fetch as FetchContract;
+use Ankh\Contracts\Synk\Fetcher as FetcherContract;
 
-	var $server = 'http://samlib.ru';
-	var $timeout = 60;
-	var $userAgent = 'AnkhZet Cache Sync Bot v0.2';
-
-	protected $cache;
-	protected $cached = true;
+class UrlFetcher implements FetcherContract {
 
 	protected $curl;
 
-	protected $minutes = 60 * 1;
+	protected $userAgent = 'AnkhZet Cache Sync Bot v0.2';
+	protected $server;
+	protected $timeout = 30;
 
-	public function __construct() {
-		$this->cache = Cache::store('file');
-	}
+	protected $proxy;
 
-	public function pull($link, &$params = []) {
+	public function fetch(FetchContract $fetch) {
+		$link = $fetch->resource();
+
 		if ($link == '/')
 			throw new Exception('Failed fetcher assertion: link should not be "/"');
-
-		$url = $this->url($link);
-
-		$cached = isset($params['cached']) ? $params['cached'] : $this->cached;
-
-		return$this->pullFromCache($url, $params, !$cached);
-	}
-
-	public function sourceServer() {
-		return trim($this->server, '/');
-	}
-
-	public function url($relative = '') {
-		return rtrim($this->sourceServer(), '/') . '/' . ltrim($relative, '/');
-	}
-
-	public function pullFromCache($link, &$params = [], $flush = false) {
-		$key = $this->key($link);
-
-		if ($flush)
-			$this->flush($link);
-		else
-			if ($this->cache->has($key)) {
-				$params['code'] = 200;
-				$params[200] = true;
-				$params['speed'] = 0;
-				$params['time'] = 0;
-			}
-
-		$data = $this->cache->remember($key, $this->minutes, function () use ($link, &$params) {
-			return $this->pullFromServer($link, $params);
-		});
-
-		$params['length'] = strlen($data);
-		return $data;
-	}
-
-	public function flush($link) {
-		$this->cache->forget($this->key($link));
-	}
-
-	function key($link) {
-		return md5($link);
-	}
-
-	public function pullFromServer($link, &$params = []) {
-		// dump("fetching [$link]...");
 
 		if (!$curl = $this->curl())
 			throw new Exception('Curl initialization error');
 
-		curl_setopt($curl, CURLOPT_URL, $link);
-		if (isset($params['referer']))
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array('Referer' => $params['referer']));
+		$url = $this->url($link);
 
-		$start = microtime(true);
+		curl_setopt($curl, CURLOPT_URL, $url);
+
+
 		try {
-			$response = curl_exec($curl);
-			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-			$params['code'] = $code;
-			$params[$code] = true;
-			switch ($code) {
-			case 200:
-			case 206:
-			case 301:
-			case 302:
-				break;
-			default :
-				if (($code >= 400) && ($code < 600))
-					$response = false;
-			}
+			curl_setopt($curl, CURLOPT_HEADERFUNCTION, function ($curl, $header) use ($fetch) {
+
+				if (!preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#i", $header)) {
+					$parts = explode( ':', $header, 2);
+
+					$headers = $fetch->data();
+					if ((count($parts) > 1) && ($name = trim(array_shift($parts))) != '')
+						$headers[$name] = trim(join(':', $parts));
+					else
+						if (($value = trim($header)) != '')
+							$headers[] = $value;
+
+					$fetch->data($headers);
+				}
+
+				return strlen($header);
+			});
+
+			$fetch->response(curl_exec($curl));
+			$fetch->code(curl_getinfo($curl, CURLINFO_HTTP_CODE));
+
 		} catch (Exception $e) {
-			$params['exception'] = (string)$e;
+			$fetch->code($e);
 			return false;
 		}
 
-		$time = microtime(true) - $start;
-
-		$params['speed'] = strlen($response) / $time;
-		$params['time'] = $time;
-
-		return $response ? $response : false;
+		return true;
 	}
 
+	public function isOk(FetchContract $fetch) {
+		$response = $fetch->response();
+		if (!isset($response))
+			return false;
+
+		if (!is_numeric($code = $fetch->code()))
+			return false;
+
+		switch ($code) {
+
+		case 200:
+		case 206:
+			break;
+
+		case 301:
+		case 302:
+			break;
+
+		default :
+			if (($code >= 400) && ($code < 600))
+				return false;
+		}
+
+		return $response !== false;
+	}
+
+	function sourceServer() {
+		return rtrim($this->server, '/');
+	}
+
+	function url($relative = '') {
+		return rtrim($this->sourceServer(), '/') . '/' . ltrim($relative, '/');
+	}
 
 	function curl() {
 		if (!$this->curl) {
@@ -116,9 +101,36 @@ class Fetcher {
 			curl_setopt($c, CURLOPT_USERAGENT, $this->userAgent);
 			curl_setopt($c, CURLOPT_HTTPHEADER, array('X-Bot' => $this->userAgent));
 			curl_setopt($c, CURLOPT_TIMEOUT, $this->timeout);
+
+			if ($this->proxy)
+				$this->setupProxy();
 		}
 
 		return $this->curl;
+	}
+
+	protected function setupProxy($proxy = null) {
+		$proxy = $proxy ?: $this->proxy;
+
+		$context = explode(':', $this->server)[0];
+		$r_default_context = stream_context_get_default(array(
+			$context => array(
+				'proxy' => $proxy,
+				'request_fulluri' => true
+				)
+			));
+
+		$p = explode(':', $proxy);
+		$port = intval(array_pop($p));
+		$address = $port ? join(':', $p) : $proxy;
+
+		curl_setopt($this->curl, CURLOPT_PROXY, $address);
+		if ($port)
+			curl_setopt($this->curl, CURLOPT_PROXYPORT, $port);
+	}
+
+	protected function setupReferer($referer) {
+		curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Referer' => $referer));
 	}
 
 }

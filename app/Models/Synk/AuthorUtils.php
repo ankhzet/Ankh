@@ -1,23 +1,22 @@
 <?php namespace Ankh\Synk;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-
 use Ankh\Synk\Parsing\Parser;
-use Ankh\Synk\Fetching\Fetcher;
+
+use Ankh\Entity;
+use Ankh\Author;
+
+use Ankh\Contracts\Synk\Fetch;
 
 class AuthorUtils {
 
 	public function check(Entity $entity) {
 		$link = $entity->absoluteLink();
-		$params = [];
 
-		$fetcher = new Fetcher;
-		$data = $fetcher->pull($link, $params);
+		$fetch = app(Fetch::class);
+		$data = $fetch->pull($link);
 
-		if ($data === false || trim($data) == '')
-			return false;
-
+		if (!$fetch->isOk())
+			throw new CheckError($entity, $fetch->code());
 
 		$data = $this->fixHTML($data);
 

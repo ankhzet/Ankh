@@ -45,6 +45,8 @@ class AppServiceProvider extends ServiceProvider
 		$this->registerPageUtilsFacade();
 		$this->registerHtmlCleaner();
 
+		$this->registerUrlFetcher();
+
 		if ($this->app->environment() == 'local') {
 
 			$this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
@@ -67,6 +69,11 @@ class AppServiceProvider extends ServiceProvider
 
 	function registerHtmlCleaner() {
 		$this->app->bind(\Ankh\Contracts\HtmlCleaner::class, \Ankh\TidyCleaner::class);
+	}
+
+	function registerUrlFetcher() {
+		$this->app->bind(\Ankh\Contracts\Synk\Fetcher::class, \Ankh\Synk\Fetching\SamlibFetcher::class);
+		$this->app->bind(\Ankh\Contracts\Synk\Fetch::class, \Ankh\Synk\Fetching\CachedFetch::class);
 	}
 
 }

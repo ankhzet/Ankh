@@ -61,6 +61,8 @@ $authors = array(
 return array(
 	'home' => 'Home',
 
+	'login' => 'Login form',
+
 	'authors' => $authors,
 	'groups' => $groups,
 	'pages' => $pages,

@@ -15,6 +15,15 @@
 			return $this->hasMany('Ankh\Page');
 		}
 
+		public function peekGroups(&$delta, $amount = 10, $paginate = false) {
+			if ($paginate)
+				return $this->groups()->paginate($amount);
+
+			$paginator = $this->groups()->take($amount);
+			$delta = $paginator->count() - $amount;
+			return $paginator->orderBy('updated_at', 'desc');
+		}
+
 		public function absoluteLink() {
 			return '/' . trim($this->link, '/') . '/';
 		}

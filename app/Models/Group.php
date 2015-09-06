@@ -17,10 +17,13 @@
 			return $this->link ? '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/') : null;
 		}
 
-		public function peekPages($amount, &$delta) {
+		public function peekPages(&$delta, $amount = 10, $paginate = false) {
+			if ($paginate)
+				return $this->pages()->orderBy('title')->paginate($amount);
+
 			$paginator = $this->pages()->take($amount);
 			$delta = $paginator->count() - $amount;
-			return $paginator->orderBy('updated_at', 'desc')->get();
+			return $paginator->orderBy('updated_at', 'desc');
 		}
 
 		public function updateType() {

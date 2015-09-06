@@ -18,7 +18,7 @@ class BladeServiceProvider extends ServiceProvider {
 	public function boot() {
 
 		Blade::extend(function($view, $compiler) {
-			return preg_replace('/\@kept\((.+?)\)/', '<?php if (array_search(\'${1}\', $exclude) === false) { ?>', $view);
+			return preg_replace('/\@kept\((.+?)\)/', '<?php if (!isset($exclude) || array_search(\'${1}\', $exclude) === false) { ?>', $view);
 		});
 
 		Blade::extend(function($view, $compiler) {

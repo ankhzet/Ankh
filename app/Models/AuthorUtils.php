@@ -48,18 +48,25 @@ class AuthorUtils {
 	public function checkAuthor(Author $author, array $data) {
 		$stats = [];
 
-		$author->fio = $data['fio'];
+		$author->fio = array_pull($data, 'fio');
+		$author->title = array_pull($data, 'title');
+		$author->rating = array_pull($data, 'rating');
+		$author->visitors = array_pull($data, 'visitors');
 
-		$author->info = json_encode(array_except($data, ['fio', 'groups']), JSON_UNESCAPED_UNICODE);
+		$groups = array_pull($data, 'groups');
 
 		$authors = $author->diffAttributes();
 
-		$author->save();
-
-		if ($groups = $this->synkGroups($author, $data['groups'])) {
+		$groups = $this->synkGroups($author, $groups);
+		if ($groups) {
 			$authors['groups'] = $groups;
 			$authors['id'] = $author->id;
 		}
+
+		if ($authors)
+			$author->touch();
+
+		$author->save();
 
 		if ($authors)
 			$stats['authors'][] = $authors;

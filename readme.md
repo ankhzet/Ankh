@@ -1,7 +1,7 @@
 ## Ankh
 ============
 
-Ankh is service for SAMLIB updates tracking/versioning with public API.
+Ankh is a service for SAMLIB updates tracking/versioning with public API.
 
 Installation
 ----------------
@@ -83,7 +83,7 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 
 - [ ] Update watcher
 
-- [ ] Updates checker
+- [x] Updates checker
 	- [ ] Load balancer
 	- [ ] Cron command
 		- [ ] Cron command admin-UI
@@ -105,3 +105,5 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 - 0.3 Basic Updates functionality implementation
 - 0.4 Added RSS feeds
 - 0.5 Basic forms
+- 0.6 Updates handling, views & formatting
+- 0.7 Synk subsystem implementation

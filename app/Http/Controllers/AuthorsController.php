@@ -81,35 +81,34 @@ class AuthorsController extends RestfulController {
 		return $this->_update($request, pick_arg(Author::class));
 	}
 
-	public function getCheck(Author $author) {
-		$toCheck = session('to_check') ?: [];
-		if (!$toCheck) {
-			$toCheck = Author::all()->pluck(['id'])->all();
-			session()->set('to_check', $toCheck);
-			session()->save();
-		}
+	public function getCheck() {
+		$stats = [];
 
-		$util = new AuthorUtils;
-		$stats = $util->check($author);
+		$queue = session('to_check') ?: [];
 
-		dump($stats);
+		$check = intval(array_shift($queue));
+		if (!($queue || $check))
+			$queue = Author::all()->pluck(['id'])->all();
 
-		$toCheck = array_merge(array_diff($toCheck, [$author->id]), []);
-		session()->set('to_check', $toCheck);
+		sort($queue);
+
+		session()->set('to_check', $queue);
 		session()->save();
 
-		$next = @$toCheck[0];
+		$stats['pending'] = $queue;
 
-		$content = 'Pending: ' . join(', ', $toCheck);
-		if ($next) {
+		if ($check) {
+			$author = Author::find($check);
 
-			$next = Author::find($next);
-			if ($next) {
-				$content .= '<br/><br/><center>Continue [check ' . \HTML::link(route('authors.check', $next), $next->fio) . ']</center>';
+			if ($author) {
+				$util = new AuthorUtils;
+				$stats['changes'] = $util->check($author);
+				$stats['check'] = array_only($author->attributesToArray(), ['id', 'link']);
+				$stats['link'] = \HTML::link(route('authors.show', $author), $stats['check']['link']);
 			}
 		}
 
-		return view('home', compact('content'));
+		return response()->json($stats);
 	}
 
 	public function getTraceUpdates(Author $author) {

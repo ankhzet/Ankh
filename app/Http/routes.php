@@ -32,7 +32,7 @@
 	});
 
 Route::group(['middleware' => 'subdomens'], function() {
-	Route::get('authors/check', ['middleware' => ['admin', 'api'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
+	Route::get('authors/check', ['middleware' => ['admin'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{authors}'], function () {
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);

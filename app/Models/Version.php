@@ -1,12 +1,21 @@
 <?php namespace Ankh;
 
+use Carbon\Carbon;
+use Ecxeption;
+
 class Version {
 
 	protected $entity;
 	protected $time;
 
-	public function setEntity($entity) {
+	public function __construct($timestamp = null) {
+		if ($timestamp)
+			$this->setTimestamp($timestamp);
+	}
+
+	public function setEntity(Resolvable $entity) {
 		$this->entity = $entity;
+		return $this;
 	}
 
 	public function entity() {
@@ -18,14 +27,26 @@ class Version {
 	}
 
 	public function setTimestamp($timestamp) {
-		if (is_object($timestamp))
+		switch (true) {
+		case is_object($timestamp):
 			$this->time = $timestamp;
-		else
-			$this->time = \Carbon\Carbon::createFromTimestamp($timestamp);
+			break;
+		case is_string($timestamp):
+			$this->time = Carbon::createFromFormat('d-m-Y\+H-i-s', $timestamp);
+			break;
+		case is_numeric($timestamp):
+			$this->time = Carbon::createFromTimestamp($timestamp);
+			break;
+		default:
+			$timestamp = e($timestamp);
+			throw new Exception("Don't know how to interpret [{$timestamp}] version identifier");
+		}
+
+		return $this;
 	}
 
-	public function encode() {
-		return $this->time->format('d-m-Y+H-i-s');
+	public function encode($format = 'd-m-Y+H-i-s') {
+		return $this->time->format($format);
 	}
 
 	public function __toString() {

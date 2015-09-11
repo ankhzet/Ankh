@@ -1,8 +1,6 @@
 <?php
 
-	use Illuminate\Http\Request;
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-	use Carbon\Carbon;
 
 	use Ankh\Contracts\AuthorRepository;
 	use Ankh\Contracts\GroupRepository;
@@ -67,10 +65,8 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::bind('updates', function ($id) {
 		return App::make(UpdateRepository::class)->find($id);
 	});
-	Route::bind('version', function ($date) {
-		$version = new Version();
-		$version->setTimestamp(Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
-		return $version;
+	Route::bind('version', function ($date, $route) {
+		return (new Version($date))->setEntity($route->parameter('pages'));
 	});
 });
 

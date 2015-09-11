@@ -17,7 +17,6 @@ function file_size($bytes, $dec = 2, $truncate = true) {
 }
 
 function diff_size($bytes, $dec = 0, $plus = '+') {
-	$bytes = $bytes;
 	$size = file_size(abs($bytes), $dec);
 
 	$size = (($bytes >= 0) ? $plus : '-') . $size;

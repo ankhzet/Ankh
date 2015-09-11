@@ -81,10 +81,16 @@ class AuthorsController extends RestfulController {
 		return $this->_update($request, pick_arg(Author::class));
 	}
 
-	public function getCheck() {
+	public function getCheck(Request $request) {
 		$stats = [];
 
 		$queue = session('to_check') ?: [];
+
+		foreach ($request->query() as $key => $value)
+			if ($value == '' && intval($key) == "$key") {
+				$queue = [$key];
+				break;
+			}
 
 		$check = intval(array_shift($queue));
 		if (!($queue || $check))

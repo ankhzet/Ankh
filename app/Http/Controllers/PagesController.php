@@ -85,7 +85,7 @@ class PagesController extends RestfulController {
 	 */
 	public function update(PageRequest $request) {
 		return $this->_update($request, pick_arg(Page::class));
-	 }
+	}
 
 	public function getVersions(Page $page) {
 	}

@@ -38,11 +38,15 @@ function firstTag($nodes, $tag) {
 }
 
 function tag($nodes, $tag) {
-	$tag = strtolower($tag);
+	if (!is_array($tag))
+		$tag = [$tag];
+
+	foreach ($tag as &$t)
+		$t = strtolower($t);
 
 	$r = [];
 	foreach (wrap($nodes) as $node)
-		if (strtolower($node->nodeName()) == $tag)
+		if (str_contains(strtolower($node->nodeName()), $tag))
 			$r[] = $node;
 
 	return $r;

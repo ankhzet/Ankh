@@ -3,7 +3,9 @@
 use Carbon\Carbon;
 use Ecxeption;
 
-class Version {
+use Ankh\Contracts\Resolvable;
+
+class Version implements Resolvable {
 
 	protected $entity;
 	protected $time;
@@ -24,6 +26,10 @@ class Version {
 
 	public function timestamp() {
 		return $this->time ? $this->time->timestamp : 0;
+	}
+
+	public function time() {
+		return $this->time;
 	}
 
 	public function setTimestamp($timestamp) {
@@ -51,6 +57,10 @@ class Version {
 
 	public function __toString() {
 		return $this->encode();
+	}
+
+	public function resolver() {
+		return $this->entity()->resolver()->setVersion($this);
 	}
 
 }

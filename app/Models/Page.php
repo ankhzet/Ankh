@@ -2,7 +2,9 @@
 
 	use Closure;
 
-	class Page extends Updateable {
+	use Ankh\Contracts\Resolvable;
+
+	class Page extends Updateable implements Resolvable {
 
 		const COLUMN_SIZE = 'size';
 

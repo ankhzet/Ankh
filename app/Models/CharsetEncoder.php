@@ -1,14 +1,31 @@
-<?php namespace Ankh;
+<?php namespace Ankh\Downloadable;
 
 use Exception;
 
-class CharsetEncoder {
+use Ankh\Contracts\Downloadable\Transformation;
+use Ankh\Contracts\Downloadable\Transformable;
+
+class CharsetEncoder implements Transformation {
 
 	protected $used_enc;
 
 	public function __construct() {
 		$this->used_enc = 'UTF-8';
 		mb_detect_order(['ASCII', 'CP1251', 'UTF-8']);
+	}
+
+	public function apply(Transformable $transformable, $toEncoding = null) {
+		$data = (string)$transformable;
+		$data = $this->transform($data, $this->detectEncoding($data), $toEncoding);
+
+		if (!!$data)
+			$transformable->charset = $this->remap($this->detectEncoding($data));
+
+		return $transformable->setContents($data);
+	}
+
+	public function remap($encoding) {
+		return $encoding;
 	}
 
 	public function transform($data, $fromEncoding, $toEncoding = null) {

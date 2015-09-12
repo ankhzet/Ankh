@@ -2,6 +2,7 @@
 
 use Storage;
 use Ankh\Contracts\HtmlCleaner;
+use Ankh\Downloadable\CharsetEncoder;
 
 class PageUtils extends CharsetEncoder {
 

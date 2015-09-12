@@ -39,9 +39,10 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::resource('groups', 'GroupsController');
 
 	Route::resource('pages', 'PagesController');
-	Route::group(['prefix' => 'pages/{pages}'], function () {
+	Route::group(['prefix' => 'pages/{pages}/{version?}'], function () {
+		Route::get('/', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
 		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
-		Route::get('download/{version}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
+		Route::get('download/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
 	});
 
 	Route::resource('updates', 'UpdatesController');

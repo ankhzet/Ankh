@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
 	{
 
 		$this->app['charset-encoder'] = $this->app->share(function ($app) {
-			return new \Ankh\CharsetEncoder();
+			return new \Ankh\Downloadable\CharsetEncoder();
 		});
 
 		$this->app['htmlizer'] = $this->app->share(function ($app) {

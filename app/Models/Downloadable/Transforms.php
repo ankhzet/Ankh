@@ -1,5 +1,7 @@
 <?php namespace Ankh\Downloadable;
 
+use Ankh\Contracts\Downloadable\Transformable;
+
 class Transforms {
 
 	protected $transforms = [];

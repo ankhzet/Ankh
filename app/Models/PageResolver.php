@@ -13,7 +13,8 @@ class PageResolver extends ResourceResolver {
 	}
 
 	public function setVersion(Version $version = null) {
-		$this->timestamp = $version ? $version->timestamp() : 'last';
+		$timestamp = $version ? $version->timestamp() : 0;
+		$this->timestamp = $timestamp ?: 'last';
 		return $this;
 	}
 

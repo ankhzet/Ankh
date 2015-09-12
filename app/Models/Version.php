@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Ecxeption;
 
 use Ankh\Contracts\Resolvable;
+use Ankh\Downloadable\FileVersion;
 use PageUtils;
 
 class Version implements Resolvable {
@@ -70,6 +71,12 @@ class Version implements Resolvable {
 
 	public function setContents($data) {
 		return PageUtils::putContents($this->resolver(), $data);
+	}
+
+	public function downloadable() {
+		return (new FileVersion())
+			->setPage($this->entity())
+			->setVersion($this);
 	}
 
 }

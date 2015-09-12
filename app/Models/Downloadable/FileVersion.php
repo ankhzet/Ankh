@@ -20,7 +20,7 @@ class FileVersion extends DownloadFileResolver implements Downloadable, Zipable 
 
 	public function getContents() {
 		if (!$this->contents)
-			$this->contents = $this->version->getContents();
+			$this->contents = $this->version->contents();
 
 		return $this->contents;
 	}

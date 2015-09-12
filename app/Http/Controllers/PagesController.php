@@ -9,7 +9,7 @@ use Ankh\Page;
 use Ankh\Contracts\PageRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
-use PageUtils;
+use Ankh\Version;
 
 class PagesController extends RestfulController {
 	protected $m;
@@ -51,7 +51,7 @@ class PagesController extends RestfulController {
 		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$text = PageUtils::contents($page->resolver());
+		$text = $page->version()->contents();
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}

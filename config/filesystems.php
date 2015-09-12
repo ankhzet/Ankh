@@ -48,6 +48,11 @@ return [
             'root'   => storage_path('app'),
         ],
 
+        'page-tvs' => [
+            'driver' => 'local',
+            'root'   => storage_path('tvs'),
+        ],
+
         'ftp' => [
             'driver'   => 'ftp',
             'host'     => 'ftp.example.com',

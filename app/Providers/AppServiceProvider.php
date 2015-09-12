@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
 	public function register()
 	{
 
+		$this->app['charset-encoder'] = $this->app->share(function ($app) {
+			return new \Ankh\CharsetEncoder();
+		});
+
 		$this->app['crumbs'] = $this->app->share(function($app) {
 			return new Crumbs($app['router'], $app['route']);
 		});

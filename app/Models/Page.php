@@ -27,6 +27,10 @@
 			return with(new PageResolver)->setPage($this);
 		}
 
+		public function version($timestamp = null) {
+			return with(new Version($timestamp))->setEntity($this);
+		}
+
 		public function updateType() {
 			return PageUpdate::TYPE;
 		}

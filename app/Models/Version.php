@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Ecxeption;
 
 use Ankh\Contracts\Resolvable;
+use PageUtils;
 
 class Version implements Resolvable {
 
@@ -61,6 +62,14 @@ class Version implements Resolvable {
 
 	public function resolver() {
 		return $this->entity()->resolver()->setVersion($this);
+	}
+
+	public function contents() {
+		return PageUtils::contents($this->resolver());
+	}
+
+	public function setContents($data) {
+		return PageUtils::putContents($this->resolver(), $data);
 	}
 
 }

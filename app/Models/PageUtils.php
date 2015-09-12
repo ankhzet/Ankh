@@ -1,53 +1,66 @@
 <?php namespace Ankh;
 
-use File;
+use Storage;
 use Ankh\Contracts\HtmlCleaner;
 
-class PageUtils {
+class PageUtils extends CharsetEncoder {
+
+	protected $stored_enc;
 
 	protected $cleaner;
 	protected $cache_dir_cmod;
-	protected $stored_enc;
-	protected $used_enc;
+
+	protected $storage;
+
 
 	public function __construct(HtmlCleaner $cleaner) {
+		parent::__construct();
+
+		$this->stored_enc = 'cp1251';
+
 		$this->cleaner = $cleaner;
 		$this->cache_dir_cmod = 0755;
-		$this->stored_enc = 'cp1251';
-		$this->used_enc = 'utf8';
+
+		$this->storage = Storage::disk('page-tvs');
 	}
 
 	/**
 	 * @return string
 	 */
 	public function clean($html) {
-		return $this->cleaner->clean($html, $this->used_enc);
+		return $this->cleaner->clean($html, $this->encoding());
 	}
 
 	/**
 	 * @return string
 	 */
-	public function contents(PageResolver $resolver) {
+	public function contents(PageResolver $resolver, $encoding = null) {
 		$path = $resolver->resolve();
-		if (!File::exists($path))
+		if (!$this->storage->exists($path))
 			return null;
 
-		$data = File::get($path);
+		$data = $this->storage->get($path);
 		$data = @gzuncompress($data);
+		if (!$data)
+			return null;
 
-		if (!$this->checkEncoding($data)) {
+		if (!$this->checkEncoding($data, $encoding)) {
 			$storedEncoding = $this->stored_enc;
 			if (!$this->checkEncoding($data, $storedEncoding)) {
 				$storedEncoding = $this->detectEncoding($data);
 
 				// recache if needed
 				if ($storedEncoding != $this->stored_enc) {
-					$stored = @mb_convert_encoding($data, $this->stored_enc, $storedEncoding);
+					$data = $this->transform($data, $storedEncoding, $this->stored_enc);
 					$this->putContents($resolver, $data);
+					$storedEncoding = $this->stored_enc;
 				}
 			}
 
-			$data = @mb_convert_encoding($data, $this->used_enc, $storedEncoding);
+
+
+			if ($storedEncoding != ($encoding ?: $this->encoding()))
+				$data = $this->transform($data, $storedEncoding, $encoding);
 		}
 
 		return $this->clean($data);
@@ -56,39 +69,18 @@ class PageUtils {
 	/**
 	 * @return bool
 	 */
-	public function putContents(PageResolver $resolver, $contents) {
+	public function putContents(PageResolver $resolver, $contents, $encoding = null) {
 		$path = $resolver->resolve();
 
-		if (!File::isDirectory($directory = dirname($path)))
-			File::makeDirectory($directory, $this->cache_dir_cmod, true);
+		if (!$this->storage->isDirectory($directory = dirname($path)))
+			$this->storage->makeDirectory($directory);
 
-		if ($this->stored_enc != $this->used_enc)
-			$contents = @mb_convert_encoding($contents, $this->stored_enc, $this->used_enc);
+		if ($this->stored_enc != ($encoding = $encoding ?: $this->encoding()))
+			$contents = $this->transform($contents, $encoding, $this->stored_enc);
 
 		$data = @gzcompress($contents);
 
-		return File::put($path, $data);
-	}
-
-
-	/**
-	 * @return bool
-	 */
-	public function checkEncoding($text, $encoding = null, $sample = 200) {
-		if ($encoding === null)
-			$encoding = $this->used_enc;
-
-		if (strlen($text) > $sample)
-			$text = substr($text, 0, $sample);
-
-		return mb_check_encoding($text, $encoding);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function detectEncoding($text) {
-		throw new Exception('Can\'t decode cached text, "{$this->stored_enc}" or "{$this->used_enc}" encoding expected');
+		return $this->storage->put($path, $data);
 	}
 
 }

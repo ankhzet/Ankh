@@ -17,6 +17,7 @@ $pages = array(
 		'show' => '{:title}',
 		'create' => 'Add',
 		'edit' => 'Edit',
+		'download' => 'Download',
 
 		'updates' => $updates,
 

@@ -63,6 +63,9 @@ class FileVersion extends DownloadFileResolver implements Downloadable, Zipable 
 		return basename($this->path());
 	}
 
+	function __clone() {
+		$this->setContents(is_object($this->contents) ? clone $this->contents : $this->contents);
+	}
 }
 
 class TransformableContainer implements Transformable {

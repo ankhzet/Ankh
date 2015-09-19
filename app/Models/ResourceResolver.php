@@ -55,5 +55,8 @@ class ResourceResolver {
 		return $this->setFragment($fragment, $value);
 	}
 
+	function __clone() {
+		$this->fragments = array_merge([], $this->fragments);
+	}
 }
 

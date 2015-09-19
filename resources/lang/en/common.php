@@ -31,4 +31,5 @@ return array(
 	'link' => 'Link',
 	'inline' => 'Is inline group',
 	'annotation' => 'Annotation',
+	'size' => 'Size',
 	);

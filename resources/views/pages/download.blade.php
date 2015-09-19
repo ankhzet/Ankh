@@ -18,13 +18,13 @@
 </div>
 
 <div class="download-page">
-	<b>@lang('Page version'):</b>
+	<b>@lang('pages.pages.download.version'):</b>
 	<ul>
 		<li>{{$version->encode('j F, Y H:i')}}</li>
 	</ul>
 
 	<br/>
-	<b>@lang('Encoding'):</b>
+	<b>@lang('pages.pages.download.encoding'):</b>
 	<br /><br />
 	<form>
 		<div class="edit">
@@ -32,8 +32,8 @@
 		<thead class="header">
 			<tr>
 				<td></td>
-				<td><div>Not zipped</div></td>
-				<td><div>Zipped</div></td>
+				<td><div>@lang('pages.pages.download.not-zipped')</div></td>
+				<td><div>@lang('pages.pages.download.zipped')</div></td>
 			</tr>
 		</thead>
 		<tbody>

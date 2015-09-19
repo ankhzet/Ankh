@@ -18,11 +18,9 @@ class Plaintexter implements Transformation {
 
 		$data = preg_replace("~<(br|p|dd)>~i", static::LINEBREAK, $data);
 
+		$data = str_ireplace(['&nbsp;', '&nbsp'], ' ', $data);
+
 		$data = strip_tags($data);
-
-		$data = preg_replace('/[ ]{2,}/', ' ', $data);
-
-		$data = preg_replace("/" . static::LINEBREAK . "[ ]+/s", static::LINEBREAK . "    ", $data);
 
 		$trans = get_html_translation_table(HTML_ENTITIES);
 		$trans = array_flip($trans);
@@ -30,7 +28,11 @@ class Plaintexter implements Transformation {
 
 		$data = strip_tags($data);
 
-		$transformable->setContents(trim($data, static::LINEBREAK) . static::LINEBREAK);
+		$data = preg_replace('/ {3,}/', '  ', $data);
+
+		$data = preg_replace('/' . static::LINEBREAK . '[ ]+/', static::LINEBREAK . "\t", $data);
+
+		$transformable->setContents(rtrim($data, static::LINEBREAK) . static::LINEBREAK);
 
 		$transformable->setType(static::EXTENSION);
 

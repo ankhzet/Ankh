@@ -57,7 +57,7 @@ class UpdateRepositoryEloquent extends EntityRepositoryEloquent implements Updat
 class UpdatesPaginator extends LengthAwarePaginator {
 	private $known = [];
 
-	private $authors = [];
+	private $glue;
 
 	protected function known() {
 		if (!$this->known) {
@@ -84,52 +84,24 @@ class UpdatesPaginator extends LengthAwarePaginator {
 		return $update;
 	}
 
-	public function daily() {
-		$grouped = [];
-		$idx = 0;
-		foreach ($this as $update) {
-			$date = Date::instance($update->created_at);
+	public function collect() {
+		$u = [];
+		foreach ($this as $update)
+			$u[] = $this->transform($update);
 
-			$grouped[$date->format('Y-m-d 00:00:00')][] = $this->transform($update);
-		}
-		krsort($grouped);
-
-		return $grouped;
+		return $this->glue()->collect($u);
 	}
 
-	public function authorly(array $group) {
-		$r = [];
-		$idx = 0;
-		foreach ($group as $date => $update) {
-			$author = $update->relatedAuthor();
-			if ($author) {
-				$this->authors[$author->id] = $author;
-				$r[$author->fio . ' ' . $author->id][] = $update;
-			} else {
-				$this->authors[0] = new \Ankh\Author(['fio' => 'Unknown author']);
-				$r['error'][] = $update;
-			}
-
-		}
-		krsort($r);
-		return $r;
+	public function ago($date) {
+		return date_ago(Date::createFromFormat('Y-m-d', $date));
 	}
 
-	public function dateOrigin($origin) {
-		return Date::createFromFormat('Y-m-d H:i:s', $origin);
+	public function author($id) {
+		return $this->glue()->author($id);
 	}
 
-	public function dateDaysDiff($date) {
-		$now = Date::now();
-		$now->hour = 0;
-		$now->minute = 0;
-		$now->second = 0;
-		return $date->diff($now)->days;
-	}
-
-	public function authorOrigin($origin) {
-		preg_match('/(\d+)$/', $origin, $m);
-		return @$this->authors[intval($m[1])];
+	function glue() {
+		return $this->glue ?: ($this->glue = new UpdatesGroupping);
 	}
 
 }

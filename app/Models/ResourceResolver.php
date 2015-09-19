@@ -19,14 +19,44 @@ class ResourceResolver {
 	}
 
 	public function fragment($name) {
-		return $this->fragments[$name];
+		$fragment = @$this->fragments[$name];
+		if ($fragment)
+			if ((!is_string($fragment)) && is_callable($fragment))
+				$fragment = $fragment($this);
+			else
+				if (strpos($fragment, '{:') !== false)
+					$fragment = $this->resolve($fragment);
+
+		return $fragment;
 	}
 
-	public function resolve() {
-		return preg_replace_callback('/\{:([^\}]+)\}/i', function ($matches) {
-			return $this->fragment((string)$matches[1]);
-		}, $this->pattern);
+	public function resolve($fragment = null) {
+		$fragment = $fragment ?: $this->pattern;
+
+		$fragments = [];
+
+		$result = preg_replace_callback('/\{:([^\}]+)\}/i', function ($matches) use (&$fragments) {
+			$fragment = (string)$matches[1];
+
+			return $fragments[$fragment] = $this->fragment($fragment);
+		}, $fragment);
+
+		if (count($fragments) && empty(array_filter($fragments)))
+			return null;
+
+		return $result;
 	}
 
+	public function __get($fragment) {
+		return $this->fragment($fragment);
+	}
+
+	public function __set($fragment, $value) {
+		return $this->setFragment($fragment, $value);
+	}
+
+	function __clone() {
+		$this->fragments = array_merge([], $this->fragments);
+	}
 }
 

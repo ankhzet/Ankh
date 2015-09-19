@@ -233,6 +233,49 @@
 	}
 
 
+	.download-page {
+		margin: 40px 20px 40px 20px;
+		color: black;
+
+		li {
+			display: list-item;
+			list-style-type: disc;
+			margin-left: 15px;
+		}
+
+		table {
+			width: 100%;
+
+			thead {
+				font-weight: bold;
+			}
+
+			tr.between {
+					border-bottom: 1px dotted gray;
+			}
+
+			td {
+				padding: 10px 5px 5px 15px;
+				vertical-align: middle;
+
+				&.download {
+					border-left: 1px dotted gray;
+				}
+				&.download:before {
+					content: '↓';
+					position: absolute;
+					margin-left: -10px;
+				}
+
+				.size {
+					font-size: 80%;
+					color: gray;
+				}
+			}
+		}
+	}
+
+
 	@import('reader');
 
 	@import('form-inputs');

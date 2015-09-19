@@ -1,5 +1,7 @@
 <?php
 
+use Jenssegers\Date\Date;
+
 function file_size($bytes, $dec = 2, $truncate = true) {
 	$bytes = intval($bytes);
 	$size   = array(' B', ' kB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
@@ -17,7 +19,6 @@ function file_size($bytes, $dec = 2, $truncate = true) {
 }
 
 function diff_size($bytes, $dec = 0, $plus = '+') {
-	$bytes = $bytes;
 	$size = file_size(abs($bytes), $dec);
 
 	$size = (($bytes >= 0) ? $plus : '-') . $size;
@@ -57,3 +58,29 @@ function common_title() {
 
 	return is_array($picked) ? @$picked['index'] ?: first($picked) : $picked;
 }
+
+function date_ago($date) {
+	switch ($date->diff(today())->days) {
+	case 0:
+		return \Lang::get('pages.updates.today');
+		break;
+	case 1:
+		return \Lang::get('pages.updates.yesterday');
+		break;
+	}
+
+	return $date->ago();
+}
+
+function today() {
+	global $today;
+
+	if (!isset($today)) {
+		$today = Date::now();
+		$today->hour = 0;
+		$today->minute = 0;
+		$today->second = 0;
+	}
+	return $today;
+}
+

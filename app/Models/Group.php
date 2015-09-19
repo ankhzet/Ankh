@@ -14,7 +14,10 @@
 		}
 
 		public function absoluteLink() {
-			return $this->link ? '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/') : null;
+			if (!$this->link)
+				return null;
+
+			return path_join($this->author->absoluteLink(), $this->link);
 		}
 
 		public function peekPages(&$delta, $amount = 10, $paginate = false) {

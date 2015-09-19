@@ -25,7 +25,7 @@
 		}
 
 		public function absoluteLink() {
-			return '/' . trim($this->link, '/') . '/';
+			return path_join('/', $this->link, '/');
 		}
 
 		public function collumn($value = null) {

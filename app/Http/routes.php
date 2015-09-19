@@ -1,14 +1,11 @@
 <?php
 
-	use Illuminate\Http\Request;
 	use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-	use Carbon\Carbon;
 
 	use Ankh\Contracts\AuthorRepository;
 	use Ankh\Contracts\GroupRepository;
 	use Ankh\Contracts\PageRepository;
 	use Ankh\Contracts\UpdateRepository;
-	use Ankh\Version;
 
 	Route::controller('home', 'HomeController', [
 			'getTermsOfUse' => 'terms-of-use',
@@ -32,7 +29,7 @@
 	});
 
 Route::group(['middleware' => 'subdomens'], function() {
-	Route::get('authors/check', ['middleware' => ['admin', 'api'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
+	Route::get('authors/check', ['middleware' => ['admin'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{authors}'], function () {
 		Route::get('trace-updates', ['uses' => 'AuthorsController@getTraceUpdates', 'as' => 'authors.trace-updates']);
@@ -42,8 +39,9 @@ Route::group(['middleware' => 'subdomens'], function() {
 
 	Route::resource('pages', 'PagesController');
 	Route::group(['prefix' => 'pages/{pages}'], function () {
+		Route::get('/', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
 		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
-		Route::get('download/{version}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
+		Route::get('download/{version}/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
 	});
 
 	Route::resource('updates', 'UpdatesController');
@@ -67,10 +65,8 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::bind('updates', function ($id) {
 		return App::make(UpdateRepository::class)->find($id);
 	});
-	Route::bind('version', function ($date) {
-		$version = new Version();
-		$version->setTimestamp(Carbon::createFromFormat('d-m-Y\+H-i-s', $date));
-		return $version;
+	Route::bind('version', function ($date, $route) {
+		return $route->parameter('pages')->version($date);
 	});
 });
 

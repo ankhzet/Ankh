@@ -40,3 +40,30 @@ function strip_unwanted_tags($text, $tags = []) {
 	return $text;
 
 }
+
+function path_join() {
+	$args = func_get_args();
+	$r = [];
+	foreach ($args as $portion)
+		$r[] = rtrim($portion, '/\\');
+
+	return preg_replace('#[\\/]+#', '/', join('/', $r));
+}
+
+function krsort_tree(&$array) {
+	foreach ($array as $key => &$value)
+		if (is_array($value))
+			krsort_tree($value);
+
+	krsort($array);
+}
+
+function array_append_recursive($a1, $a2) {
+	foreach ($a2 as $key => $value)
+		if (is_array($value))
+			$a1[$key] = array_append_recursive(@$a1[$key] ?: [], $value);
+		else
+			$a1[$key] = $value;
+
+	return $a1;
+}

@@ -1,5 +1,6 @@
 <?php namespace Ankh\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Ankh\Http\Requests\PageRequest;
 
 use Ankh\Author;
@@ -9,7 +10,9 @@ use Ankh\Page;
 use Ankh\Contracts\PageRepository;
 use Ankh\Crumbs as Breadcrumbs;
 
-use PageUtils;
+use Ankh\Version;
+use Ankh\Downloadable\Transforms;
+use Ankh\Downloadable\DownloadWorker;
 
 class PagesController extends RestfulController {
 	protected $m;
@@ -48,10 +51,10 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function show() {
-		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
+		list($author, $group, $page, $version) = pick_arg(Author::class, Group::class, Page::class, Version::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$text = PageUtils::contents($page->resolver());
+		$text = with($version ?: $page->version())->contents();
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}
@@ -85,12 +88,24 @@ class PagesController extends RestfulController {
 	 */
 	public function update(PageRequest $request) {
 		return $this->_update($request, pick_arg(Page::class));
-	 }
+	}
 
 	public function getVersions(Page $page) {
 	}
 
-	public function getDownload(Page $page) {
+	public function getDownload(Request $request, Page $page, Version $version) {
+		$parameters = $request->route()->parameters();
+
+		$transformer = new Transforms();
+		$transforms = $transformer->filterTransforms($parameters);
+
+		if ($transforms) {
+			$downloadable = $transformer->apply($transforms, $version->downloadable());
+
+			return new DownloadWorker($downloadable);
+		}
+
+		return $this->viewDownload(compact('page', 'version'));
 	}
 
 }

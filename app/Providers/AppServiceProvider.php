@@ -33,6 +33,22 @@ class AppServiceProvider extends ServiceProvider
 	public function register()
 	{
 
+		$this->app['charset-encoder'] = $this->app->share(function ($app) {
+			return new \Ankh\Downloadable\CharsetEncoder();
+		});
+
+		$this->app['htmlizer'] = $this->app->share(function ($app) {
+			return new \Ankh\Downloadable\Htmlizer();
+		});
+
+		$this->app['plaintexter'] = $this->app->share(function ($app) {
+			return new \Ankh\Downloadable\Plaintexter();
+		});
+
+		$this->app['ziper'] = $this->app->share(function ($app) {
+			return new \Ankh\Downloadable\Ziper();
+		});
+
 		$this->app['crumbs'] = $this->app->share(function($app) {
 			return new Crumbs($app['router'], $app['route']);
 		});

@@ -2,7 +2,9 @@
 
 	use Closure;
 
-	class Page extends Updateable {
+	use Ankh\Contracts\Resolvable;
+
+	class Page extends Updateable implements Resolvable {
 
 		const COLUMN_SIZE = 'size';
 
@@ -18,11 +20,15 @@
 		}
 
 		public function absoluteLink() {
-			return '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/');
+			return path_join($this->author->absoluteLink(), $this->link);
 		}
 
 		public function resolver() {
 			return with(new PageResolver)->setPage($this);
+		}
+
+		public function version($timestamp = null) {
+			return with(new Version($timestamp))->setEntity($this);
 		}
 
 		public function updateType() {

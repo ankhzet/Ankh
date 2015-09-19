@@ -18,7 +18,7 @@
 <div class="page">
   <div class="text reader">
     <div class="pre">
-      {!!$text!!}
+{!!$text!!}
     </div>
     <div class="terminator"></div>
   </div>

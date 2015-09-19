@@ -75,6 +75,8 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 		- [ ] Pages collection admin-UI
 		- [ ] Pages collection page
 		- [ ] Pages collection API
+	- [x] Page downloading
+		- [x] Page download page
 
 - [x] Update entity
 	- [ ] Update entity admin-UI

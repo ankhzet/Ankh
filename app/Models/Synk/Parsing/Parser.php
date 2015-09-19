@@ -38,11 +38,15 @@ function firstTag($nodes, $tag) {
 }
 
 function tag($nodes, $tag) {
-	$tag = strtolower($tag);
+	if (!is_array($tag))
+		$tag = [$tag];
+
+	foreach ($tag as &$t)
+		$t = strtolower($t);
 
 	$r = [];
 	foreach (wrap($nodes) as $node)
-		if (strtolower($node->nodeName()) == $tag)
+		if (str_contains(strtolower($node->nodeName()), $tag))
 			$r[] = $node;
 
 	return $r;
@@ -173,36 +177,45 @@ class Parser {
 		return $pages;
 	}
 
-	function authorGroup(Crawler $node) {
-		$data = ['link' => ''];
+	function authorGroup(Crawler $groupNode) {
+		$data = ['link' => '', 'pages' => []];
 
-		$p = firstTag($node->filter('p>font>b')->parents(), 'p');
+		$done = false;
+		$groupNode->children()->each(function (Crawler $node) use (&$data, &$done) {
+			if ($done)
+				return;
 
-		$links = $p->filter('b a');
+			switch (strtolower($node->nodeName())) {
+			case 'p':
 
-		$name = firstNode($links, function (Crawler $node) {
-			return trim($node->attr('name')) != '';
+				$links = $node->filter('b a');
+
+				$name = firstNode($links, function (Crawler $node) {
+					return trim($node->attr('name')) != '';
+				});
+				$title = firstNode($links, function (Crawler $node) {
+					return trim($node->text()) != '';
+				});
+				$link = firstNode($links, function (Crawler $node) {
+					return trim($node->attr('href')) != '';
+				});
+
+				$data['idx'] = intval(str_replace('gr', '', $name->attr('name')));
+				$data['title'] = trim($title->text(), ' :');
+				$data['link'] = $link ? $link->attr('href') : null;
+
+
+				$about = $node->filter('font i')->first();
+				$data['annotation'] = trim($about->html());
+
+				break;
+			case 'dl':
+				$data['pages'][] = $this->groupPage($node);
+				break;
+			case 'h3':
+				$done = true;
+			}
 		});
-		$title = firstNode($links, function (Crawler $node) {
-			return trim($node->text()) != '';
-		});
-		$link = firstNode($links, function (Crawler $node) {
-			return trim($node->attr('href')) != '';
-		});
-
-		$data['idx'] = intval(str_replace('gr', '', $name->attr('name')));
-		$data['title'] = trim($title->text(), ' :');
-		$data['link'] = $link ? $link->attr('href') : null;
-
-
-		$about = $node->filter('font i')->first();
-		$data['annotation'] = trim($about->html());
-
-
-		$pages = array_filter(wrap(tag($node->children(), 'dl'), function ($node) {
-			return $this->groupPage($node);
-		}));
-		$data['pages'] = $pages;
 
 		return $data;
 	}

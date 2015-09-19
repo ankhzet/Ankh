@@ -19,6 +19,8 @@ $pages = array(
 		'edit' => 'Edit',
 		'download' => 'Download',
 
+		'downloaded' => 'Downloaded from <a href=":url">Ankh</a>',
+
 		'updates' => $updates,
 
 		'list' => 'list pages',

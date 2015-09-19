@@ -28,10 +28,30 @@ class Htmlizer implements Transformation {
 
 		$data = str_replace(static::LINEBREAK, '<p>', $data);
 
-		$transformable->setContents($data);
+		$page = $transformable->page;
+		$author = $page->author;
 
 		$charset = $transformable->charset ?: 'utf-8';
-		$view = view('pages.html-download', compact('transformable', 'img'));
+		$title = $author->fio . " - " . $page->title;
+		$link = \HTML::link(path_join("http://samlib.ru", $author->absoluteLink()), $author->fio) . " - "
+		 . \HTML::link(path_join("http://samlib.ru", $page->absoluteLink()), $page->title);
+
+		$annotation = $page->annotation;
+		$contents = $data;
+
+		$downloaded = \Lang::get('pages.pages.downloaded', ['url' => \Request::fullUrl()]);
+
+		if ($charset != 'utf-8') {
+			$e = app('charset-encoder');
+			$c = $e->remap($charset, true);
+
+			$title = $e->transform($title, 'utf-8', $c);
+			$link = $e->transform($link, 'utf-8', $c);
+			$annotation = $e->transform($annotation, 'utf-8', $c);
+			$downloaded = $e->transform($downloaded, 'utf-8', $c);
+		}
+
+		$view = view('pages.html-download', compact('img', 'charset', 'title', 'link', 'annotation', 'contents', 'downloaded'));
 
 		$transformable->setContents((string)$view);
 

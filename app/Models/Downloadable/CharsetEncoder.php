@@ -8,6 +8,8 @@ use Ankh\Contracts\Downloadable\Transformable;
 class CharsetEncoder implements Transformation {
 
 	protected $used_enc;
+	protected $map = ['cp1251' => 'win1251'];
+	protected $rmap = ['win1251' => 'cp1251'];
 
 	public function __construct() {
 		$this->used_enc = 'UTF-8';
@@ -24,8 +26,9 @@ class CharsetEncoder implements Transformation {
 		return $transformable->setContents($data);
 	}
 
-	public function remap($encoding) {
-		return $encoding;
+	public function remap($encoding, $reverse = false) {
+		$map = $reverse ? $this->rmap : $this->map;
+		return @$map[$encoding] ?: $encoding;
 	}
 
 	public function transform($data, $fromEncoding, $toEncoding = null) {

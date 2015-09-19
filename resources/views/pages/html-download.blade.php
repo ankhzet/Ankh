@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset={{ $charset or "utf-8" }}" />
+	<meta http-equiv="content-type" content="text/html; charset={{ $charset }}" />
 
-	<title>{{$transformable->page->author->fio}} - {{$transformable->page->title}}</title>
+	<title>{!! $title !!}</title>
 	<style>
 		body {
 			background-color: #e9e9e9;
@@ -74,16 +74,15 @@
 				<div>
 					<div class="cnt-item">
 						<div>
-							<a href="http://samlib.ru/{{ ltrim($transformable->page->author->absoluteLink(), '/') }}">{{$transformable->page->author->fio}}</a> -
-							<a href="http://samlib.ru/{{ ltrim($transformable->page->absoluteLink(), '/') }}">{{$transformable->page->title}}</a>
+							{!! $link !!}
 						</div>
 						<div class="text quote">
-							{!! $transformable->page->annotation !!}
+							{!! $annotation !!}
 						</div>
 					</div>
 					<div class="text reader">
 						<div class="pre">
-							{!! $transformable->getContents() !!}
+							{!! $contents !!}
 						</div>
 						<div class="terminator"></div>
 					</div>
@@ -95,7 +94,7 @@
 
 	<footer>
 		<ul>
-			<li>Downloaded from {!! HTML::link(Request::fullUrl(), trans('common.site')) !!}</li>
+			<li>{!! $downloaded !!}</li>
 		</ul>
 	</footer>
 

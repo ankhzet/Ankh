@@ -1,6 +1,7 @@
 <?php namespace Ankh\Http\Controllers;
 
 use Request;
+use Exception;
 
 use Ankh\Contracts\EntityRepository;
 use Ankh\Entity;
@@ -89,7 +90,8 @@ class RestfulController extends Controller {
 
 		$this->repository()->order();
 
-		$paginator = $this->repository()->paginate(static::ENTITIES_PER_PAGE);
+		$perPage = intval(Request::get('perPage')) ?: static::ENTITIES_PER_PAGE;
+		$paginator = $this->repository()->paginate($perPage);
 
 		$this->repository()->appendFiltersToPaginator($paginator);
 
@@ -127,16 +129,16 @@ class RestfulController extends Controller {
 	* @return Response
 	*/
 	public function _update(EntityRequest $request, Entity $entity) {
-		if ($request->deleted())
-			$entity->delete();
-		else
-			if ($entity->trashed())
+		if (($deleted = !!$request->deleted()) != !!$entity->trashed())
+			if ($deleted)
+				$entity->delete();
+			else
 				$entity->restore();
 
 		if ($this->m->updateEvenTrashed($entity, $request->data()))
 			return $this->innerRedirect('show', $entity)->withMessage('Updated');
 
-		throw new \Exception('Update failed');
+		throw new Exception('Update failed');
 	}
 
 	/**
@@ -175,7 +177,7 @@ class RestfulController extends Controller {
 			$arg = @$args[0] ?: [];
 
 			if (self::isApiCall()) {
-				$relations = !!\Request::get('relations');
+				$relations = !!Request::get('relations');
 
 				if (is_array($arg)) {
 					$entity = pick_arg($arg, get_class($this->repository()->model()));

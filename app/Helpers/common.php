@@ -41,6 +41,15 @@ function strip_unwanted_tags($text, $tags = []) {
 
 }
 
+function path_join() {
+	$args = func_get_args();
+	$r = [];
+	foreach ($args as $portion)
+		$r[] = rtrim($portion, '/\\');
+
+	return preg_replace('#[\\/]+#', '/', join('/', $r));
+}
+
 function krsort_tree(&$array) {
 	foreach ($array as $key => &$value)
 		if (is_array($value))

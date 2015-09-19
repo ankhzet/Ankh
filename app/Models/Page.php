@@ -20,7 +20,7 @@
 		}
 
 		public function absoluteLink() {
-			return '/' . trim($this->author->absoluteLink(), '/') . '/' . trim($this->link, '/');
+			return path_join($this->author->absoluteLink(), $this->link);
 		}
 
 		public function resolver() {

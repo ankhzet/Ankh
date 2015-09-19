@@ -5,6 +5,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
+use Ankh\Entity;
 use Ankh\Update;
 use Ankh\AuthorUpdate;
 use Ankh\GroupUpdate;
@@ -16,11 +17,11 @@ class UpdateRepositoryEloquent extends EntityRepositoryEloquent implements Updat
 
 	protected $entity;
 
-	public function __construct(\Ankh\Update $model) {
+	public function __construct(Update $model) {
 		$this->setModel($model);
 	}
 
-	public function setEntity(\Ankh\Entity $entity) {
+	public function setEntity(Entity $entity) {
 		$this->entity = $entity;
 
 		if ($this->entity) {
@@ -72,7 +73,7 @@ class UpdatesPaginator extends LengthAwarePaginator {
 		$r_type = $update->updateType();
 
 		$class = $update->entityClass();
-		if ($class == \Ankh\Entity::class) {
+		if ($class == Entity::class) {
 			foreach ($this->known() as $model) {
 				if ($model->updateType() == $r_type)
 					return $model->newFromBuilder($update->getAttributes());
@@ -105,3 +106,4 @@ class UpdatesPaginator extends LengthAwarePaginator {
 	}
 
 }
+

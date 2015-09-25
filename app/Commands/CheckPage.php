@@ -1,17 +1,19 @@
-<?php namespace Ankh\Commands;
+<?php namespace Ankh\Jobs;
+
+use Illuminate\Contracts\Queue\ShouldBeQueued;
 
 use Carbon\Carbon;
-use Queue;
+use Bus;
 
 use Ankh\Page\Comparator;
 use Ankh\Version;
 use Ankh\PageUpdate;
 
-class CheckPage extends Command {
+class CheckPage extends Job implements ShouldBeQueued {
 
 	protected $update;
 
-	function __construct(PageUpdate $update) {
+	function __construct($update) {
 		$this->update = $update;
 	}
 
@@ -21,29 +23,29 @@ class CheckPage extends Command {
 	 * @return void
 	 */
 	public function handle() {
-		$page = $this->update->relatedPage();
-		$version = $page->version($this->update->created_at);
+		$update = PageUpdate::withTrashed()->find($this->update);
+
+		$page = $update->relatedPage();
+		$version = $page->version($update->created_at);
 
 		$compare = with(new Comparator)->compareLast($version);
 
 		if ($compare === false)
-			throw new \Exception("Page {$this->version->getEntity()->id} check failed");
+			throw new \Exception("Page {$page->id} check failed");
 
 		if ($compare->equals())
-			$this->update->delete();
+			$update->forceDelete();
 		else {
-
+			$update->restore();
 		}
 	}
 
-	public static function queue(PageUpdate $update) {
-		$page = $update->relatedPage();
-		$id = "page-{$page->id}-check";
-
-		// clearing page-check queue
-		while (Queue::pop($id) != null);
-
-		Queue::pushOn($id, new static($update));
+	public static function checkLater(PageUpdate $update) {
+		$update->delete();
+		$job = new static($update->id);
+		$job->onQueue('page-check');
+		$job->delay(60);
+		Bus::dispatch($job);
 	}
 
 }

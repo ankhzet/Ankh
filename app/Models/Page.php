@@ -3,7 +3,7 @@
 	use Closure;
 
 	use Ankh\Contracts\Resolvable;
-	use Ankh\Commands\CheckPage as CheckJob;
+	use Ankh\Jobs\CheckPage as CheckJob;
 
 	class Page extends Updateable implements Resolvable {
 
@@ -67,7 +67,7 @@
 			$update = parent::newUpdate($type, $callback);
 
 			if ($type == PageUpdate::U_DIFF) {
-				CheckJob::queue($update);
+				CheckJob::checkLater($update);
 			}
 
 			return $update;

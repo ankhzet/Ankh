@@ -33,9 +33,9 @@ class CheckPage extends Job implements ShouldBeQueued {
 		if ($compare === false)
 			throw new \Exception("Page {$page->id} check failed");
 
-		if ($compare->equals())
-			$update->forceDelete();
-		else {
+		if ($compare->equals()) {
+
+		} else {
 			$update->restore();
 		}
 	}

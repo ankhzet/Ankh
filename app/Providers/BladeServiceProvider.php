@@ -10,6 +10,16 @@ class BladeServiceProvider extends ServiceProvider {
 		return '/' . $prev . '\B@(' . $tag . ')([ \t]*)(\( (( (?>[^()]+) | (?3) )* ) \))?' . $post . '/x';
 	}
 
+	function menuItem($href, $title, $attributes = '') {
+		if (starts_with($title, '!')) {
+			$attributes = trim(join(' ', [$attributes, 'class="fa fa-' . trim(substr($title, 1)) . '"']));
+			$title = '';
+		} else
+			$title = '<?php echo app(\'translator\')->get(' . $title . '); ?>';
+
+		return '<li><a href="<?php echo ' . $href . '; ?>" ' . $attributes . '>' . $title . '</a></li>';
+	}
+
 	/**
 	 * Register bindings in the container.
 	 *
@@ -46,7 +56,7 @@ class BladeServiceProvider extends ServiceProvider {
 			$pattern = $this->openMatcherPattern('m-item');
 			return preg_replace_callback($pattern, function ($matches) {
 				preg_match('/(.+?)\s*,(.+)/', $matches[4], $m);
-				return '<li><a href="<?php echo ' . $m[2] . '; ?>"><?php echo app(\'translator\')->get(' . $m[1] . '); ?></a></li>';
+				return $this->menuItem($m[2], $m[1]);
 			}, $view);
 		});
 
@@ -54,7 +64,7 @@ class BladeServiceProvider extends ServiceProvider {
 			$pattern = $this->openMatcherPattern('m-delete');
 			return preg_replace_callback($pattern, function ($matches) {
 				preg_match('/(.+?)\s*,(.+)/', $matches[4], $m);
-				return '<li><a href="<?php echo ' . $m[2] . '; ?>" data-method="delete"><?php echo app(\'translator\')->get(' . $m[1] . '); ?></a></li>';
+				return $this->menuItem($m[2], $m[1], 'data-method="delete"');
 			}, $view);
 		});
 

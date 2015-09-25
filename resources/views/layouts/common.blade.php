@@ -73,6 +73,7 @@
 	{!! asset_link('js/jquery.js') !!}
 	{!! asset_link('js/common.js') !!}
 	{!! asset_link('js/upform.js') !!}
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 
 @if (($message = session('message')) || ($message = session('status')))
 	<script language="javascript">

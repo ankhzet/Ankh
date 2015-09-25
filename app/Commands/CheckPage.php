@@ -1,7 +1,5 @@
 <?php namespace Ankh\Jobs;
 
-use Illuminate\Contracts\Queue\ShouldBeQueued;
-
 use Carbon\Carbon;
 use Bus;
 
@@ -9,7 +7,7 @@ use Ankh\Page\Comparator;
 use Ankh\Version;
 use Ankh\PageUpdate;
 
-class CheckPage extends Job implements ShouldBeQueued {
+class CheckPage extends Job {
 
 	protected $update;
 
@@ -41,10 +39,8 @@ class CheckPage extends Job implements ShouldBeQueued {
 	}
 
 	public static function checkLater(PageUpdate $update) {
-		$update->delete();
 		$job = new static($update->id);
 		$job->onQueue('page-check');
-		$job->delay(60);
 		Bus::dispatch($job);
 	}
 

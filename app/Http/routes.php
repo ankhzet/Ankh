@@ -41,6 +41,7 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::group(['prefix' => 'pages/{pages}'], function () {
 		Route::get('/', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
 		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
+		Route::get('{version}/diff/{diff}', ['uses' => 'PagesController@getDiff', 'as' => 'pages.diff']);
 		Route::get('download/{version}/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
 	});
 
@@ -66,6 +67,9 @@ Route::group(['middleware' => 'subdomens'], function() {
 		return App::make(UpdateRepository::class)->find($id);
 	});
 	Route::bind('version', function ($date, $route) {
+		return $route->parameter('pages')->version($date);
+	});
+	Route::bind('diff', function ($date, $route) {
 		return $route->parameter('pages')->version($date);
 	});
 });

@@ -14,6 +14,8 @@ use Ankh\Version;
 use Ankh\Downloadable\Transforms;
 use Ankh\Downloadable\DownloadWorker;
 
+use Ankh\Page\Diff;
+
 class PagesController extends RestfulController {
 	protected $m;
 
@@ -59,6 +61,27 @@ class PagesController extends RestfulController {
 			throw new \Exception("Version {$version} not found");
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
+	}
+
+	/**
+	 * Display the specified page versions diff.
+	 *
+	 * @param  Page $page
+	 * @return Response
+	 */
+	public function getDiff(Page $page, Version $v1, Version $v2) {
+		$t1 = $v1->contents();
+		$t2 = $v2->contents();
+
+		if ($t1 === null)
+			throw new \Exception("Version {$v1} not found");
+
+		if ($t2 === null)
+			throw new \Exception("Version {$v2} not found");
+
+		$text = with(new Diff)->diff($t1, $t2);
+
+		return $this->viewShow(compact('page', 'text'));
 	}
 
 	/**

@@ -14,6 +14,9 @@ class CachedFetch extends Fetch {
 		parent::__construct($fetcher);
 
 		$this->cache = Cache::store('file');
+		if ($this->cached = config('synk.cache.enabled', $this->cached)) {
+			$this->minutes = config('synk.cache.ttl', $this->minutes);
+		}
 	}
 
 	public function cached($cached = true) {

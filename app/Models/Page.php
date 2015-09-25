@@ -66,7 +66,9 @@
 		public function newUpdate($type, Closure $callback = null) {
 			$update = parent::newUpdate($type, $callback);
 
-			if ($type == PageUpdate::U_DIFF) {
+			switch ($type) {
+			case PageUpdate::U_ADDED:
+			case PageUpdate::U_DIFF:
 				CheckJob::checkLater($update);
 			}
 

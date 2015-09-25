@@ -3,6 +3,7 @@
 	use Closure;
 
 	use Ankh\Contracts\Resolvable;
+	use Ankh\Commands\CheckPage as CheckJob;
 
 	class Page extends Updateable implements Resolvable {
 
@@ -60,6 +61,16 @@
 					'size' => PageUpdate::U_DIFF,
 				]
 			);
+		}
+
+		public function newUpdate($type, Closure $callback = null) {
+			$update = parent::newUpdate($type, $callback);
+
+			if ($type == PageUpdate::U_DIFF) {
+				CheckJob::queue($update);
+			}
+
+			return $update;
 		}
 
 	}

@@ -114,6 +114,8 @@ class Updateable extends Entity {
 		$update->save();
 
 		$this->attachUpdate($update);
+
+		return $update;
 	}
 
 	public function updates() {

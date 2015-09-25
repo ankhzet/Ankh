@@ -15,6 +15,7 @@ use Ankh\Downloadable\Transforms;
 use Ankh\Downloadable\DownloadWorker;
 
 use Ankh\Page\Diff;
+use PageUtils;
 
 class PagesController extends RestfulController {
 	protected $m;
@@ -53,6 +54,38 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function show() {
+		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
+		$exclude = view_excludes(['author' => $author, 'group' => $group]);
+
+		$updates = \Ankh\PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
+
+		$v = [];
+		foreach ($updates as $update) {
+			$version = $update->pageVersion();
+			if (PageUtils::exists($version->resolver()))
+				$v[] = [$version, $update];
+		}
+
+		$versions = [];
+		foreach ($v as $version) {
+			$h = [];
+			foreach (array_reverse($v) as $version2)
+				if ($version[0]->timestamp() > $version2[0]->timestamp())
+					$h[title_case($version2[1]->created_at->format('F, Y'))][] = $version2[0];
+
+			$versions[title_case($update->created_at->format('F, Y'))][] = [0 => $version[0], 1 => $version[1], 2 => $h];
+		}
+
+		return $this->viewVersions(compact('page', 'updates', 'versions', 'exclude'));
+	}
+
+	/**
+	 * Display the specified page entity.
+	 *
+	 * @param  Page $page
+	 * @return Response
+	 */
+	public function getRead() {
 		list($author, $group, $page, $version) = pick_arg(Author::class, Group::class, Page::class, Version::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 

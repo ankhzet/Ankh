@@ -33,4 +33,5 @@ return array(
 	'annotation' => 'Описание',
 	'size' => 'Объем',
 
+	'read-diff' => 'читать изменения после',
 	);

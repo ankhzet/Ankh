@@ -18,7 +18,7 @@
 						</div>
 						<div class="text">{!! strip_unwanted_tags($page->annotation, ['font']) !!}</div>
 						<ul class="text">
-							<li><a href="{{ route('pages.versions', $page) }}">@lang('pages.pages.all-versions')</a></li>
+							<li><a href="{{ route('pages.show', $page) }}">@lang('pages.pages.all-versions')</a></li>
 							<li><span class="size">{{file_size($page->size, 1)}}</span></li>
 @kept(group)
 							<li>@lang('pages.groups.group'):

@@ -1,9 +1,11 @@
 .text.reader {
+	@text-color: #000;
+
 	margin-top: 30px;
 	padding: 40px 10px 0 10px;
 	font-size: 16px;
 	font-family: Tahoma;
-	color: #000;
+	color: @text-color;
 	text-align: justify;
 	background-image: url(@{image-root}/borders.png);
 	background-position: center -16px;
@@ -28,4 +30,21 @@
 		border-top: 1px dotted #666;
 		margin: 20px 0;
 	}
+
+	span.context {
+		color: lighten(@text-color, 40%);
+	}
+
+	ins, del {
+		text-decoration: none;
+	}
+
+	ins {
+		color: green;
+	}
+
+	del {
+		color: red;
+	}
+
 }

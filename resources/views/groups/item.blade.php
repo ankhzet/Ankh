@@ -8,7 +8,7 @@
 					<div class="text">
 						@if (trim($group->annotation) != '') {!! $group->annotation !!} <br/> @endif
 @foreach ($group->peekPages($delta, 4)->get() as $page)
-								&rarr; <a href="{{ route('pages.versions', $page) }}">{{$page->title}}</a><br />
+								&rarr; <a href="{{ route('pages.show', $page) }}">{{$page->title}}</a><br />
 @endforeach
 @if ($delta > 0)
 								&rarr; <a href="{{ route('groups.pages.index', $group) }}">@lang('pages.pages.another', ['count' => $delta])</a><br />

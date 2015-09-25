@@ -32,4 +32,6 @@ return array(
 	'inline' => 'Is inline group',
 	'annotation' => 'Annotation',
 	'size' => 'Size',
+
+	'read-diff' => 'read updated after',
 	);

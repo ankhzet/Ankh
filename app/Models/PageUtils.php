@@ -64,7 +64,7 @@ class PageUtils extends CharsetEncoder {
 	public function putContents(PageResolver $resolver, $contents, $encoding = null) {
 		$path = $resolver->resolve();
 
-		if (!$this->exists($directory = dirname($path)))
+		if (!$this->storage->exists($directory = dirname($path)))
 			$this->storage->makeDirectory($directory);
 
 		$stored = $this->storedEncoding();

@@ -81,7 +81,7 @@ class Comparator {
 	}
 
 	function cleanup($html) {
-		$p1 = '<!----------- ���������� ������������ --------------->';
+		$p1 = mb_convert_encoding('<!----------- Собственно произведение --------------->', $this->fetchedEncoding);
 		$p2 = '<!--------------------------------------------------->';
 
 		$i1 = strpos($html, $p1) + strlen($p1);
@@ -94,7 +94,7 @@ class Comparator {
 	}
 
 	function size($html) {
-		$p1 = '- ���� �������� ������������ (����� ������) -';
+		$p1 = mb_convert_encoding('- Блок описания произведения (слева вверху) -', $this->fetchedEncoding);
 		$p2 = '</small>';
 		$i1 = strpos($html, $p1);
 		$i2 = strpos($html, $p2, $i1);

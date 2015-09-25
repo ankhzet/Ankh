@@ -119,7 +119,7 @@ class Updateable extends Entity {
 	public function updates() {
 		return $this->belongsToMany($this->updateClass(), 'entity_update', 'entity_id', 'update_id')
 		->withPivot(['r_type'])
-		->where('entity_update.r_type', $this->updateType());
+		->where('r_type', $this->updateType());
 	}
 
 	public function attachUpdate($update) {

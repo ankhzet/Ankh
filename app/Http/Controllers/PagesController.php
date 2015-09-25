@@ -55,6 +55,8 @@ class PagesController extends RestfulController {
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
 		$text = with($version ?: $page->version())->contents();
+		if ($text === null)
+			throw new \Exception("Version {$version} not found");
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}

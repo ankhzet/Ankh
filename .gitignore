@@ -8,5 +8,4 @@
 public/assets/*.css
 public/assets/*.js
 
-/storage/tvs
 /public/cache

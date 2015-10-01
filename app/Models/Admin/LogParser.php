@@ -34,8 +34,8 @@ class LogParser {
 		$log[] = $this->parseEntry($chunk);
 
 		$l = [];
-		foreach (array_filter($log) as $entry)
-			$l[$entry['date']->timestamp] = $entry;
+		foreach (array_filter($log) as $id => $entry)
+			$l[$entry['date']->timestamp . '.' . $id] = $entry;
 
 		krsort($l);
 
@@ -67,23 +67,22 @@ class LogParser {
 
 		$message = $this->parseMessage(trim($match[3]));
 
-		return [
-		'date' => new Carbon($match[1]),
-		'level' => str_replace('local.', '', strtolower(trim($match[2]))),
-		'message' => $message,
-		'stack' => $entry,
-		];
-
+		return array(
+			'date' => new Carbon($match[1]),
+			'level' => str_replace('local.', '', strtolower(trim($match[2]))),
+			'message' => $message,
+			'stack' => $entry,
+			);
 	}
 
 	public function parseMessage($message) {
 		if (preg_match("#exception '(.+)' with message '(.+)' in (.*):(\d+)#i", $message, $m))
-			return [
+			return array(
 				'exception' => $m[1],
 				'message' => $m[2],
 				'file' => $this->parseFile($m[3]),
 				'line' => $m[4],
-			];
+				);
 
 		return $message;
 	}
@@ -91,4 +90,5 @@ class LogParser {
 	public function parseFile($file) {
 		return str_replace($this->doc_root, $this->dbg_root, str_replace('\\', '/', $file));
 	}
+
 }

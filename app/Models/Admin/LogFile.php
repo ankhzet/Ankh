@@ -14,8 +14,12 @@ class LogFile implements Downloadable, Zipable {
 
 	function __construct($filename) {
 		$this->filename = $filename;
-		$this->setContents(@Storage::disk('logs')->get($this->filename));
 		$this->setType(pathinfo($filename, PATHINFO_EXTENSION));
+
+		if (Storage::disk('logs')->exists($this->filename))
+			$this->setContents(Storage::disk('logs')->get($this->filename));
+		else
+			$this->setContents(null);
 	}
 
 	public function filename() {

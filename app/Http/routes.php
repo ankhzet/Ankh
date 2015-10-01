@@ -75,3 +75,10 @@ Route::group(['middleware' => 'subdomens'], function() {
 });
 
 	Route::get('rss/{chanel?}/{id?}', ['uses' => 'HomeController@getRSS', 'as' => 'rss']);
+
+	Route::group(['middleware' => 'admin', 'namespace' => 'Admin'], function() {
+		Route::controller('admin', 'AdminController', [
+			'getLog' => 'admin.log',
+
+			]);
+	});

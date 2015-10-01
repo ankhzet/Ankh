@@ -73,6 +73,11 @@ $authors = array(
 	'no-authors' => 'No authors',
 	);
 
+$admin = array(
+	'index' => 'Admin',
+	'log' => 'View log',
+	);
+
 return array(
 	'home' => 'Home',
 
@@ -86,6 +91,8 @@ return array(
 	'user' => array(
 		'profile' => 'Profile',
 		),
+
+	'admin' => $admin,
 
 	'password' => array(
 		'email' => 'Pasword resetting form',

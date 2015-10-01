@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'url' => 'http://ankh-tvs.herokuapp.com',
+    'url' => env('APP_URL'),
     'debug_src' => 'Z:/home/co.re/',
 
     /*

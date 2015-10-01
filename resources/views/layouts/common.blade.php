@@ -27,6 +27,7 @@
 						<li><a href="{{ route('authors.index') }}">@lang('pages.authors.index')</a></li>
 						<li><a href="{{ route('groups.index') }}">@lang('pages.groups.index')</a></li>
 						<li><a href="{{ route('pages.index') }}">@lang('pages.pages.index')</a></li>
+						<li><a href="{{ route('updates.index') }}">@lang('pages.updates.index')</a></li>
 					</ul>
 
 					<span class="user">

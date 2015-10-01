@@ -1,9 +1,9 @@
 $(function() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-Token': $('meta[name="_token"]').attr('content')
-        }
-    });
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+		}
+	});
 
 	$('.log .stack').click(function () {
 		var expanded = 'expanded', has = $(this).hasClass(expanded);
@@ -77,7 +77,7 @@ $(function() {
 			});
 
 			return form.append(token, hiddenInput)
-								 .appendTo('body');
+			.appendTo('body');
 		}
 	};
 

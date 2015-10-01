@@ -20,6 +20,7 @@ trait TransformableTrait {
 
 	public function setType($type) {
 		$this->type = $type;
+		$this->extension = $type;
 	}
 
 	function __toString() {

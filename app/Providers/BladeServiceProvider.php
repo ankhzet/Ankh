@@ -56,7 +56,7 @@ class BladeServiceProvider extends ServiceProvider {
 			$pattern = $this->openMatcherPattern('m-item');
 			return preg_replace_callback($pattern, function ($matches) {
 				preg_match('/(.+?)\s*,(.+)/', $matches[4], $m);
-				return $this->menuItem($m[2], $m[1]);
+				return $this->menuItem(trim($m[2]), trim($m[1]));
 			}, $view);
 		});
 
@@ -64,7 +64,7 @@ class BladeServiceProvider extends ServiceProvider {
 			$pattern = $this->openMatcherPattern('m-delete');
 			return preg_replace_callback($pattern, function ($matches) {
 				preg_match('/(.+?)\s*,(.+)/', $matches[4], $m);
-				return $this->menuItem($m[2], $m[1], 'data-method="delete"');
+				return $this->menuItem(trim($m[2]), trim($m[1]), 'data-method="delete"');
 			}, $view);
 		});
 

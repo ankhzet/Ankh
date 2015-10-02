@@ -1,7 +1,7 @@
 <?php namespace Ankh\Jobs;
 
 use Carbon\Carbon;
-use Bus;
+use Queue;
 
 use Ankh\Page\Comparator;
 use Ankh\Version;
@@ -40,8 +40,7 @@ class CheckPage extends Job {
 
 	public static function checkLater(PageUpdate $update) {
 		$job = new static($update->id);
-		$job->onQueue('page-check');
-		Bus::dispatch($job);
+		Queue::pushOn('page-check', $job);
 	}
 
 }

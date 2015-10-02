@@ -16,7 +16,8 @@
         "davejamesmiller/laravel-breadcrumbs": "dev-master",
         "jenssegers/date": "^3.0@dev",
         "roumen/feed": "~2.9",
-        "iron-io/iron_mq": "dev-master"
+        "iron-io/iron_mq": "dev-master",
+        "ezyang/htmlpurifier": "dev-master"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*",

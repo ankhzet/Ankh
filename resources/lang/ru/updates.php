@@ -6,7 +6,7 @@ return array(
 	'change' => 'изменено [:a]: :old -> :new',
 
 	'title' => 'переименовано "{:old}" в "{:new}"',
-	'annotation' => 'ищменилось описание',
+	'annotation' => 'изменилось описание',
 
 	'authorupdate' => array(
 		'change' => array (

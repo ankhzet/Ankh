@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL'),
+    'url' => env('APP_URL', 'http://co.re'),
     'debug_src' => 'Z:/home/co.re/',
 
     /*

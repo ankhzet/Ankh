@@ -67,9 +67,9 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 	- [x] Page info page
 	- [x] Page edit page
 	- [x] Page-related updates page
-	- [ ] Page versions page
-		- [ ] Page version view
-		- [ ] Page version diff
+	- [x] Page versions page
+		- [x] Page version view
+		- [x] Page version diff
 		- [x] Page version download
 			- [x] Page version download page
 	- [ ] Pages collection
@@ -82,11 +82,11 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 	- [x] Updates page
 	- [x] Updates RSS
 
-- [ ] Update watcher
+- [x] Update watcher
 
 - [x] Updates checker
 	- [ ] Load balancer
-	- [ ] Cron command
+	- [x] Cron command
 		- [ ] Cron command admin-UI
 
 - [x] REST'ful service API
@@ -109,3 +109,4 @@ Note: You can change database/seeds/UsersTableSeeder.php to seed database with y
 - 0.6 Updates handling, views & formatting
 - 0.7 Synk subsystem implementation
 - 0.8 Added downloading functionality
+- 0.9 Added page versioning and diff view

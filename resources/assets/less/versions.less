@@ -2,17 +2,23 @@
 	margin: 0;
 	padding: 0;
 	position: relative;
-
 }
 
 .version {
 	font-weight: normal;
 	color: @dark-font-color;
+
+	.size {
+		width: 100px;
+		sup * {
+			font-weight: normal;
+		}
+	}
 }
 
 .versions {
 	overflow: hidden;
-	width: 310px;
+	width: 260px;
 	height: 20px;
 	display: inline-block;
 	position: relative;
@@ -23,24 +29,26 @@
 		z-index: 100;
 	}
 
-	li {
-		width: 307px;
-		border: 1px solid transparent;
+	.month {
+		white-space: nowrap;
+	}
+
+	ul {
 		position: absolute;
-		border-radius: 3px;
-		margin: 0;
-		padding: 2px 1px;
 		background: #ddd;
 		border: 1px solid transparent;
+		border-radius: 3px;
+	}
+
+	li {
+		width: 256px;
+		margin: 0;
+		padding: 2px 1px;
 		text-align: center;
 	}
 
-	&:hover li {
-		border: 1px solid #333;
-	}
-
 	a {
-		display: inline;
+		display: none;
 		padding: 0 4px 0;
 		text-align: center;
 		border-radius: 2px;
@@ -51,6 +59,14 @@
 			background: #eee;
 		}
 
+	}
+
+	&:hover ul {
+		border: 1px solid #333;
+	}
+
+	&:hover a {
+		display: inline;
 	}
 
 }

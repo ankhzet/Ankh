@@ -41,6 +41,11 @@ class PageUtils extends CharsetEncoder {
 		return $this->storage->exists($path) ? $path : false;
 	}
 
+	public function local(PageResolver $resolver) {
+		$path = $resolver->resolve();
+		return $this->storage->exists($path) ? $this->storage->size($path) : false;
+	}
+
 	/**
 	 * @param  string $encoding - Encoding, in which contents should be returned.
 	 * @return string

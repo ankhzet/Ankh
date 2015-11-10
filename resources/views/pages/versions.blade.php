@@ -40,20 +40,28 @@
 @if ($v[2])
 			<span class="text">
 				<span class="v-diff">&rarr; @lang('common.read-diff'):
-					<ul class="versions">
+					<div class="versions">
+						<ul>
 @foreach($v[2] as $month2 => $perMonth2)
-						<li>
-							<span class="nowrap">{{$month2}}</span><br />
-@foreach($perMonth2 as $v2)
-							<a href="{{ route('pages.diff', [$page, $v[0], $v2]) }}" noindex nofollow >{{$v2->encode('d.m')}}</a>
+							<li class="dotted">
+								<div class="month">{{$month2}}</div>
+@foreach(array_chunk($perMonth2, 5) as $chunk)
+@foreach($chunk as $v2)
+								<a href="{{ route('pages.diff', [$page, $v2, $v[0]]) }}" noindex nofollow>{{$v2->encode('d.m')}}</a>
 @endforeach
-						</li>
+								<br />
 @endforeach
-					</ul>
+							</li>
+@endforeach
+						</ul>
+					</div>
 				</span>
 			</span>
 @endif
-			<span class="link size right">{{file_size(@$v[1]->change['new'])}}</span>
+			<span class="link size right">{{file_size(@$v[1]->change['new'])}}<sup>{!!$v[1]!!}</sup></span>
+			<span class="link size right">{{file_size(PageUtils::local($v[0]->resolver()))}}<sup>z</sup></span>
+
+
 		</div>
 @endforeach
 @endforeach

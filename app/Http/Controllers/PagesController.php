@@ -59,22 +59,9 @@ class PagesController extends RestfulController {
 
 		$updates = \Ankh\PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
 
-		$v = [];
-		foreach ($updates as $update) {
-			$version = $update->pageVersion();
-			if (PageUtils::exists($version->resolver()))
-				$v[] = [$version, $update];
-		}
+		$groupper = new UpdatesGroupper($updates);
 
-		$versions = [];
-		foreach ($v as $version) {
-			$h = [];
-			foreach (array_reverse($v) as $version2)
-				if ($version[0]->timestamp() > $version2[0]->timestamp())
-					$h[title_case($version2[1]->created_at->format('F, Y'))][] = $version2[0];
-
-			$versions[title_case($update->created_at->format('F, Y'))][] = [0 => $version[0], 1 => $version[1], 2 => $h];
-		}
+		$versions = $groupper->flow();
 
 		return $this->viewVersions(compact('page', 'updates', 'versions', 'exclude'));
 	}
@@ -164,6 +151,64 @@ class PagesController extends RestfulController {
 		}
 
 		return $this->viewDownload(compact('page', 'version'));
+	}
+
+}
+
+class UpdatesGroupper {
+
+	const MONTH_FORMAT = 'F, Y';
+
+	protected $updates;
+
+	private $monthful = [];
+	private $versions = [];
+
+	function __construct($updates) {
+		$this->updates = $updates;
+	}
+
+	function months() {
+		foreach ($this->updates as $update) {
+			$version = $update->pageVersion();
+			if (PageUtils::exists($version->resolver())) {
+				$this->versions[] = [$version, $update];
+
+				$this->monthful[$this->month($update)][] = $update;
+			}
+		}
+
+		return array_keys($this->monthful);
+	}
+
+	function monthful($month) {
+		return $this->monthful[$month];
+	}
+
+	function prior($version) {
+		$from = $version->timestamp();
+		$r = [];
+		foreach ($this->versions as $pair) {
+			if ($from > $pair[0]->timestamp())
+				$r[$this->month($pair[1])][] = $pair[0];
+		}
+		return ($r);
+	}
+
+	function month($update) {
+		return title_case($update->created_at->format(static::MONTH_FORMAT));
+	}
+
+	function flow() {
+		$versions = [];
+		foreach ($this->months() as $month) {
+			foreach ($this->monthful($month) as $update) {
+				$version = $update->pageVersion();
+				$versions[$month][] = [$version, $update, $this->prior($version)];
+			}
+		}
+
+		return $versions;
 	}
 
 }

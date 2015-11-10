@@ -14,7 +14,7 @@ class Crumbs {
 	protected $route = null;
 	protected $routes = null;
 	protected $crumbs = [];
-	protected $entitied = ['create', 'edit', 'show', 'delete', 'check', 'download'];
+	protected $entitied = ['create', 'edit', 'show', 'delete', 'check', 'download', 'diff', 'read'];
 	protected $sole = ['create'];
 
 	public function __construct(Router $routes, Route $route) {

@@ -31,6 +31,9 @@ $pages = array(
 
 		'updates' => $updates,
 
+		'diff' => 'Отличия',
+		'read' => 'Чтение',
+
 		'list' => 'произведения',
 		'all-versions' => 'все версии',
 		'another' => '+ еще :count...',

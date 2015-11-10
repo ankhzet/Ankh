@@ -29,8 +29,10 @@ $pages = array(
 		'downloaded' => 'Downloaded from <a href=":url">Ankh</a>',
 		'page' => 'Page',
 
-
 		'updates' => $updates,
+
+		'diff' => 'Differences',
+		'read' => 'Reading',
 
 		'list' => 'list pages',
 		'all-versions' => 'all versions',

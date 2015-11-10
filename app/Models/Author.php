@@ -60,6 +60,8 @@
 			return array_merge_recursive(
 				parent::infoUpdateCapture(),
 				[
+					'-*rating' => Update::U_INFO,
+					'-*visitors' => Update::U_INFO,
 					'link' => Update::U_INFO
 				]
 			);

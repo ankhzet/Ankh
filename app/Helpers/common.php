@@ -67,3 +67,14 @@ function array_append_recursive($a1, $a2) {
 
 	return $a1;
 }
+
+function hasUpdateModifier($modifier, $where) {
+	return strpos($where, $modifier) !== false;
+}
+function pickUpdateModifiers(&$field) {
+	$old = $field;
+	return str_replace($field = clearUpdateField($field), '', $old);
+}
+function clearUpdateField($field) {
+	return ltrim($field, '-*');
+}

@@ -75,6 +75,11 @@ class Synker {
 				return !is_array($property);
 			}));
 
+			if ($value) {
+				if (!($value = $entity->filterImportantUpdatedAttributes($value)))
+					return;
+			}
+
 			$value['id'] = $entity->id;
 		} else
 			$value = array_merge(['id' => $entity->id], @$value);

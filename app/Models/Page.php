@@ -52,7 +52,7 @@
 			});
 		}
 
-		protected function infoUpdateCapture() {
+		public function infoUpdateCapture() {
 			return array_merge_recursive(
 				parent::infoUpdateCapture(),
 				[

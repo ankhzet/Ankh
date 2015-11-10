@@ -24,6 +24,12 @@ class Updateable extends Entity {
 		static::updating(function($updateable) {
 			if ($diff = $updateable->diffAttributes())
 				$updateable->willBeUpdated($diff);
+
+			$was = $updateable->getOriginal();
+
+			foreach ($was as $key => $value)
+				$updateable->{$key} = $value;
+
 		});
 
 		static::deleting(function ($updateable) {
@@ -48,15 +54,25 @@ class Updateable extends Entity {
 		$this->newUpdate(Update::U_ADDED, $callback);
 	}
 
-	protected function infoUpdateCapture() {
+	public function infoUpdateCapture() {
 		return [
 			static::RENAME_FIELD => Update::U_RENAMED,
 		];
 	}
 
-	protected function willBeUpdated($dirty) {
+	public function filterImportantUpdatedAttributes(array $from) {
 		foreach ($this->infoUpdateCapture() as $field => $type)
-			$this->checkChange(ltrim($field, '-'), $dirty, $type, !(strpos($field, '-') === 0));
+			if (hasUpdateModifier('*', pickUpdateModifiers($field)))
+				unset($from[$field]);
+
+		return $from;
+	}
+
+	protected function willBeUpdated($dirty) {
+		foreach ($this->infoUpdateCapture() as $field => $type) {
+			$modifiers = pickUpdateModifiers($field);
+			$this->checkChange($field, $dirty, $type, hasUpdateModifier('-', $modifiers));
+		}
 	}
 
 	protected function willBeDeleted(Closure $callback = null) {

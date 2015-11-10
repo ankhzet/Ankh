@@ -56,7 +56,7 @@
 			return false;
 		}
 
-		protected function infoUpdateCapture(array $over = []) {
+		public function infoUpdateCapture(array $over = []) {
 			return array_merge_recursive(
 				parent::infoUpdateCapture(),
 				[

@@ -82,15 +82,42 @@ class AuthorsController extends RestfulController {
 	}
 
 	public function getCheck(Request $request) {
-		$stats = [];
-
-		$queue = session('to_check') ?: [];
-
+		$selected = 0;
 		foreach ($request->query() as $key => $value)
-			if ($value == '' && intval($key) == "$key") {
-				$queue = [$key];
+			if ($value == '' && (string)intval($key) == "$key") {
+				$selected = intval($key);
 				break;
 			}
+
+		$id = $selected;
+		if (!$id) {
+			$queue = $this->pickAuthor();
+			$id = intval(array_shift($queue));
+		}
+
+		$stats = [];
+
+		if ($id) {
+			$author = Author::find($id);
+
+			if ($author) {
+				if (!$selected) {
+					$stats['pending'] = $queue;
+					$stats['link'] = \HTML::link(route('authors.show', $author), $stats['check']['link']);
+				}
+
+				$stats = array_merge_recursive($stats, $this->checkAuthor($author));
+			} else
+				throw new Exception("Author with ID $id not found");
+
+		}
+
+
+		return response()->json($stats);
+	}
+
+	function pickAuthor() {
+		$queue = session('to_check') ?: [];
 
 		$check = intval(array_shift($queue));
 		if (!($queue || $check))
@@ -101,20 +128,15 @@ class AuthorsController extends RestfulController {
 		session()->set('to_check', $queue);
 		session()->save();
 
-		$stats['pending'] = $queue;
+		return array_merge([$check], $queue);
+	}
 
-		if ($check) {
-			$author = Author::find($check);
-
-			if ($author) {
-				$util = new AuthorUtils;
-				$stats['changes'] = $util->check($author);
-				$stats['check'] = array_only($author->attributesToArray(), ['id', 'link']);
-				$stats['link'] = \HTML::link(route('authors.show', $author), $stats['check']['link']);
-			}
-		}
-
-		return response()->json($stats);
+	function checkAuthor(Author $author) {
+		$stats = [];
+		$util = new AuthorUtils;
+		$stats['changes'] = $util->check($author);
+		$stats['check'] = array_only($author->attributesToArray(), ['id', 'link']);
+		return $stats;
 	}
 
 	public function getTraceUpdates(Author $author) {

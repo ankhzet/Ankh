@@ -30,7 +30,7 @@ class PageSynker extends Synker {
 
 		return $strict ? false :
 			Str::equals($page->title, $data['title'])
-			|| ($page->annotation && Str::equals($page->annotation, $data['annotation']))
+			|| ($page->annotation && Str::equals($page->annotation, @$data['annotation']))
 		;
 	}
 

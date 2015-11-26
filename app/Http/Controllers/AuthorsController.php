@@ -103,7 +103,7 @@ class AuthorsController extends RestfulController {
 			if ($author) {
 				if (!$selected) {
 					$stats['pending'] = $queue;
-					$stats['link'] = \HTML::link(route('authors.show', $author), $stats['check']['link']);
+					$stats['link'] = \HTML::link(route('authors.show', $author), $author->link);
 				}
 
 				$stats = array_merge_recursive($stats, $this->checkAuthor($author));

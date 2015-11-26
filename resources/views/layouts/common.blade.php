@@ -27,6 +27,7 @@
 						<li><a href="{{ route('authors.index') }}">@lang('pages.authors.index')</a></li>
 						<li><a href="{{ route('groups.index') }}">@lang('pages.groups.index')</a></li>
 						<li><a href="{{ route('pages.index') }}">@lang('pages.pages.index')</a></li>
+						<li><a href="{{ route('updates.index') }}">@lang('pages.updates.index')</a></li>
 					</ul>
 
 					<span class="user">
@@ -73,6 +74,7 @@
 	{!! asset_link('js/jquery.js') !!}
 	{!! asset_link('js/common.js') !!}
 	{!! asset_link('js/upform.js') !!}
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 
 @if (($message = session('message')) || ($message = session('status')))
 	<script language="javascript">

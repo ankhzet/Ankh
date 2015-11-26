@@ -84,7 +84,7 @@ class AppServiceProvider extends ServiceProvider
 	}
 
 	function registerHtmlCleaner() {
-		$this->app->bind(\Ankh\Contracts\HtmlCleaner::class, \Ankh\TidyCleaner::class);
+		$this->app->bind(\Ankh\Contracts\HtmlCleaner::class, \Ankh\HTMLPurifierCleaner::class);
 	}
 
 	function registerUrlFetcher() {

@@ -1,0 +1,72 @@
+.v-diff {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+.version {
+	font-weight: normal;
+	color: @dark-font-color;
+
+	.size {
+		width: 100px;
+		sup * {
+			font-weight: normal;
+		}
+	}
+}
+
+.versions {
+	overflow: hidden;
+	width: 260px;
+	height: 20px;
+	display: inline-block;
+	position: relative;
+	margin: -5px 0;
+
+	&:hover {
+		overflow: visible;
+		z-index: 100;
+	}
+
+	.month {
+		white-space: nowrap;
+	}
+
+	ul {
+		position: absolute;
+		background: #ddd;
+		border: 1px solid transparent;
+		border-radius: 3px;
+	}
+
+	li {
+		width: 256px;
+		margin: 0;
+		padding: 2px 1px;
+		text-align: center;
+	}
+
+	a {
+		display: none;
+		padding: 0 4px 0;
+		text-align: center;
+		border-radius: 2px;
+		margin: 2px 2px;
+		font: 11px/14px normal Tahoma !important;
+
+		&:hover {
+			background: #eee;
+		}
+
+	}
+
+	&:hover ul {
+		border: 1px solid #333;
+	}
+
+	&:hover a {
+		display: inline;
+	}
+
+}

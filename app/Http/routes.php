@@ -39,8 +39,9 @@ Route::group(['middleware' => 'subdomens'], function() {
 
 	Route::resource('pages', 'PagesController');
 	Route::group(['prefix' => 'pages/{pages}'], function () {
-		Route::get('/', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
-		Route::get('versions', ['uses' => 'PagesController@getVersions', 'as' => 'pages.versions']);
+		Route::get('read/{version?}', ['uses' => 'PagesController@getRead', 'as' => 'pages.read']);
+		Route::get('{version?}', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
+		Route::get('{version}/diff/{diff}', ['uses' => 'PagesController@getDiff', 'as' => 'pages.diff']);
 		Route::get('download/{version}/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
 	});
 
@@ -68,6 +69,16 @@ Route::group(['middleware' => 'subdomens'], function() {
 	Route::bind('version', function ($date, $route) {
 		return $route->parameter('pages')->version($date);
 	});
+	Route::bind('diff', function ($date, $route) {
+		return $route->parameter('pages')->version($date);
+	});
 });
 
 	Route::get('rss/{chanel?}/{id?}', ['uses' => 'HomeController@getRSS', 'as' => 'rss']);
+
+	Route::group(['middleware' => 'admin', 'namespace' => 'Admin'], function() {
+		Route::controller('admin', 'AdminController', [
+			'getLog' => 'admin.log',
+
+			]);
+	});

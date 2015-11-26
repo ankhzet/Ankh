@@ -49,6 +49,7 @@
 	}
 
 	.inline-menu {
+		font-family: 'FontAwesome';
 		display: inline;
 		font-weight: normal;
 		font-size: 70%;
@@ -87,6 +88,28 @@
 			display: none;
 
 
+		}
+
+		&.icons {
+			font-size: 100%;
+			margin: 0;
+			vertical-align: baseline;
+
+			li {
+				border: 0;
+				padding: 2px 4px;
+			}
+
+			a:hover {
+				color: #fff - @link-color;
+			}
+
+			&::before {
+				content: '';
+			}
+			&::after {
+				content: '';
+			}
 		}
 	}
 
@@ -251,7 +274,7 @@
 			}
 
 			tr.between {
-					border-bottom: 1px dotted gray;
+				border-bottom: 1px dotted gray;
 			}
 
 			td {
@@ -278,5 +301,14 @@
 
 	@import('reader');
 
+	@import('versions');
+
 	@import('form-inputs');
+
+	@import('log');
+
+	a.fa {
+		text-decoration: none;
+	}
+
 }

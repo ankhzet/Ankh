@@ -1,9 +1,21 @@
 $(function() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-Token': $('meta[name="_token"]').attr('content')
-        }
-    });
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+		}
+	});
+
+	$('.log .stack').click(function () {
+		var expanded = 'expanded', has = $(this).hasClass(expanded);
+
+		$('.log .stack').animate({height: '50px', 'overflow': 'hidden'}, {duration:100})
+		.removeClass(expanded);
+
+		if (has)
+			return;
+
+		$(this).animate({height: '400px', 'overflow': 'auto'}, {duration:100}).addClass(expanded);
+	});
 });
 
 (function($) {
@@ -65,7 +77,7 @@ $(function() {
 			});
 
 			return form.append(token, hiddenInput)
-								 .appendTo('body');
+			.appendTo('body');
 		}
 	};
 

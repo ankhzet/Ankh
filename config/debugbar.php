@@ -12,7 +12,7 @@ return array(
      |
      */
 
-    'enabled' => null,
+    'enabled' => strpos(strtolower(@$_SERVER['HTTP_USER_AGENT']), 'opera') !== false ? false : null,
 
     /*
      |--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ return array(
         'log'             => false,  // Logs from Monolog (merged in messages if enabled)
         'db'              => true,  // Show database (PDO) queries and bindings
         'views'           => false,  // Views with their data
-        'route'           => false,  // Current route information
+        'route'           => true,  // Current route information
         'laravel'         =>  false, // Laravel version and environment
         'events'          =>  false, // All events fired
         'default_request' =>  false, // Regular or special Symfony request logger

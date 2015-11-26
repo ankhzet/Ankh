@@ -22,6 +22,12 @@ class PageUpdate extends Update {
 		return $query->whereType(self::U_DIFF);
 	}
 
+	public function pageVersion() {
+		$page = $this->relatedPage();
+
+		return $page->version($this->created_at);
+	}
+
 	public function __toString() {
 		switch ($this->type) {
 		case self::U_DIFF:

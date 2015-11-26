@@ -2,6 +2,8 @@
 
 use Cache;
 
+use Ankh\Contracts\Synk\Fetcher;
+
 class CachedFetch extends Fetch {
 
 	protected $cache;
@@ -10,10 +12,13 @@ class CachedFetch extends Fetch {
 
 	protected $fromCache = false;
 
-	public function __construct(\Ankh\Contracts\Synk\Fetcher $fetcher) {
+	public function __construct(Fetcher $fetcher) {
 		parent::__construct($fetcher);
 
 		$this->cache = Cache::store('file');
+		if ($this->cached = config('synk.cache.enabled', $this->cached)) {
+			$this->minutes = config('synk.cache.ttl', $this->minutes);
+		}
 	}
 
 	public function cached($cached = true) {

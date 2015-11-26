@@ -3,6 +3,7 @@
 	use Closure;
 
 	use Ankh\Contracts\Resolvable;
+	use Ankh\Jobs\CheckPage as CheckJob;
 
 	class Page extends Updateable implements Resolvable {
 
@@ -51,7 +52,7 @@
 			});
 		}
 
-		protected function infoUpdateCapture() {
+		public function infoUpdateCapture() {
 			return array_merge_recursive(
 				parent::infoUpdateCapture(),
 				[
@@ -60,6 +61,18 @@
 					'size' => PageUpdate::U_DIFF,
 				]
 			);
+		}
+
+		public function newUpdate($type, Closure $callback = null) {
+			$update = parent::newUpdate($type, $callback);
+
+			switch ($type) {
+			case PageUpdate::U_ADDED:
+			case PageUpdate::U_DIFF:
+				CheckJob::checkLater($update);
+			}
+
+			return $update;
 		}
 
 	}

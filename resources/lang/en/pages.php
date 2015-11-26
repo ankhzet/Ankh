@@ -17,9 +17,22 @@ $pages = array(
 		'show' => '{:title}',
 		'create' => 'Add',
 		'edit' => 'Edit',
-		'download' => 'Download',
+
+		'download' => array (
+			'index' => 'Download',
+			'version' => 'Page version',
+			'encoding' => 'Encoding',
+			'zipped' => 'Zipped',
+			'not-zipped' => 'Not zipped',
+			),
+
+		'downloaded' => 'Downloaded from <a href=":url">Ankh</a>',
+		'page' => 'Page',
 
 		'updates' => $updates,
+
+		'diff' => 'Differences',
+		'read' => 'Reading',
 
 		'list' => 'list pages',
 		'all-versions' => 'all versions',
@@ -53,10 +66,18 @@ $authors = array(
 	'cant-parse-link' => 'Can\'t parse link',
 	'already-has' => 'Author is already in DB',
 
+	'rating' => 'Rating',
+	'visitors' => 'Visitors',
+
 	'groups' => $groups,
 	'pages' => $pages,
 	'updates' => $updates,
 	'no-authors' => 'No authors',
+	);
+
+$admin = array(
+	'index' => 'Admin',
+	'log' => 'View log',
 	);
 
 return array(
@@ -72,6 +93,8 @@ return array(
 	'user' => array(
 		'profile' => 'Profile',
 		),
+
+	'admin' => $admin,
 
 	'password' => array(
 		'email' => 'Pasword resetting form',

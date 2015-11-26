@@ -15,8 +15,9 @@ class AuthorUtils {
 		$fetch = app(Fetch::class);
 		$data = $fetch->pull($link);
 
-		if (!$fetch->isOk())
-			throw new CheckError($entity, $fetch->code());
+		if (!$fetch->isOk()) {
+			return null;
+		}
 
 		$data = $this->fixHTML($data);
 
@@ -43,7 +44,7 @@ class AuthorUtils {
 
 
 	public function checkAuthor(Author $author, array $data) {
-		$stats = [];
+		$stats = null;
 
 		$author->fio = array_pull($data, 'fio');
 		$author->title = array_pull($data, 'title');
@@ -52,21 +53,22 @@ class AuthorUtils {
 
 		$groups = array_pull($data, 'groups');
 
-		$authors = $author->diffAttributes();
+		$authorData = $author->diffAttributes();
+		$authorData = $author->filterImportantUpdatedAttributes($authorData);
 
 		$groups = $this->synkGroups($author, $groups);
 		if ($groups) {
-			$authors['groups'] = $groups;
-			$authors['id'] = $author->id;
+			$authorData['groups'] = $groups;
+			$authorData['id'] = $author->id;
 		}
 
-		if ($authors)
+		if ($authorData)
 			$author->touch();
 
 		$author->save();
 
-		if ($authors)
-			$stats['authors'][] = $authors;
+		if ($authorData)
+			$stats['author'] = $authorData;
 
 		return $stats;
 	}
@@ -100,8 +102,31 @@ class AuthorUtils {
 
 		if ($pages)
 			if ($pages = with(new PageSynker($group->author))->synk($pages)) {
-				$stats['pages'] = $pages;
-				$stats['id'] = $group->id;
+				$grouped = [];
+				$pagesData = [];
+				foreach ($pages as $type => $pages)
+					foreach ($pages as $page)
+						$pagesData[$page['id']][$type][] = $page;
+
+				$grouped = [];
+				$links = \Ankh\Page::whereIn('id', array_keys($pagesData))->withTrashed()->get(['id', 'group_id']);
+				foreach ($links as $page)
+					$grouped[$page->id] = $page->group_id;
+
+				foreach ($pagesData as $id => $data) {
+					$gId = $grouped[$id];
+					$found = false;
+					foreach ($stats as $type => $groups)
+						foreach ($groups as $idx => $group)
+							if ($found = ($group['id'] == $gId)) {
+								$stats[$type][$idx]['pages'] = array_merge_recursive(@$group['pages'], $pagesData[$id]);
+								break;
+							}
+
+					if (!$found)
+						$stats[Synker::UPDATED][] = ['id' => $gId, 'pages' => $pagesData[$id]];
+				}
+
 			}
 
 		return $stats;

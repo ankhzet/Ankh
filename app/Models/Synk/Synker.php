@@ -69,11 +69,20 @@ class Synker {
 		return [$unbound, $new];
 	}
 
-	protected function log($type, $value) {
-		if (is_array($value))
+	protected function log($type, $value, Entity $entity = null) {
+		if (is_array($value)) {
 			$value = array_filter(array_filter($value, function ($property) {
 				return !is_array($property);
 			}));
+
+			if ($value) {
+				if (!($value = $entity->filterImportantUpdatedAttributes($value)))
+					return;
+			}
+
+			$value['id'] = $entity->id;
+		} else
+			$value = array_merge(['id' => $entity->id], @$value);
 
 		$this->statistics[$type][] = $value;
 	}
@@ -84,19 +93,19 @@ class Synker {
 			$entity->{$this->associate}()->associate($this->parent);
 			$entity->save();
 
-			$this->log(static::CREATED, array_merge(['id' => $entity->id], $data));
+			$this->log(static::CREATED, $data, $entity);
 		}
 	}
 
 	function update(Entity $entity, array $data) {
 		if ($diff = $this->updateEntity($entity, $data)) {
-			$this->log(static::UPDATED, array_merge(['id' => $entity->id], $diff));
+			$this->log(static::UPDATED, $diff, $entity);
 		}
 	}
 
 	function delete(Entity $entity) {
 		if ($this->deleteEntity($entity))
-			$this->log(static::DELETED, ['id' => $entity->id]);
+			$this->log(static::DELETED, [], $entity);
 	}
 
 	protected function createEntity(array $data) {

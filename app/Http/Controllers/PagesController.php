@@ -14,6 +14,9 @@ use Ankh\Version;
 use Ankh\Downloadable\Transforms;
 use Ankh\Downloadable\DownloadWorker;
 
+use Ankh\Page\Diff;
+use PageUtils;
+
 class PagesController extends RestfulController {
 	protected $m;
 
@@ -51,12 +54,54 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function show() {
+		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
+		$exclude = view_excludes(['author' => $author, 'group' => $group]);
+
+		$updates = \Ankh\PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
+
+		$groupper = new UpdatesGroupper($updates);
+
+		$versions = $groupper->flow();
+
+		return $this->viewVersions(compact('page', 'updates', 'versions', 'exclude'));
+	}
+
+	/**
+	 * Display the specified page entity.
+	 *
+	 * @param  Page $page
+	 * @return Response
+	 */
+	public function getRead() {
 		list($author, $group, $page, $version) = pick_arg(Author::class, Group::class, Page::class, Version::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
 		$text = with($version ?: $page->version())->contents();
+		if ($text === null)
+			throw new \Exception("Version {$version} not found");
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
+	}
+
+	/**
+	 * Display the specified page versions diff.
+	 *
+	 * @param  Page $page
+	 * @return Response
+	 */
+	public function getDiff(Page $page, Version $v1, Version $v2) {
+		$t1 = $v1->contents();
+		$t2 = $v2->contents();
+
+		if ($t1 === null)
+			throw new \Exception("Version {$v1} not found");
+
+		if ($t2 === null)
+			throw new \Exception("Version {$v2} not found");
+
+		$text = with(new Diff)->diff($t1, $t2);
+
+		return $this->viewShow(compact('page', 'text'));
 	}
 
 	/**
@@ -106,6 +151,64 @@ class PagesController extends RestfulController {
 		}
 
 		return $this->viewDownload(compact('page', 'version'));
+	}
+
+}
+
+class UpdatesGroupper {
+
+	const MONTH_FORMAT = 'F, Y';
+
+	protected $updates;
+
+	private $monthful = [];
+	private $versions = [];
+
+	function __construct($updates) {
+		$this->updates = $updates;
+	}
+
+	function months() {
+		foreach ($this->updates as $update) {
+			$version = $update->pageVersion();
+			if (PageUtils::exists($version->resolver())) {
+				$this->versions[] = [$version, $update];
+
+				$this->monthful[$this->month($update)][] = $update;
+			}
+		}
+
+		return array_keys($this->monthful);
+	}
+
+	function monthful($month) {
+		return $this->monthful[$month];
+	}
+
+	function prior($version) {
+		$from = $version->timestamp();
+		$r = [];
+		foreach ($this->versions as $pair) {
+			if ($from > $pair[0]->timestamp())
+				$r[$this->month($pair[1])][] = $pair[0];
+		}
+		return ($r);
+	}
+
+	function month($update) {
+		return title_case($update->created_at->format(static::MONTH_FORMAT));
+	}
+
+	function flow() {
+		$versions = [];
+		foreach ($this->months() as $month) {
+			foreach ($this->monthful($month) as $update) {
+				$version = $update->pageVersion();
+				$versions[$month][] = [$version, $update, $this->prior($version)];
+			}
+		}
+
+		return $versions;
 	}
 
 }

@@ -1,8 +1,8 @@
 @section('rss')@stop
 
 @section('rss-link')
-@i-menu()
-<li><a href="/rss/@yield('rss')">RSS</a></li>
+@i-menu(icons)
+@m-item(!rss, '/rss/' . $__env->yieldContent('rss') )
 @endmenu
 @stop
 

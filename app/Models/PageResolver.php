@@ -8,6 +8,7 @@ class PageResolver extends ResourceResolver {
 	}
 
 	public function setPage(Page $page) {
+		$this->page = $page;
 		$this->id = $page->id;
 		return $this;
 	}
@@ -16,6 +17,10 @@ class PageResolver extends ResourceResolver {
 		$timestamp = $version ? $version->timestamp() : 0;
 		$this->timestamp = $timestamp ?: 'last';
 		return $this;
+	}
+
+	public function last() {
+		return with(clone $this)->setVersion(null);
 	}
 
 }

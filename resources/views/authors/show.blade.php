@@ -31,8 +31,8 @@
 					<div class="text">
 						<div class="author-title">{{ $author->title }}</div>
 						<small>
-							Rating: {{ $author->rating }}<br/>
-							Visitors: {{ $author->visitors }}
+							@lang('pages.authors.rating'): {{ $author->rating }}<br/>
+							@lang('pages.authors.visitors'): {{ $author->visitors }}
 						</small>
 					</div>
 				</div>

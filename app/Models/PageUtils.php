@@ -25,6 +25,10 @@ class PageUtils extends CharsetEncoder {
 		$this->storage = Storage::disk('page-tvs');
 	}
 
+	public function storedEncoding() {
+		return $this->stored_enc;
+	}
+
 	/**
 	 * @return string
 	 */
@@ -32,12 +36,22 @@ class PageUtils extends CharsetEncoder {
 		return $this->cleaner->clean($html, $this->encoding());
 	}
 
+	public function exists(PageResolver $resolver) {
+		$path = $resolver->resolve();
+		return $this->storage->exists($path) ? $path : false;
+	}
+
+	public function local(PageResolver $resolver) {
+		$path = $resolver->resolve();
+		return $this->storage->exists($path) ? $this->storage->size($path) : false;
+	}
+
 	/**
+	 * @param  string $encoding - Encoding, in which contents should be returned.
 	 * @return string
 	 */
 	public function contents(PageResolver $resolver, $encoding = null) {
-		$path = $resolver->resolve();
-		if (!$this->storage->exists($path))
+		if (!($path = $this->exists($resolver)))
 			return null;
 
 		$data = $this->storage->get($path);
@@ -45,43 +59,49 @@ class PageUtils extends CharsetEncoder {
 		if (!$data)
 			return null;
 
-		if (!$this->checkEncoding($data, $encoding)) {
-			$storedEncoding = $this->stored_enc;
-			if (!$this->checkEncoding($data, $storedEncoding)) {
-				$storedEncoding = $this->detectEncoding($data);
-
-				// recache if needed
-				if ($storedEncoding != $this->stored_enc) {
-					$data = $this->transform($data, $storedEncoding, $this->stored_enc);
-					$this->putContents($resolver, $data);
-					$storedEncoding = $this->stored_enc;
-				}
-			}
-
-
-
-			if ($storedEncoding != ($encoding ?: $this->encoding()))
-				$data = $this->transform($data, $storedEncoding, $encoding);
-		}
-
-		return $this->clean($data);
+		return $this->wakeup($data, $encoding);
 	}
 
 	/**
+	 * @param  string $encoding - Encoding, in which contents are encoded.
 	 * @return bool
 	 */
 	public function putContents(PageResolver $resolver, $contents, $encoding = null) {
 		$path = $resolver->resolve();
 
-		if (!$this->storage->isDirectory($directory = dirname($path)))
+		if (!$this->storage->exists($directory = dirname($path)))
 			$this->storage->makeDirectory($directory);
 
-		if ($this->stored_enc != ($encoding = $encoding ?: $this->encoding()))
-			$contents = $this->transform($contents, $encoding, $this->stored_enc);
+		$stored = $this->storedEncoding();
+		if ($stored != ($encoding = $encoding ?: $this->encoding()))
+			$contents = $this->transform($contents, $encoding, $stored);
 
 		$data = @gzcompress($contents);
 
 		return $this->storage->put($path, $data);
+	}
+
+	public function wakeup($contents, $encoding = null) {
+		$encoding = $encoding ?: $this->encoding();
+
+		if (!$this->checkEncoding($contents, $encoding)) {
+			$storedEncoding = $this->storedEncoding();
+			if (!$this->checkEncoding($contents, $storedEncoding)) {
+				$detectedEncoding = $this->detectEncoding($contents);
+
+				// recache if needed
+				if ($detectedEncoding != $storedEncoding) {
+					$stored = $this->transform($contents, $detectedEncoding, $storedEncoding);
+					$this->putContents($resolver, $stored);
+				}
+			} else
+				$detectedEncoding = $storedEncoding;
+
+			if ($detectedEncoding != $encoding)
+				$contents = $this->transform($contents, $detectedEncoding, $encoding);
+		}
+
+		return $this->clean($contents);
 	}
 
 }

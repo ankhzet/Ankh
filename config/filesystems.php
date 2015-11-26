@@ -53,6 +53,11 @@ return [
             'root'   => storage_path('tvs'),
         ],
 
+        'logs' => [
+            'driver' => 'local',
+            'root'   => storage_path('logs'),
+        ],
+
         'ftp' => [
             'driver'   => 'ftp',
             'host'     => 'ftp.example.com',

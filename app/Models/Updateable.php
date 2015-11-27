@@ -24,12 +24,6 @@ class Updateable extends Entity {
 		static::updating(function($updateable) {
 			if ($diff = $updateable->diffAttributes())
 				$updateable->willBeUpdated($diff);
-
-			$was = $updateable->getOriginal();
-
-			foreach ($was as $key => $value)
-				$updateable->{$key} = $value;
-
 		});
 
 		static::deleting(function ($updateable) {

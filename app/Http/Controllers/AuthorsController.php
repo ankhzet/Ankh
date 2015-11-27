@@ -111,6 +111,8 @@ class AuthorsController extends RestfulController {
 
 		}
 
+		if ($id && !$selected)
+			header("Refresh: 2");
 
 		return response()->json($stats);
 	}

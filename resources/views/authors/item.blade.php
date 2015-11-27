@@ -3,9 +3,9 @@
 						<span class="head">
 							<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a>
 							@admin()
-								@i-menu(admin)
-									@m-item('common.edit', route('authors.edit', $author) )
-									@m-delete('common.delete', route('authors.destroy', $author) )
+								@i-menu(admin icons)
+									@m-item(!edit, route('authors.edit', $author) )
+									@m-delete(!trash, route('authors.destroy', $author) )
 								@endmenu
 							@endadmin
 							@samlib($author)

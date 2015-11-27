@@ -6,16 +6,16 @@
 @section('rss')group/{{$group->id}}@stop
 
 @section('moderation')
-@i-menu()
-	@m-item('pages.pages.list', route('groups.pages.index', $group) )
-	@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
-@endmenu
 @admin()
-@i-menu(admin)
-	@m-item('common.edit', route('groups.edit', $group) )
-	@m-delete('common.delete', route('groups.destroy', $group) )
+@i-menu(admin icons)
+	@m-item(!edit, route('groups.edit', $group) )
+	@m-delete(!trash, route('groups.destroy', $group) )
 @endmenu
 @endadmin
+@i-menu(right)
+	@m-item(!list, route('groups.pages.index', $group) )
+	@m-item('pages.updates.chronology', route('groups.updates.index', $group) )
+@endmenu
 @stop
 
 @section('content')

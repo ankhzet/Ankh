@@ -6,8 +6,8 @@
 
 @section('moderation')
 @admin()
-@i-menu(admin)
-	@m-delete('common.delete', route('updates.destroy', $update) )
+@i-menu(admin icons)
+	@m-delete(!trash, route('updates.destroy', $update) )
 @endmenu
 @endadmin
 @stop

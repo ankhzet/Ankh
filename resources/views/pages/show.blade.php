@@ -6,9 +6,9 @@
 
 @section('moderation')
 @admin()
-  @i-menu(admin)
-    @m-item('common.edit', route('pages.edit', $page) )
-    @m-delete('common.delete', route('pages.destroy', $page) )
+  @i-menu(admin icons right)
+    @m-item(!edit, route('pages.edit', $page) )
+    @m-delete(!trash, route('pages.destroy', $page) )
   @endmenu
 @endadmin
 @stop

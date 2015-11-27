@@ -65,7 +65,13 @@ class Updateable extends Entity {
 	protected function willBeUpdated($dirty) {
 		foreach ($this->infoUpdateCapture() as $field => $type) {
 			$modifiers = pickUpdateModifiers($field);
-			$this->checkChange($field, $dirty, $type, hasUpdateModifier('-', $modifiers));
+			$important = !hasUpdateModifier('*', $modifiers);
+
+			if (!$important)
+				continue;
+
+			$capture = !hasUpdateModifier('-', $modifiers);
+			$this->checkChange($field, $dirty, $type, $capture);
 		}
 	}
 

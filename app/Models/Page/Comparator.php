@@ -28,6 +28,14 @@ class Compare {
 
 }
 
+class EqualCompare extends Compare {
+
+	function __construct($comparable, $proclaimedSize = null) {
+		parent::__construct($comparable, $comparable, $proclaimedSize);
+	}
+
+}
+
 class Comparator {
 
 	var $fetchedEncoding = 'cp1251';
@@ -56,13 +64,18 @@ class Comparator {
 		if ($contents2 === null) {
 			$fetch = app(Fetch::class);
 
+			//todo: move this to Fetch constructor & make it configurable
 			if (method_exists($fetch, 'cached'))
 				$fetch = $fetch->cached(false);
 
 			$contents2 = $fetch->pull($r2->page->absoluteLink());
 
 			if (!$fetch->isOk())
-				throw new CompareFetchError($r2->page, $fetch->code());
+				if ($fetch->code() == 404) {
+					$r2->page->delete();
+					return new EqualCompare($contents1, $this->size($contents1));
+				} else
+					throw new CompareFetchError($r2->page, $fetch->code());
 
 			$size = $this->size($contents2);
 

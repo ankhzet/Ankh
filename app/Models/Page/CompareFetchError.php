@@ -18,7 +18,7 @@ class CompareFetchError extends Exception {
 		$class = ucfirst(class_basename($this->model));
 		$error = (string)($this->error);
 		return class_basename($this) . ": [{$this->code}] "
-		. "Failed to comapre $class ['id': {$this->model->id}] as remote version fetch failed\n$error";
+		. "Failed to compare $class ['id': {$this->model->id}] as remote version fetch failed\n$error";
 	}
 
 }

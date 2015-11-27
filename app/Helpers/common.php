@@ -33,7 +33,7 @@ function strip_unwanted_tags($text, $tags = []) {
 			$text = str_replace($found[0], $found[1], $text);
 		}
 
-		if (preg_match_all('/<'.$tag.'[^>]*>/iU', $text, $found))
+		if (preg_match_all('/<\/?'.$tag.'[^>]*>/iU', $text, $found))
 			$text = str_replace($found[0], '', $text);
 	}
 

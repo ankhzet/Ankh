@@ -84,3 +84,11 @@ function today() {
 	return $today;
 }
 
+function cleanup_annotation($html) {
+	$html = str_replace("\n", "", $html);
+	$html = preg_replace('"<(br|dd|p)[\s/]*>"', "\n", $html);
+	$html = strip_unwanted_tags($html, ['font', 'dd']);
+	$html = trim($html);
+	$html = str_replace("\n", "<br/>", $html);
+	return $html;
+}

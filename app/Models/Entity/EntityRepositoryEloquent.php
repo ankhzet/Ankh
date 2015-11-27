@@ -22,6 +22,10 @@ class EntityRepositoryEloquent implements EntityRepositoryContract {
 		return $this->model->all($columns);
 	}
 
+	public function pluck(array $columns) {
+		return $this->all()->pluck($columns);
+	}
+
 	public function newInstance(array $attributes = array()) {
 		return $this->model->newInstance($attributes);
 	}

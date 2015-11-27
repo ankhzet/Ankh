@@ -119,7 +119,7 @@ class AuthorUtils {
 					foreach ($stats as $type => $groups)
 						foreach ($groups as $idx => $group)
 							if ($found = ($group['id'] == $gId)) {
-								$stats[$type][$idx]['pages'] = array_merge_recursive(@$group['pages'], $pagesData[$id]);
+								$stats[$type][$idx]['pages'] = array_merge_recursive(@$group['pages'] ?: [], $pagesData[$id]);
 								break;
 							}
 

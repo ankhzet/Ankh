@@ -16,7 +16,7 @@
 							</span>
 							@samlib($page)
 						</div>
-						<div class="text">{!! strip_unwanted_tags($page->annotation, ['font']) !!}</div>
+						<div class="text">{!! cleanup_annotation($page->annotation) !!}</div>
 						<ul class="text">
 							<li><a href="{{ route('pages.show', $page) }}">@lang('pages.pages.all-versions')</a></li>
 							<li><span class="size">{{file_size($page->size, 1)}}</span></li>

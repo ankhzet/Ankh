@@ -120,7 +120,7 @@ class AuthorsController extends RestfulController {
 
 		$check = intval(array_shift($queue));
 		if (!($queue || $check))
-			$queue = Author::all()->pluck(['id'])->all();
+			$queue = $this->repository()->pluck(['id'])->all();
 
 		sort($queue);
 

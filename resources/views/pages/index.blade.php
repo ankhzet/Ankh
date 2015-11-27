@@ -3,6 +3,6 @@
 @section('content')
 
 	@include('layouts.filters')
-	@include('pages.list')
+	@include('layouts.list', ['name' => 'page'])
 
 @stop

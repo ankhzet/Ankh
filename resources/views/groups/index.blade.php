@@ -13,6 +13,6 @@
 @section('content')
 
 	@include('layouts.filters')
-	@include('groups.list')
+	@include('layouts.list', ['name' => 'group'])
 
 @stop

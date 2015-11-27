@@ -11,6 +11,6 @@
 @section('content')
 
 	@include('layouts.filters')
-	@include('authors.list')
+	@include('layouts.list', ['name' => 'author'])
 
 @stop

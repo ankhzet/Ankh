@@ -38,6 +38,6 @@
 				</div>
 
 				<div class="groups">
-					@include('groups.list', ['groups' => $author->peekGroups($delta, 10, true), 'exclude' => ['author']])
+					@include('layouts.list', ['name' => 'group', 'groups' => $author->peekGroups($delta, 10, true), 'exclude' => ['author']])
 				</div>
 @stop

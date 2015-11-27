@@ -31,6 +31,6 @@
 				</div>
 
 				<div class="pages">
-					@include('pages.list', ['pages' => $group->peekPages($delta, 10, true), 'exclude' => array_merge($exclude, ['group'])])
+					@include('layouts.list', ['name' => 'page', 'pages' => $group->peekPages($delta, 10, true), 'exclude' => array_merge($exclude, ['group'])])
 				</div>
 @stop

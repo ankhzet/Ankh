@@ -45,7 +45,7 @@ class Synker {
 	}
 
 	function current() {
-		return $this->parent->{$this->attribute}()->get()->all();
+		return $this->parent->{$this->attribute}()->withTrashed()->get()->all();
 	}
 
 	function cross($current, $synk, $strictMatch = true) {
@@ -137,7 +137,7 @@ class Synker {
 	}
 
 	protected function deleteEntity(Entity $entity) {
-		return $entity->delete();
+		return !$entity->trashed() && $entity->delete();
 	}
 
 	public static function same(Entity $entity, array $data, $strict = true) {

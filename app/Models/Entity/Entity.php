@@ -94,7 +94,7 @@ class Picker {
 			$delta = $paginator->count() - $this->amount;
 
 			if ($this->trashed)
-				$query->orderBy('deleted_at', 'asc');
+				$paginator = $paginator->orderBy('deleted_at', 'asc');
 
 			$query = $paginator->orderBy('updated_at', 'desc')->get();
 		}

@@ -20,13 +20,8 @@
 			return path_join($this->author->absoluteLink(), $this->link);
 		}
 
-		public function peekPages(&$delta, $amount = 10, $paginate = false) {
-			if ($paginate)
-				return $this->pages()->orderBy('title')->paginate($amount);
-
-			$paginator = $this->pages()->take($amount);
-			$delta = $paginator->count() - $amount;
-			return $paginator->orderBy('updated_at', 'desc');
+		public function pickPages($amount = 10) {
+			return parent::pickPages($amount)->orderBy('title');
 		}
 
 		public function updateType() {

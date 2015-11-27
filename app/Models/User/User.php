@@ -40,4 +40,9 @@ class User extends Entity implements AuthenticatableContract, CanResetPasswordCo
 		 });
 	}
 
+	public static function isUserAdmin() {
+		$user = Auth::user();
+		return $user ? $user->isAdmin() : false;
+	}
+
 }

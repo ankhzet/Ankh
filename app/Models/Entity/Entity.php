@@ -43,18 +43,6 @@ class Entity extends Model implements EntityContract {
 		return new Picker($this, $from, $amount);
 	}
 
-
-	public function picks(&$delta, $amount = 10, $paginate = false) {
-		$pages = $this->pages();
-		$pages->withTrashed()->orderBy('deleted_at', 'asc');
-		if ($paginate)
-			return $pages->orderBy('title')->paginate($amount);
-
-		$paginator = $pages->take($amount);
-		$delta = $paginator->count() - $amount;
-		return $paginator->orderBy('updated_at', 'desc');
-	}
-
 }
 
 class Picker {
@@ -91,9 +79,12 @@ class Picker {
 		$query = $this->query;
 
 		if ($this->trashed)
-			$query->withTrashed()->orderBy('deleted_at', 'asc');
+			$query->withTrashed();
 
 		if ($this->paginate) {
+			if ($this->trashed)
+				$query->orderBy('deleted_at', 'asc');
+
 			if ($this->orderBy)
 				$query = $query->orderBy($this->orderBy, $this->orderDir);
 
@@ -101,6 +92,10 @@ class Picker {
 		} else {
 			$paginator = $query->take($this->amount);
 			$delta = $paginator->count() - $this->amount;
+
+			if ($this->trashed)
+				$query->orderBy('deleted_at', 'asc');
+
 			$query = $paginator->orderBy('updated_at', 'desc')->get();
 		}
 

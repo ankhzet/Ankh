@@ -83,18 +83,19 @@ class Picker {
 
 		if ($this->paginate) {
 			if ($this->trashed)
-				$query->orderBy('deleted_at', 'asc');
+				$query = $query->orderBy('deleted_at', 'asc');
 
 			if ($this->orderBy)
 				$query = $query->orderBy($this->orderBy, $this->orderDir);
 
 			$query = $query->paginate($this->amount);
 		} else {
-			$paginator = $query->take($this->amount);
-			$delta = $paginator->count() - $this->amount;
+			$delta = max(0, $query->count() - $this->amount);
 
 			if ($this->trashed)
-				$paginator = $paginator->orderBy('deleted_at', 'asc');
+				$query = $query->orderBy('deleted_at', 'asc');
+
+			$paginator = $query->take($this->amount);
 
 			$query = $paginator->orderBy('updated_at', 'desc')->get();
 		}

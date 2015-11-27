@@ -21,7 +21,7 @@
 
 @section('content')
 
-				<div class="cnt-item author">
+				<div class="cnt-item @trashed($author) author">
 					<div class="title">
 						<span class="head">
 						</span>

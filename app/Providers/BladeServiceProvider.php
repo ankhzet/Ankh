@@ -89,6 +89,22 @@ class BladeServiceProvider extends ServiceProvider {
 			}, $view);
 		});
 
+		Blade::extend(function($view, $compiler) {
+			$pattern = $this->openMatcherPattern('trashed');
+			return preg_replace_callback($pattern, function ($matches) {
+				preg_match('/(.+)(,(.+))|(.+)/', $matches[4], $m);
+				return $this->trashedItem(trim($m[1] . @$m[4]), (boolean) @trim($m[3]));
+			}, $view);
+		});
+
+	}
+
+	function trashedItem($item, $wrap = false) {
+		$style = "trashed";
+		if ($wrap)
+			$style = "class=\"$style\"";
+
+		return "<?php if ({$item}->trashed()) echo \"$style\" ?>";
 	}
 
 	public function register() {

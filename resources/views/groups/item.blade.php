@@ -1,4 +1,4 @@
-				<div class="cnt-item group">
+				<div class="cnt-item @trashed($group) group">
 					<div class="title">
 						<span class="head">
 							@kept(author)<a href="{{ route('authors.show', $group->author) }}">{{$group->author->fio}}</a> - @endkept <a href="{{ route('groups.show', $group) }}">{{$group->title}}</a>

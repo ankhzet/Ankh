@@ -1,6 +1,6 @@
 
 
-					<div class="cnt-item">
+					<div class="cnt-item @trashed($page) ">
 						<div class="title">
 							<span class="head">
 @kept(author)

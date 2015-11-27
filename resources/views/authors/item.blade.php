@@ -1,4 +1,4 @@
-				<div class="cnt-item">
+				<div class="cnt-item @trashed($author)">
 					<div class="title">
 						<span class="head">
 							<a href="{{ route('authors.show', $author) }}">{{$author->fio}}</a>

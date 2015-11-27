@@ -20,7 +20,7 @@
 
 @section('content')
 
-				<div class="cnt-item group">
+				<div class="cnt-item @trashed($group) group">
 					<div class="title">
 						<span class="head">
 						</span>

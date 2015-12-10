@@ -11,6 +11,9 @@ class Update extends Entity {
 	const U_RENAMED = 3;
 	const U_INFO    = 4;
 
+	const C_OLD     = 'old';
+	const C_NEW     = 'new';
+
 	protected $table = 'updates';
 	protected $guarded = ['id'];
 	protected $fillable = ['type', 'change'];
@@ -46,7 +49,7 @@ class Update extends Entity {
 
 	public function diffString($format = '{:delta}', $colors = []) {
 		return $this->changeString($format, function ($change) use ($colors) {
-			$delta = intval(@$change['new']) - intval(@$change['old']);
+			$delta = intval(@$change[self::C_NEW]) - intval(@$change[self::C_OLD]);
 			if (!$delta)
 				return false;
 
@@ -62,7 +65,7 @@ class Update extends Entity {
 		$change = $this->change;
 
 		if (is_string($change))
-			$change = ['a' => $change, 'old' => null, 'new' => null];
+			$change = ['a' => $change, self::C_OLD => null, self::C_NEW => null];
 
 		if ($replacements)
 			if (!($change = $replacements($change)))

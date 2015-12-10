@@ -35,8 +35,8 @@ class PageUpdate extends Update {
 		case self::U_MOVED:
 			return $this->changeString(null, function ($change) {
 				$g = app(\Ankh\Contracts\GroupRepository::class);
-				$change['new'] = $g->findEvenTrashed(intval($change['new']), ['id', 'title']);
-				$change['old'] = $g->findEvenTrashed(intval($change['old']), ['id', 'title']);
+				$change[self::C_NEW] = $g->findEvenTrashed(intval($change[self::C_NEW]), ['id', 'title']);
+				$change[self::C_OLD] = $g->findEvenTrashed(intval($change[self::C_OLD]), ['id', 'title']);
 				return $change;
 			});
 		}

@@ -94,14 +94,14 @@ class Updateable extends Entity {
 	protected function pickAttr($a, array $dirty = []) {
 		$old = $this->getOriginal($a);
 		$new = @$dirty[$a];
-		return compact('a', 'old', 'new');
+		return ['a' => $a, Update::C_OLD => $old, Update::C_NEW => $new];
 	}
 
 	protected function pickDiff($a, array $dirty, $fromNull = false) {
 		$changed = $this->changedAttribute($a, $dirty, $fromNull);
 
 		if (is_array($changed) && (list($old, $new) = $changed)) {
-			return compact('a', 'old', 'new');
+			return ['a' => $a, Update::C_OLD => $old, Update::C_NEW => $new];
 		}
 
 		return [];

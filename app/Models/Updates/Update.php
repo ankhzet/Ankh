@@ -30,6 +30,18 @@ class Update extends Entity {
 		$this->attributes['change'] = ($value != null) ? json_encode($value, JSON_UNESCAPED_UNICODE) : null;
 	}
 
+	public function oldValue() {
+		$change = $this->change;
+
+		return is_array($change) ? $change[self::C_OLD] : null;
+	}
+
+	public function newValue() {
+		$change = $this->change;
+
+		return is_array($change) ? $change[self::C_NEW] : $change;
+	}
+
 	public function entity() {
 		$type = $this->updateType();
 		$id = $this->entityId();

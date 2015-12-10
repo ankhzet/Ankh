@@ -39,11 +39,14 @@ class UpdatesFeedChanel extends FeedChanel {
 		return $this->entity;
 	}
 
-	public function feedItems(\Closure $consumer) {
+	public function feedItems(\Closure $consumer, $limit = 0) {
 		$last = 0;
 
-		$items = PageUpdate::diff()->get();
-		foreach ($items as $item)
+		$items = PageUpdate::diff()->orderBy('created_at', 'desc');
+		if ($limit)
+			$items = $items->take($limit);
+
+		foreach ($items->get() as $item)
 			if ($this->filter($item)) {
 				$page = $item->relatedPage();
 				$author = $item->relatedAuthor();

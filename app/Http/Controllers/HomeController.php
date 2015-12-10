@@ -24,7 +24,9 @@ class HomeController extends Controller {
 		if (!$chanel)
 			throw new NotFoundHttpException("RSS chanel not found");
 
-		return Feed::make($chanel)->render();
+		$limit = intval($request->get('limit'));
+
+		return Feed::limit($limit)->make($chanel)->render();
 	}
 
 }

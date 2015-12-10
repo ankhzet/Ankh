@@ -10,7 +10,10 @@ use Roumen\Feed\Facades\Feed as FeedEngine;
 
 class Feed implements FeedContract {
 
+	const DEF_LIMIT = 30;
+
 	protected $feeder;
+	protected $limit = self::DEF_LIMIT;
 
 	public function __construct(FeedChanel $chanel = null) {
 		$this->feeder = FeedEngine::make();
@@ -21,14 +24,26 @@ class Feed implements FeedContract {
 		$this->feeder->description = Lang::get('pages.rss.description');
 	}
 
+	public function limit($limit) {
+		$this->limit = $limit ?: self::DEF_LIMIT;
+		return $this;
+	}
+
 	public function make(FeedChanelContract $chanel) {
 		$this->feeder->title = Lang::get('common.site') . ' - ' . $chanel->title();
 
 		$this->feeder->link = $chanel->url();
 
 		$this->feeder->pubdate = $chanel->feedItems(function ($item) {
-			$this->feeder->add($item->title, $item->author, $item->url, $item->created, $item->description, $item->content);
-		});
+			$this->feeder->add(
+				$item->title,
+				$item->author,
+				$item->url,
+				$item->created,
+				$item->description,
+				$item->content
+			);
+		}, $this->limit);
 
 		return $this;
 	}

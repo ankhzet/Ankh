@@ -19,7 +19,7 @@ class PageUpdate extends Update {
 	}
 
 	public function scopeDiff($query) {
-		return $query->whereType(self::U_DIFF);
+		return $query->whereIn('type', [self::U_DIFF, self::U_ADDED]);
 	}
 
 	public function pageVersion() {

@@ -54,25 +54,34 @@ class Updateable extends Entity {
 		];
 	}
 
-	public function filterImportantUpdatedAttributes(array $from) {
-		foreach ($this->infoUpdateCapture() as $field => $type)
-			if (hasUpdateModifier('*', pickUpdateModifiers($field)))
+	public function filterImportantUpdatedAttributes(array $from, Closure $callback = null) {
+		foreach ($this->infoUpdateCapture() as $field => $type) {
+			$modifiers = pickUpdateModifiers($field);
+			if (hasUpdateModifier('*', $modifiers))
 				unset($from[$field]);
+			else
+				if ($callback)
+					$callback($field, $type, $modifiers);
+		}
 
 		return $from;
 	}
 
 	protected function willBeUpdated($dirty) {
-		foreach ($this->infoUpdateCapture() as $field => $type) {
-			$modifiers = pickUpdateModifiers($field);
-			$important = !hasUpdateModifier('*', $modifiers);
-
-			if (!$important)
-				continue;
-
+		$this->filterImportantUpdatedAttributes($dirty, function ($field, $type, $modifiers) use ($dirty) {
 			$capture = !hasUpdateModifier('-', $modifiers);
-			$this->checkChange($field, $dirty, $type, $capture);
-		}
+			$update = $this->checkChange($field, $dirty, $type, $capture);
+			if ($update && !$capture) {
+				$similar = $update->similar()->withTrashed();
+				// pgsql restriction bypass
+				$ids = [];
+				foreach ($similar->get() as $update) {
+					$ids[] = $update->id;
+				}
+				$updates = Update::whereIn('id', $ids)->withTrashed();
+				$updates->forceDelete();
+			}
+		});
 	}
 
 	protected function willBeDeleted(Closure $callback = null) {
@@ -108,14 +117,15 @@ class Updateable extends Entity {
 	}
 
 	public function checkChange($attribute, array $dirty, $type, $capture = true, $fromNull = false) {
+		$update = false;
 		if ($change = $this->pickDiff($attribute, $dirty, $fromNull)) {
 			$change = $capture ? $change : $attribute;
-			$this->newUpdate($type, function ($update) use ($change) {
+			$update = $this->newUpdate($type, function ($update) use ($change) {
 				$update->change = $change;
 			});
 		}
 
-		return !!$change;
+		return $update;
 	}
 
 	public function newUpdate($type, Closure $callback = null) {

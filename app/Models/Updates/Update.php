@@ -142,6 +142,10 @@ class Update extends Entity {
 		return $this->cached_pivot->{$column};
 	}
 
+	public function scopeSimilar($query) {
+		return $query->where('type', $this->type)->where('id', '!=', $this->id)->where('change', $this->attributes['change']);
+	}
+
 	public function newQuery() {
 		$query = parent::newQuery();
 

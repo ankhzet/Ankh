@@ -62,6 +62,9 @@ class LogParser {
 			} else
 				$r = ['code' => trim(str_replace('[internal function]: ', '', $trimmed))];
 
+			if (strpos($r['code'], 'Illuminate\Foundation\Bootstrap\HandleExceptions') !== false)
+				return null;
+
 			return $r;
 		}, $entry));
 

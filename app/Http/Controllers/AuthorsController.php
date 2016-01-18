@@ -107,7 +107,7 @@ class AuthorsController extends RestfulController {
 
 				$stats = array_merge_recursive($stats, $this->checkAuthor($author));
 			} else
-				throw new Exception("Author with ID $id not found");
+				throw new \Exception("Author with ID $id not found");
 
 		}
 

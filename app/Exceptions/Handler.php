@@ -43,7 +43,10 @@ class Handler extends ExceptionHandler
 		public function render($request, Exception $e)
 		{
 
-			if (config('app.debug')) { 
+			$debug = config("app.debug");
+			$debugbar = $debug && (config("debugbar.enabled") !== false) && !$request->ajax();
+
+			if (app()->environment('local')) {
 				if ($request->ajax())
 					$handler = new \Whoops\Handler\JsonResponseHandler;
 				else {
@@ -55,16 +58,28 @@ class Handler extends ExceptionHandler
 				$whoops = new \Whoops\Run;
 				$whoops->pushHandler($handler);
 
-					$whoops->allowQuit(false);
-					$whoops->writeToOutput(false);
+				$whoops->allowQuit(false);
+				$whoops->writeToOutput(true);
 
-				$status = $e instanceof HttpExceptionInterface ? $e->getStatusCode() : 500;
-				$headers = $e instanceof HttpExceptionInterface ? $e->getHeaders() : [];
+				$status = 500;
+				$headers = [];
+
+				if ($e instanceof HttpExceptionInterface) {
+					$status = $e->getStatusCode();
+					$headers = $e->getHeaders();
+				}
 
 				$response = response($whoops->handleException($e), $status, $headers);
-
 			} else
 				$response = parent::render($request, $e);
+
+			if ($debugbar) {
+				$debugbar = app()->make('debugbar');
+				$debugbar->boot();
+				$debugbar->addException($e);
+
+				$response = $debugbar->modifyResponse($request, $response);
+			}
 
 			if (Subdomens::is('api'))
 				$response = Api::addCORSHeaders($response);

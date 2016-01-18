@@ -64,6 +64,10 @@ class RestfulController extends Controller {
 		$repository = $this->repository();
 		foreach ($this->filters as $filter)
 			switch ($filter) {
+				case 'offset':
+					$repository->addOffsetFilter(intval(Request::get('after')), intval(Request::get('before')));
+					break;
+
 				case 'letter':
 					$repository->addLetterFilter(Request::get('letter'));
 					break;

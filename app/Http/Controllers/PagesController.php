@@ -20,7 +20,7 @@ use PageUtils;
 class PagesController extends RestfulController {
 	protected $m;
 
-	protected $filters = ['letter', 'author', 'group'];
+	protected $filters = ['letter', 'author', 'group', 'offset'];
 	protected $filtersMapping = ['author' => 'authors', 'group' => 'groups'];
 
 	public function __construct(PageRepository $pages, Breadcrumbs $breadcrumbs) {
@@ -40,7 +40,7 @@ class PagesController extends RestfulController {
 		$pages = parent::index();
 
 		if (self::isApiCall())
-			return response()->json($pages);
+			return response()->json(remap_for_json($pages->all()));
 
 		$exclude = $this->hasFilters($this->filters);
 

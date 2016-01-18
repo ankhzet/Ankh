@@ -13,7 +13,7 @@ use Ankh\Crumbs as Breadcrumbs;
 class GroupsController extends RestfulController {
 	protected $m;
 
-	protected $filters = ['letter', 'author'];
+	protected $filters = ['letter', 'author', 'offset'];
 	protected $filtersMapping = ['author' => 'authors'];
 
 	public function __construct(GroupRepository $groups, Breadcrumbs $breadcrumbs) {
@@ -33,7 +33,7 @@ class GroupsController extends RestfulController {
 		$groups = parent::index();
 
 		if (self::isApiCall())
-			return response()->json($pages);
+			return response()->json(remap_for_json($groups->all()));
 
 		$exclude = $this->hasFilters($this->filters);
 

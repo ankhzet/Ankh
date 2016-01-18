@@ -15,7 +15,7 @@ use Ankh\Http\Requests\AdminRoleRequest;
 class AuthorsController extends RestfulController {
 	protected $m;
 
-	protected $filters = ['letter'];
+	protected $filters = ['letter', 'offset'];
 
 	public function __construct(AuthorRepository $authors, Breadcrumbs $crumbs) {
 		$this->m = $authors;
@@ -34,7 +34,7 @@ class AuthorsController extends RestfulController {
 		$authors = parent::index();
 
 		if (self::isApiCall())
-			return response()->json($authors);
+			return response()->json(remap_for_json($authors->all()));
 
 		return $this->viewIndex(compact('authors'));
 	}

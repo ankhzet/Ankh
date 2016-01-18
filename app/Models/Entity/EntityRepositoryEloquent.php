@@ -11,6 +11,7 @@ use Ankh\Contracts\OrderingDescriptor;
 class EntityRepositoryEloquent implements EntityRepositoryContract {
 
 	use \Ankh\Traits\Entity\Repository\RelationFilterTrait;
+	use \Ankh\Traits\Entity\Repository\OffsetFilterTrait;
 	use \Ankh\Traits\Entity\Repository\LetterFilterTrait;
 	use \Ankh\Traits\Entity\Repository\OrderingTrait;
 

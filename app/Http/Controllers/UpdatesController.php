@@ -10,6 +10,8 @@ class UpdatesController extends RestfulController {
 	const ENTITIES_PER_PAGE = 40;
 	protected $m;
 
+	protected $filters = ['offset'];
+
 	public function __construct(UpdateRepository $updates, Breadcrumbs $breadcrumbs) {
 		$this->m = $updates;
 	}
@@ -30,7 +32,7 @@ class UpdatesController extends RestfulController {
 
 		$updates = parent::index();
 		if (self::isApiCall())
-			return response()->json($updates);
+			return response()->json(remap_for_json($updates->all()));
 
 		$exclude = $this->hasFilters($this->filters);
 

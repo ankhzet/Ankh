@@ -17,6 +17,8 @@ class Kernel extends HttpKernel
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Ankh\Http\Middleware\Subdomens::class,
+        \Ankh\Http\Middleware\Api::class,
         \Ankh\Http\Middleware\VerifyCsrfToken::class,
     ];
 
@@ -29,8 +31,6 @@ class Kernel extends HttpKernel
         'auth' => \Ankh\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Ankh\Http\Middleware\RedirectIfAuthenticated::class,
-        'subdomens' => \Ankh\Http\Middleware\Subdomens::class,
-        'api' => \Ankh\Http\Middleware\Api::class,
         'admin' => \Ankh\Http\Middleware\Admin::class,
     ];
 }

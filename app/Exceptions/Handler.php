@@ -6,6 +6,9 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Ankh\Http\Middleware\Api;
+use Ankh\Http\Middleware\Subdomens;
+
 class Handler extends ExceptionHandler
 {
 		/**
@@ -43,22 +46,30 @@ class Handler extends ExceptionHandler
 			if (config('app.debug')) { 
 				if ($request->ajax())
 					$handler = new \Whoops\Handler\JsonResponseHandler;
-				else
+				else {
 					$handler = new \Whoops\Handler\PrettyPageHandler;
 
-				$handler->setEditor('sublime');
+					$handler->setEditor('sublime');
+				}
 
 				$whoops = new \Whoops\Run;
 				$whoops->pushHandler($handler);
 
-				return response($whoops->handleException($e),
-					$e->getStatusCode(),
-					$e->getHeaders()
-					);
-			}
+					$whoops->allowQuit(false);
+					$whoops->writeToOutput(false);
 
-			return parent::render($request, $e);
-			
+				$status = $e instanceof HttpExceptionInterface ? $e->getStatusCode() : 500;
+				$headers = $e instanceof HttpExceptionInterface ? $e->getHeaders() : [];
+
+				$response = response($whoops->handleException($e), $status, $headers);
+
+			} else
+				$response = parent::render($request, $e);
+
+			if (Subdomens::is('api'))
+				$response = Api::addCORSHeaders($response);
+
+			return $response;
 		}
 
 	}

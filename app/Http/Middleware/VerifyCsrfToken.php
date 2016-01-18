@@ -26,4 +26,8 @@ class VerifyCsrfToken extends BaseVerifier
 
       return $token === $request->session()->token();
   }
+
+    protected function shouldPassThrough($request) {
+        return parent::shouldPassThrough($request) || Subdomens::is("api");
+    }
 }

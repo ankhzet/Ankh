@@ -6,6 +6,9 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Ankh\Http\Middleware\Api;
+use Ankh\Http\Middleware\Subdomens;
+
 class Handler extends ExceptionHandler
 {
 		/**
@@ -62,6 +65,9 @@ class Handler extends ExceptionHandler
 
 			} else
 				$response = parent::render($request, $e);
+
+			if (Subdomens::is('api'))
+				$response = Api::addCORSHeaders($response);
 
 			return $response;
 		}

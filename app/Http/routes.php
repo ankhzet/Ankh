@@ -28,7 +28,7 @@
 
 	});
 
-Route::group(['middleware' => 'subdomens'], function() {
+Route::group([], function() {
 	Route::get('authors/check', ['middleware' => ['admin'], 'uses' => 'AuthorsController@getCheck', 'as' => 'authors.check']);
 	Route::resource('authors', 'AuthorsController');
 	Route::group(['prefix' => 'authors/{authors}'], function () {

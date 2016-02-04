@@ -54,6 +54,7 @@ class Feed implements FeedContract {
 	}
 
 	public function render() {
+		$this->feeder->setView('rss.' . $this->format());
 		return $this->feeder->render($this->format());
 	}
 

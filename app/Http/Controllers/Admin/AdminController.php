@@ -44,8 +44,16 @@ class AdminController extends Controller {
 		return view('admin.cleanup', compact('statistics'));
 	}
 
-	public function cleanupDb() {
-		return $this->anyCleanup((new Cleaner(['db' => new CleanerDB]))->cleanup());
+	public function cleanupPages() {
+		return $this->anyCleanup((new Cleaner([
+			'deleted-pages' => new CleanerDBDeletedPages,
+		]))->cleanup());
+	}
+
+	public function cleanupUpdates() {
+		return $this->anyCleanup((new Cleaner([
+			'outdated-updates' => new CleanerDBOutdatedUpdates,
+		]))->cleanup());
 	}
 
 }
@@ -67,7 +75,7 @@ class Cleaner {
 }
 
 
-class CleanerDB {
+class CleanerDBDeletedPages {
 
 	public function clean() {
 		$pages = Page::onlyTrashed();
@@ -88,6 +96,35 @@ class CleanerDB {
 		$this->stats = [
 			'pages' => $pageIds->toArray(),
 			'updates' => $updateIds->toArray(),
+		];
+		return $this->stats;
+	}
+
+	public function __toString() {
+		return json_encode($this->stats);
+	}
+
+}
+
+class CleanerDBOutdatedUpdates {
+
+	public function clean() {
+		$old = Update::withTrashed();
+		$old = $old->orderBy('id')->take($old->count() / 2);
+
+		$deleted = Update::onlyTrashed();
+		$updateIds = array_unique(
+			array_merge(
+				$deleted->get(['id'])->pluck('id')->toArray(),
+				$old->get(['id'])->pluck('id')->toArray()
+			)
+		);
+
+		$updates = Update::withTrashed()->whereIn('id', $updateIds);
+		$updates->forceDelete();
+
+		$this->stats = [
+			'updates' => $updateIds,
 		];
 		return $this->stats;
 	}

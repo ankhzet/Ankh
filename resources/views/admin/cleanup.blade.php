@@ -22,7 +22,12 @@
 
 	<div class="option">
 		<div class="label">&nbsp;</div>
-		{!! HTML::link(route('admin.cleanup.db'), 'Cleanup deleted pages', ['class' => 'field label', 'target' => '_blank']) !!}
+		{!! HTML::link(route('admin.cleanup.pages'), Lang::get('pages.admin.cleanup.pages'), ['class' => 'field label', 'target' => '_blank']) !!}
+	</div>
+
+	<div class="option">
+		<div class="label">&nbsp;</div>
+		{!! HTML::link(route('admin.cleanup.updates'), Lang::get('pages.admin.cleanup.updates'), ['class' => 'field label', 'target' => '_blank']) !!}
 	</div>
 
 @if($statistics)

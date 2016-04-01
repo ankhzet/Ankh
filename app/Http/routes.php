@@ -77,13 +77,16 @@ Route::group([], function() {
 	Route::get('rss/{chanel?}/{id?}', ['uses' => 'HomeController@getRSS', 'as' => 'rss']);
 
 	Route::group(['middleware' => 'admin', 'namespace' => 'Admin'], function() {
-		Route::get('admin/cleanup/db', [
-			'uses' => 'AdminController@cleanupDb',
-			'as' => 'admin.cleanup.db',
+		Route::get('admin/cleanup/pages', [
+			'uses' => 'AdminController@cleanupPages',
+			'as' => 'admin.cleanup.pages',
+			]);
+		Route::get('admin/cleanup/updates', [
+			'uses' => 'AdminController@cleanupUpdates',
+			'as' => 'admin.cleanup.updates',
 			]);
 		Route::controller('admin', 'AdminController', [
 			'getLog' => 'admin.log',
 			'anyCleanup' => 'admin.cleanup',
-
 			]);
 	});

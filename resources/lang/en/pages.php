@@ -80,7 +80,8 @@ $admin = array(
 	'log' => 'View log',
 	'cleanup' => array(
 		'index' => 'Cleanup',
-		'db' => 'Database cleanup',
+		'pages' => 'Cleanup deleted pages',
+		'updates' => 'Cleanup outdated updates',
 		),
 	);
 

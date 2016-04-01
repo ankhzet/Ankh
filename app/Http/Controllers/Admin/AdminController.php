@@ -109,10 +109,10 @@ class CleanerDBDeletedPages {
 class CleanerDBOutdatedUpdates {
 
 	public function clean() {
-		$old = Update::withTrashed();
-		$old = $old->orderBy('id')->take($old->count() / 2);
-
 		$deleted = Update::onlyTrashed();
+		$count = Update::count();
+		$old = Update::withTrashed()->orderBy('id')->take($count / 2);
+
 		$updateIds = array_unique(
 			array_merge(
 				$deleted->get(['id'])->pluck('id')->toArray(),

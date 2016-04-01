@@ -6,6 +6,9 @@ use Ankh\Admin\LogFile;
 use Ankh\Admin\LogParser;
 use Ankh\Downloadable\DownloadWorker;
 
+use Ankh\Page;
+use Ankh\PageUpdate;
+
 class AdminController extends Controller {
 
 	public function anyIndex() {
@@ -34,6 +37,56 @@ class AdminController extends Controller {
 			throw new \Exception('Deletion failed!');
 
 		return redirect()->back();
+	}
+
+	public function anyCleanup($statistics = null) {
+		return view('admin.cleanup', compact('statistics'));
+	}
+
+	public function cleanupDb() {
+		return $this->anyCleanup((new Cleaner(['db' => new CleanerDB]))->cleanup());
+	}
+
+}
+
+class Cleaner {
+
+	function __construct($cleaners = []) {
+		$this->cleaners = $cleaners;
+	}
+
+	public function cleanup() {
+		$stats = [];
+		foreach ($this->cleaners as $name => $cleaner) {
+			$stats[$name] = $cleaner->clean();
+		}
+		return $stats;
+	}
+
+}
+
+
+class CleanerDB {
+
+	public function clean() {
+		$pages = Page::onlyTrashed();
+		$pageIds = $pages->get(['id'])->pluck('id');
+
+		$updates = PageUpdate::withTrashed()->whereIn('entity_id', $pageIds);
+		$updateIds = $updates->get(['id'])->pluck('id');
+
+		$updates->forceDelete();
+		$pages->forceDelete();
+
+		$this->stats = [
+			'pages' => $pageIds->toArray(),
+			'updates' => $updateIds->toArray(),
+		];
+		return $this->stats;
+	}
+
+	public function __toString() {
+		return json_encode($this->stats);
 	}
 
 }

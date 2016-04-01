@@ -78,6 +78,10 @@ $authors = array(
 $admin = array(
 	'index' => 'Admin',
 	'log' => 'View log',
+	'cleanup' => array(
+		'index' => 'Cleanup',
+		'db' => 'Database cleanup',
+		),
 	);
 
 return array(

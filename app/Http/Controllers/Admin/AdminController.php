@@ -8,6 +8,7 @@ use Ankh\Downloadable\DownloadWorker;
 
 use Ankh\Page;
 use Ankh\PageUpdate;
+use Ankh\Update;
 
 class AdminController extends Controller {
 
@@ -70,9 +71,15 @@ class CleanerDB {
 
 	public function clean() {
 		$pages = Page::onlyTrashed();
-		$pageIds = $pages->get(['id'])->pluck('id');
+		$pageIds = $pages->get(['id'])->pluck('id', 'id');
 
-		$updates = PageUpdate::withTrashed()->whereIn('entity_id', $pageIds);
+		$trough = PageUpdate::withTrashed()->get(['id', 'entity_id'])->all();
+
+		$same = array_filter(array_map(function ($e) use ($pageIds) {
+			return isset($pageIds[$e->entity_id]) ? $e->id : false;
+		}, $trough));
+
+		$updates = Update::withTrashed()->whereIn('id', $same);
 		$updateIds = $updates->get(['id'])->pluck('id');
 
 		$updates->forceDelete();

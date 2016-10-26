@@ -59,7 +59,11 @@ class Parser {
 		$crawler = new Crawler();
 		$crawler->addHtmlContent($html);
 
-		$infoTbl = $crawler->filter('table')->first();
+		$infoTbl = $crawler
+			->filter('table')
+			->reduce(function (Crawler $node) {
+				return !$node->filter('div')->count();
+			})->first();
 
 		$info = $this->authorInfo($infoTbl);
 

@@ -6,6 +6,9 @@
     "type": "project",
     "require": {
         "php": ">=7.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-zlib": "*",
         "laravel/framework": "5.1.*",
         "illuminate/html": "5.*",
         "doctrine/dbal": "~2.3",

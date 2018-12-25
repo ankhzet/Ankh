@@ -11,7 +11,7 @@ class PageUpdate extends Update {
 	const U_DIFF    = 5;
 	const U_MOVED   = 6;
 
-	public function page() {
+	public function page(): Page {
 		return $this->entity();
 	}
 
@@ -27,10 +27,10 @@ class PageUpdate extends Update {
 		return $query->whereIn('type', [self::U_DIFF, self::U_ADDED]);
 	}
 
-	public function pageVersion() {
 	/**
 	 * @return Version
 	 */
+	public function pageVersion(): Version {
 		$page = $this->relatedPage();
 
 		return $page->version($this->created_at);

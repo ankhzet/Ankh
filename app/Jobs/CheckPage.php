@@ -13,7 +13,7 @@ class CheckPage extends Job {
 	 */
 	protected $update;
 
-	function __construct($update) {
+	function __construct(string $update) {
 		$this->update = $update;
 	}
 

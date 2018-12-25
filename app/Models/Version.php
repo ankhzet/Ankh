@@ -62,21 +62,23 @@ class Version implements Resolvable {
 			break;
 		default:
 			$timestamp = e($timestamp);
+
+			/** @noinspection PhpUnhandledExceptionInspection */
 			throw new Exception("Don't know how to interpret [{$timestamp}] version identifier");
 		}
 
 		return $this;
 	}
 
-	public function encode($format = 'd-m-Y+H-i-s') {
+	public function encode($format = 'd-m-Y+H-i-s'): string {
 		return $this->time->format($format);
 	}
 
-	public function __toString() {
+	public function __toString(): string {
 		return $this->encode();
 	}
 
-	public function resolver() {
+	public function resolver(): PageResolver {
 		/** @var PageResolver $resolver */
 		$resolver = $this->entity()->resolver();
 

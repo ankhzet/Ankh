@@ -104,11 +104,10 @@ class AuthorsController extends RestfulController {
 			$author = Author::find($id);
 
 			if ($author) {
-
 				$stats = array_merge_recursive($stats, $this->checkAuthor($author));
-			} else
+			} else {
 				throw new \Exception("Author with ID $id not found");
-
+			}
 		}
 
 		if ($id && !$selected)

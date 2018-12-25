@@ -23,7 +23,7 @@ class Compare {
 	}
 
 	public function proclaimedSize() {
-		return $this->proclaimedSize ?:  strlen($this->comparable1);
+		return $this->proclaimedSize ?: strlen($this->comparable1);
 	}
 
 }
@@ -45,12 +45,13 @@ class Comparator {
 		$last = $resolver->last();
 
 		$result = $this->compare($last, $resolver);
-		if ($result === false)
-			return false;
 
+		if ($result === false) {
+			return false;
+		}
 
 		if (!PageUtils::putContents($last, $result->comparable2)) {
-			error_handler(E_USER_ERROR, "Failed to save \"$r2\"", basename(__FILE__), 28);
+			error_handler(E_USER_ERROR, "Failed to save \"$last\"", basename(__FILE__), 28);
 			return false;
 		}
 

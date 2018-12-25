@@ -58,5 +58,10 @@ class ResourceResolver {
 	function __clone() {
 		$this->fragments = array_merge([], $this->fragments);
 	}
+
+	function __toString()
+	{
+		return $this->resolve();
+	}
 }
 

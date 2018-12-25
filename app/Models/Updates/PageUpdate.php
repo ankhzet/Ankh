@@ -34,7 +34,7 @@ class PageUpdate extends Update {
 			return $this->diffString('<b class="delta {:color}">{:delta}</b>', ['red', 'green']);
 		case self::U_MOVED:
 			return $this->changeString(null, function ($change) {
-				$g = app(\Ankh\Contracts\GroupRepository::class);
+				$g = app(Contracts\GroupRepository::class);
 				$change[self::C_NEW] = $g->findEvenTrashed(intval($change[self::C_NEW]), ['id', 'title']);
 				$change[self::C_OLD] = $g->findEvenTrashed(intval($change[self::C_OLD]), ['id', 'title']);
 				return $change;

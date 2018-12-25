@@ -12,15 +12,15 @@ class DownloadFileResolver extends ResourceResolver {
 			$this->checkablePartial('format'),
 			$this->checkablePartial('encoding'),
 			$this->checkablePartial('compression'),
-			]);
+		]);
 
 		$this->title = '{:author} - {:page-title}';
-		$title = $this->checkable('title', function (DownloadFileResolver $this) {
-			return rtrim($this->resolve('{:title}'), '.');
+		$title = $this->checkable('title', function (DownloadFileResolver $self) {
+			return rtrim($self->resolve('{:title}'), '.');
 		});
 
-		$extension = $this->checkable('extension', function (DownloadFileResolver $this) {
-			return ifelse($this->resolve('{:extension}'), function ($extension) {
+		$extension = $this->checkable('extension', function (DownloadFileResolver $self) {
+			return ifelse($self->resolve('{:extension}'), function ($extension) {
 				return '.' . trim($extension, '.');
 			});
 		});
@@ -46,8 +46,8 @@ class DownloadFileResolver extends ResourceResolver {
 	}
 
 	function partial($partial, $format = "{:replace}") {
-		return function (DownloadFileResolver $this) use ($partial, $format) {
-			return ifelse($this->resolve("{:$partial}"), function ($part) use ($format) {
+		return function (DownloadFileResolver $self) use ($partial, $format) {
+			return ifelse($self->resolve("{:$partial}"), function ($part) use ($format) {
 				return str_replace('{:replace}', $part, $format);
 			});
 		};

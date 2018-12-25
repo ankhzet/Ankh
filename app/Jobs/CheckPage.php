@@ -1,11 +1,9 @@
 <?php namespace Ankh\Jobs;
 
-use Carbon\Carbon;
 use Queue;
 use Log;
 
 use Ankh\Page\Comparator;
-use Ankh\Version;
 use Ankh\PageUpdate;
 
 class CheckPage extends Job {
@@ -28,7 +26,7 @@ class CheckPage extends Job {
 		$version = $page->version($update->created_at);
 
 		Log::info("Checking page " . $page->id . "...");
-		$compare = with(new Comparator)->compareLast($version);
+		$compare = (new Comparator)->compareLast($version);
 
 		if ($compare === false)
 			throw new \Exception("Page {$page->id} check failed");
@@ -41,8 +39,7 @@ class CheckPage extends Job {
 	}
 
 	public static function checkLater(PageUpdate $update) {
-		$job = new static($update->id);
-		Queue::pushOn('page-check', $job);
+		Queue::pushOn('page-check', new static($update->id));
 	}
 
 }

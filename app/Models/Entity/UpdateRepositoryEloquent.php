@@ -44,12 +44,12 @@ class UpdateRepositoryEloquent extends EntityRepositoryEloquent implements Updat
 		$query->forPage(
 			$page = Paginator::resolveCurrentPage($pageName),
 			$perPage = $perPage ?: $this->model->model->getPerPage()
-			);
+		);
 
 		return new UpdatesPaginator($query->get($columns), $total, $perPage, $page, [
 			'path' => Paginator::resolveCurrentPath(),
 			'pageName' => $pageName,
-			]);
+		]);
 	}
 
 

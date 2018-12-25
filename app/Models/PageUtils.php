@@ -47,7 +47,8 @@ class PageUtils extends CharsetEncoder {
 	}
 
 	/**
-	 * @param  string $encoding - Encoding, in which contents should be returned.
+	 * @param PageResolver $resolver
+	 * @param string $encoding - Encoding, in which contents should be returned.
 	 * @return string
 	 */
 	public function contents(PageResolver $resolver, $encoding = null) {

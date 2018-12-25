@@ -29,7 +29,7 @@
 		}
 
 		public function version($timestamp = null) {
-			return with(new Version($timestamp))->setEntity($this);
+			return (new Version($timestamp))->setEntity($this);
 		}
 
 		public function updateType() {

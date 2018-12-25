@@ -1,7 +1,6 @@
 <?php namespace Ankh;
 
 use Illuminate\Support\Str;
-use BadMethodCallException;
 use Lang;
 
 class Update extends Entity {

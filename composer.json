@@ -17,7 +17,8 @@
         "jenssegers/date": "^3.0@dev",
         "roumen/feed": "~2.9",
         "iron-io/iron_mq": "dev-master",
-        "ezyang/htmlpurifier": "dev-master"
+        "ezyang/htmlpurifier": "dev-master",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "*",

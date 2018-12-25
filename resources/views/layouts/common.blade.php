@@ -21,7 +21,7 @@
 					<ul>
 						<li>
 							<a href="{{ route('home') }}">
-								<img src="{{asset('assets/img/logo.png')}}" alt="@lang('pages.home')" title="@lang('pages.home')" />
+								<img src="{{asset('assets/img/logo.png', true)}}" alt="@lang('pages.home')" title="@lang('pages.home')" />
 							</a>
 						</li>
 						<li><a href="{{ route('authors.index') }}">@lang('pages.authors.index')</a></li>

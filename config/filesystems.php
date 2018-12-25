@@ -1,5 +1,19 @@
 <?php
 
+$pageStorage = env('S3_BUCKET')
+    ? [
+        'driver' => 's3',
+        'key'    => env('S3_ACCESS_KEY_ID'),
+        'secret' => env('S3_SECRET_ACCESS_KEY'),
+        'region' => env('S3_REGION'),
+        'bucket' => env('S3_BUCKET'),
+        'root'   => 'x1roah3goj1m',
+    ]
+    : [
+        'driver' => 'local',
+        'root'   => storage_path('tvs'),
+    ];
+
 return [
 
     /*
@@ -48,14 +62,7 @@ return [
             'root'   => storage_path('app'),
         ],
 
-        'page-tvs' => [
-            'driver' => env('S3_ACCESS_KEY_ID') ? 's3' : 'local',
-            'key'    => env('S3_ACCESS_KEY_ID'),
-            'secret' => env('S3_SECRET_ACCESS_KEY'),
-            'region' => env('S3_REGION'),
-            'bucket' => env('S3_BUCKET'),
-            'root'   => storage_path('tvs'),
-        ],
+        'page-tvs' => $pageStorage,
 
         'logs' => [
             'driver' => 'local',

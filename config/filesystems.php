@@ -49,7 +49,11 @@ return [
         ],
 
         'page-tvs' => [
-            'driver' => 'local',
+            'driver' => env('S3_ACCESS_KEY_ID') ? 's3' : 'local',
+            'key'    => env('S3_ACCESS_KEY_ID'),
+            'secret' => env('S3_SECRET_ACCESS_KEY'),
+            'region' => env('S3_REGION'),
+            'bucket' => env('S3_BUCKET'),
             'root'   => storage_path('tvs'),
         ],
 

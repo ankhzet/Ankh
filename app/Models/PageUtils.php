@@ -11,6 +11,7 @@ class PageUtils extends CharsetEncoder {
 	protected $cleaner;
 	protected $cache_dir_cmod;
 
+	/** @var Storage */
 	protected $storage;
 
 
@@ -30,6 +31,7 @@ class PageUtils extends CharsetEncoder {
 	}
 
 	/**
+	 * @param string $html
 	 * @return string
 	 */
 	public function clean($html) {

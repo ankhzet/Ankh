@@ -1,7 +1,7 @@
 <?php namespace Ankh;
 
 use Carbon\Carbon;
-use Ecxeption;
+use Exception;
 
 use Ankh\Contracts\Resolvable;
 use Ankh\Downloadable\FileVersion;
@@ -9,9 +9,19 @@ use PageUtils;
 
 class Version implements Resolvable {
 
+	/**
+	 * @var Page
+	 */
 	protected $entity;
+
+	/**
+	 * @var Carbon $time
+	 */
 	protected $time;
 
+	/**
+	 * @param Carbon|string|integer|null $timestamp
+	 */
 	public function __construct($timestamp = null) {
 		if ($timestamp)
 			$this->setTimestamp($timestamp);
@@ -19,6 +29,7 @@ class Version implements Resolvable {
 
 	public function setEntity(Resolvable $entity) {
 		$this->entity = $entity;
+
 		return $this;
 	}
 
@@ -34,6 +45,10 @@ class Version implements Resolvable {
 		return $this->time;
 	}
 
+	/**
+	 * @param Carbon|string|integer|null $timestamp
+	 * @return $this
+	 */
 	public function setTimestamp($timestamp) {
 		switch (true) {
 		case is_object($timestamp):
@@ -62,7 +77,10 @@ class Version implements Resolvable {
 	}
 
 	public function resolver() {
-		return $this->entity()->resolver()->setVersion($this);
+		/** @var PageResolver $resolver */
+		$resolver = $this->entity()->resolver();
+
+		return $resolver->setVersion($this);
 	}
 
 	public function contents() {

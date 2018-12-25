@@ -1,5 +1,10 @@
 <?php namespace Ankh;
 
+/**
+ * Class PageUpdate
+ * @package Ankh
+ * @method Page relatedPage()
+ */
 class PageUpdate extends Update {
 	const TYPE = 3;
 
@@ -23,6 +28,9 @@ class PageUpdate extends Update {
 	}
 
 	public function pageVersion() {
+	/**
+	 * @return Version
+	 */
 		$page = $this->relatedPage();
 
 		return $page->version($this->created_at);

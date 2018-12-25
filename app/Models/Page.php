@@ -5,6 +5,16 @@
 	use Ankh\Contracts\Resolvable;
 	use Ankh\Jobs\CheckPage as CheckJob;
 
+	/**
+	 * @property mixed title
+	 * @property mixed link
+	 * @property mixed annotation
+	 * @property mixed size
+	 * @property mixed author_id
+	 * @property mixed group_id
+	 * @property mixed author
+	 * @property mixed group
+	 */
 	class Page extends Updateable implements Resolvable {
 
 		const COLUMN_SIZE = 'size';
@@ -28,6 +38,10 @@
 			return with(new PageResolver)->setPage($this);
 		}
 
+		/**
+		 * @param null $timestamp
+		 * @return Version
+		 */
 		public function version($timestamp = null) {
 			return (new Version($timestamp))->setEntity($this);
 		}

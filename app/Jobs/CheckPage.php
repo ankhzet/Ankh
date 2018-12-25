@@ -8,6 +8,9 @@ use Ankh\PageUpdate;
 
 class CheckPage extends Job {
 
+	/**
+	 * @var string
+	 */
 	protected $update;
 
 	function __construct($update) {
@@ -20,6 +23,7 @@ class CheckPage extends Job {
 	 * @return void
 	 */
 	public function handle() {
+		/** @var PageUpdate $update */
 		$update = PageUpdate::withTrashed()->find($this->update);
 
 		$page = $update->relatedPage();

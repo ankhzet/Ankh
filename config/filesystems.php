@@ -7,7 +7,7 @@ $pageStorage = env('S3_BUCKET')
         'secret' => env('S3_SECRET_ACCESS_KEY'),
         'region' => env('S3_REGION'),
         'bucket' => env('S3_BUCKET'),
-        'root'   => 'x1roah3goj1m',
+        'root'   => 'x1roah3goj1m' . storage_path('tvs'),
     ]
     : [
         'driver' => 'local',

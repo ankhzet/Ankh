@@ -36,12 +36,6 @@ Route::group([], function() {
 	Route::resource('groups', 'GroupsController');
 
 	Route::resource('pages', 'PagesController');
-	Route::group(['prefix' => 'pages/{pages}'], function () {
-		Route::get('read/{version?}', ['uses' => 'PagesController@getRead', 'as' => 'pages.read']);
-		Route::get('{version?}', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
-		Route::get('{version}/diff/{diff}', ['uses' => 'PagesController@getDiff', 'as' => 'pages.diff']);
-		Route::get('download/{version}/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
-	});
 
 	Route::resource('updates', 'UpdatesController');
 
@@ -51,6 +45,13 @@ Route::group([], function() {
 	Route::resource('authors.updates', 'UpdatesController');
 	Route::resource('groups.updates', 'UpdatesController');
 	Route::resource('pages.updates', 'UpdatesController');
+
+	Route::group(['prefix' => 'pages/{pages}'], function () {
+		Route::get('read/{version?}', ['uses' => 'PagesController@getRead', 'as' => 'pages.read']);
+		Route::get('{version?}', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
+		Route::get('{version}/diff/{diff}', ['uses' => 'PagesController@getDiff', 'as' => 'pages.diff']);
+		Route::get('download/{version}/{p1?}/{p2?}/{p3?}/{p4?}', ['uses' => 'PagesController@getDownload', 'as' => 'pages.download']);
+	});
 
 	Route::bind('authors', function ($id) {
 		return App::make(AuthorRepository::class)->find($id);

@@ -1,7 +1,5 @@
 <?php namespace Ankh\Feeds;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 class PageFeedChanel extends UpdatesFeedChanel {
 
 	public function name() {

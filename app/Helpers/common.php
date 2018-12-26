@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Support\Str;
-
-function pick_arg($variables, $class = null) {
+/**
+ * @param mixed[] $variables
+ * @param string[] ...$class
+ * @return array|mixed
+ */
+function pick_arg() {
 	$stack = debug_backtrace(0, 2);
 	$classes = $stack[0]['args'];
 
@@ -44,8 +47,9 @@ function strip_unwanted_tags($text, $tags = []) {
 function path_join() {
 	$args = func_get_args();
 	$r = [];
-	foreach ($args as $portion)
-		$r[] = rtrim($portion, '/\\');
+	foreach ($args as $portion) {
+			$r[] = rtrim($portion, '/\\');
+	}
 
 	return preg_replace('#[\\/]+#', '/', join('/', $r));
 }

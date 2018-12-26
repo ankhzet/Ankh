@@ -92,3 +92,20 @@ function cleanup_annotation($html) {
 	$html = str_replace("\n", "<br/>", $html);
 	return $html;
 }
+
+function html_classes_compose(array $array) {
+	$classes = [];
+
+	foreach ($array as $key => $value) {
+		if (is_int($key) and $value) {
+			$classes[] = $value;
+		}
+		else if ($value) {
+			$classes[] = $key;
+		}
+	}
+
+	if ($classes) {
+		return 'class="'.implode(' ', $classes).'"';
+	}
+}

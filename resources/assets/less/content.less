@@ -32,15 +32,53 @@
 
 	.breadcrumbs {
 		margin-top: 5px;
-		padding: 0 2px;
 		font-weight: bold;
 		font-size: 10px;
 		color: @dark-font-color;
 		background: darken(@grayed-color, 10%);
 		border-bottom: 1px solid darken(@grayed-color, 20%);
+		display: flex;
+		overflow-y: hidden;
+		height: 21px;
+		line-height: 21px;
+		padding: 0 4px;
 
 		li {
-			display: inline-block;
+			display: flex;
+			white-space: nowrap;
+
+			&.entity:before {
+				content: '⟶';
+				padding: 0 2px;
+			}
+
+			&.arrow {
+				display: block;
+
+				&::before {
+					content: '';
+					height: 15px;
+					width: 15px;
+					margin: 3px 8px 0 -7px;
+					display: block;
+					transform: rotate(45deg);
+					border-top: 1px solid @link-color;
+					border-right: 1px solid @link-color;
+				}
+
+				&::after {
+					content: '';
+					height: 15px;
+					width: 15px;
+					margin: -16px 0px 0px -9px;
+					display: block;
+					transform: rotate(45deg);
+					border-top: 1px solid @grayed-color;
+					border-right: 1px solid @grayed-color;
+				}
+
+				padding: 0 5px;
+			}
 		}
 	}
 

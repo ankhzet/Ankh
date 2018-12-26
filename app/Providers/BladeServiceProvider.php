@@ -26,6 +26,9 @@ class BladeServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
+		Blade::directive('class', function($expression) {
+			return '<?php echo html_classes_compose'.$expression.'; ?>';
+		});
 
 		Blade::extend(function($view, $compiler) {
 			return preg_replace('/\@kept\((.+?)\)/', '<?php if (!isset($exclude) || array_search(\'${1}\', $exclude) === false) { ?>', $view);

@@ -37,6 +37,11 @@ class Version implements Resolvable {
 		return $this->entity;
 	}
 
+	public function getAttribute($name)
+	{
+		return $this->{$name};
+	}
+
 	public function timestamp() {
 		return $this->time ? $this->time->timestamp : 0;
 	}

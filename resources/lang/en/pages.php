@@ -32,7 +32,7 @@ $pages = array(
 		'updates' => $updates,
 
 		'diff' => 'Differences',
-		'read' => 'Reading',
+		'read' => 'Version by {:time}',
 
 		'list' => 'list pages',
 		'all-versions' => 'all versions',

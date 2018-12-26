@@ -50,10 +50,12 @@ class PagesController extends RestfulController {
 	/**
 	 * Display the specified page entity.
 	 *
-	 * @param  Page $page
 	 * @return Response
 	 */
 	public function show() {
+		/** @var Author $author */
+		/** @var Group $group */
+		/** @var Page $page */
 		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
@@ -69,10 +71,10 @@ class PagesController extends RestfulController {
 	/**
 	 * Display the specified page entity.
 	 *
-	 * @param  Page $page
 	 * @return Response
 	 */
 	public function getRead() {
+		/** @var Page $page */
 		list($author, $group, $page, $version) = pick_arg(Author::class, Group::class, Page::class, Version::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
@@ -86,7 +88,9 @@ class PagesController extends RestfulController {
 	/**
 	 * Display the specified page versions diff.
 	 *
-	 * @param  Page $page
+	 * @param Page $page
+	 * @param Version $v1
+	 * @param Version $v2
 	 * @return Response
 	 */
 	public function getDiff(Page $page, Version $v1, Version $v2) {
@@ -107,7 +111,7 @@ class PagesController extends RestfulController {
 	/**
 	 * Show the form for editing the specified page entity.
 	 *
-	 * @param  Page $page
+	 * @param Page $page
 	 * @return Response
 	 */
 	public function edit($page) {

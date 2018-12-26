@@ -150,10 +150,10 @@ class RestfulController extends Controller {
 	* Actually, just marks entity as "deleted", but keeps in DB.
 	*
 	* @param  AdminRoleRequest $request
-	* @param  Entity           $entity
 	* @return Response
 	*/
 	public function destroy(AdminRoleRequest $request) {
+		/** @var Entity $entity */
 		$entity = pick_arg(get_class($this->repository()->model()));
 		if ($entity->delete())
 			return $this->innerRedirect('show', $entity)->withMessage('Deleted');

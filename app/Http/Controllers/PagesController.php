@@ -115,7 +115,8 @@ class PagesController extends RestfulController {
 	 * @return Response
 	 */
 	public function edit($page) {
-		$group = pick_arg(Page::class) ?: new Page;
+		$page = pick_arg(Page::class) ?: new Page;
+
 		if (!$page->group) {
 			$group = pick_arg(Group::class);
 

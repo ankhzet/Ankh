@@ -1,6 +1,6 @@
 <?php
 
-$storage = env('S3_BUCKET')
+$storage = env('AWS_BUCKET')
 	? [
 		'driver' => 's3',
 		'key'    => env('AWS_ACCESS_KEY_ID'),
@@ -11,8 +11,19 @@ $storage = env('S3_BUCKET')
 	]
 	: [
 		'driver' => 'local',
-		'root'   => '',
+		'root'   => storage_path(),
 	];
+
+function joinPaths(...$args) {
+	$r = [];
+	foreach ($args as $portion) {
+		if ($portion) {
+			$r[] = rtrim($portion, '/\\');
+		}
+	}
+
+	return preg_replace('#[\\/]+#', DIRECTORY_SEPARATOR, join(DIRECTORY_SEPARATOR, $r));
+}
 
 return [
 
@@ -63,11 +74,11 @@ return [
 		],
 
 		'page-tvs' => array_merge($storage, [
-			'root'   => path_join($storage['root'], storage_path('tvs')),
+			'root'   => joinPaths($storage['root'], 'tvs'),
 		]),
 
 		'logs' => array_merge($storage, [
-			'root'   => path_join($storage['root'], storage_path('logs')),
+			'root'   => joinPaths($storage['root'], 'logs'),
 		]),
 
 		'ftp' => [

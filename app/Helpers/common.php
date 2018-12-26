@@ -48,7 +48,9 @@ function path_join() {
 	$args = func_get_args();
 	$r = [];
 	foreach ($args as $portion) {
+		if ($portion) {
 			$r[] = rtrim($portion, '/\\');
+		}
 	}
 
 	return preg_replace('#[\\/]+#', '/', join('/', $r));

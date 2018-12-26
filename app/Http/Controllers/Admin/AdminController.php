@@ -19,7 +19,7 @@ class AdminController extends Controller {
 	public function getLog() {
 		$log = new LogFile('laravel.log');
 
-		$log = with(new LogParser)->parse($log->data());
+		$log = (new LogParser)->parse($log->data());
 		return view('admin.log', ['log' => $log]);
 	}
 

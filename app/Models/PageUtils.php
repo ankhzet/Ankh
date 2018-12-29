@@ -62,10 +62,12 @@ class PageUtils extends CharsetEncoder {
 		if (!$data)
 			return null;
 
-		return $this->wakeup($data, $encoding);
+		return $this->wakeup($data, $resolver, $encoding);
 	}
 
 	/**
+	 * @param PageResolver $resolver
+	 * @param $contents
 	 * @param  string $encoding - Encoding, in which contents are encoded.
 	 * @return bool
 	 */
@@ -84,11 +86,12 @@ class PageUtils extends CharsetEncoder {
 		return $this->storage->put($path, $data);
 	}
 
-	public function wakeup($contents, $encoding = null) {
+	public function wakeup($contents, PageResolver $resolver, $encoding = null) {
 		$encoding = $encoding ?: $this->encoding();
 
 		if (!$this->checkEncoding($contents, $encoding)) {
 			$storedEncoding = $this->storedEncoding();
+
 			if (!$this->checkEncoding($contents, $storedEncoding)) {
 				$detectedEncoding = $this->detectEncoding($contents);
 

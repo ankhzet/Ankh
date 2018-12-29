@@ -103,7 +103,7 @@ class PagesController extends RestfulController {
 		if ($t2 === null)
 			throw new \Exception("Version {$v2} not found");
 
-		$text = with(new Diff)->diff($t1, $t2);
+		$text = (new Diff)->diff($t1, $t2);
 
 		return $this->viewShow(compact('page', 'text'));
 	}

@@ -1,6 +1,6 @@
 <?php namespace Ankh\Page;
 
-use SebastianBergmann\Diff\Differ;
+use \SebastianBergmann\Diff\Differ;
 
 class Diff {
 

@@ -7,7 +7,7 @@ class BasicSamlibHtmlCleaner extends BasicHtmlCleaner {
 	public function clean($html, $encoding = 'utf8') {
 		$html = $this->cleanHtml($html);
 		$html = $this->resolveImages($html);
-		return $html;;
+		return $html;
 	}
 
 	public function resolveImages($html) {

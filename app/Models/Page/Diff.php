@@ -152,10 +152,10 @@ class ContextFolder extends Folder {
 			}
 
 			while ($buffer && strlen(join(PHP_EOL, $r)) < $this->context) {
-				$r[] = array_pop($buffer);
+				array_unshift($r, array_pop($buffer));
 			}
 
-			$buffer = array_merge($l, [$joiner], array_reverse($r));
+			$buffer = array_merge($l, [$joiner], $r);
 		}
 
 		$folded = join(PHP_EOL, $buffer);

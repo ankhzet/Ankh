@@ -54,7 +54,7 @@ class Comparator {
 		}
 
 		if (!$result->equals()) {
-			if (!PageUtils::putContents($last, $result->comparable2, PageUtils::encoding())) {
+			if (!PageUtils::putContents($last, $result->comparable2, $this->fetchedEncoding)) {
 				error_handler(E_USER_ERROR, "Failed to save \"$last\"", basename(__FILE__), 28);
 				return false;
 			}

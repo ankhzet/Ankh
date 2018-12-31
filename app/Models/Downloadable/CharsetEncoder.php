@@ -20,23 +20,28 @@ class CharsetEncoder implements Transformation {
 		$data = (string)$transformable;
 		$data = $this->transform($data, $this->detectEncoding($data), $toEncoding);
 
-		if (!!$data)
+		if (!!$data) {
 			$transformable->charset = $this->remap($this->detectEncoding($data));
+		}
 
 		return $transformable->setContents($data);
 	}
 
 	public function remap($encoding, $reverse = false) {
 		$map = $reverse ? $this->rmap : $this->map;
+
 		return @$map[$encoding] ?: $encoding;
 	}
 
 	public function transform($data, $fromEncoding, $toEncoding = null) {
 		$toEncoding = $toEncoding ?: $this->encoding();
-		if ($fromEncoding == $toEncoding)
+
+		if ($fromEncoding == $toEncoding) {
 			return $data;
+		}
 
 		$data = @mb_convert_encoding($data, $toEncoding, $fromEncoding);
+
 		return $data;
 	}
 

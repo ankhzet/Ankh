@@ -32,8 +32,9 @@ class CheckPage extends Job {
 		Log::info("Checking page " . $page->id . "...");
 		$compare = (new Comparator)->compareLast($version);
 
-		if ($compare === false)
+		if ($compare === false) {
 			throw new \Exception("Page {$page->id} check failed");
+		}
 
 		if ($compare->equals()) {
 			Log::info("Page {$page->id} check found no differences");

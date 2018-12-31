@@ -79,9 +79,11 @@ class PagesController extends RestfulController {
 		list($author, $group, $page, $version) = pick_arg(Author::class, Group::class, Page::class, Version::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$text = with($version ?: $page->version())->contents();
-		if ($text === null)
+		$text = ($version ?: $page->version())->contents();
+
+		if ($text === null) {
 			throw new \Exception("Version {$version} not found");
+		}
 
 		return $this->viewShow(compact('page', 'text', 'exclude'));
 	}
@@ -205,10 +207,12 @@ class UpdatesGroupper {
 	function prior($version) {
 		$from = $version->timestamp();
 		$r = [];
-		foreach ($this->versions as $pair) {
-			if ($from > $pair[0]->timestamp())
-				$r[$this->month($pair[1])][] = $pair[0];
+
+		foreach ($this->versions as [$ver, $upd]) {
+			if ($from > $ver->timestamp())
+				$r[$this->month($upd)][] = $ver;
 		}
+
 		return ($r);
 	}
 
@@ -218,6 +222,7 @@ class UpdatesGroupper {
 
 	function flow() {
 		$versions = [];
+
 		foreach ($this->months() as $month) {
 			foreach ($this->monthful($month) as $update) {
 				$version = $update->pageVersion();

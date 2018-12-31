@@ -35,7 +35,7 @@
 		}
 
 		public function resolver() {
-			return with(new PageResolver)->setPage($this);
+			return (new PageResolver)->setPage($this);
 		}
 
 		/**

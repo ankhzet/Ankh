@@ -40,11 +40,13 @@ class PageUtils extends CharsetEncoder {
 
 	public function exists(PageResolver $resolver) {
 		$path = $resolver->resolve();
+
 		return $this->storage->exists($path) ? $path : false;
 	}
 
 	public function local(PageResolver $resolver) {
 		$path = $resolver->resolve();
+
 		return $this->storage->exists($path) ? $this->storage->size($path) : false;
 	}
 
@@ -54,13 +56,16 @@ class PageUtils extends CharsetEncoder {
 	 * @return string
 	 */
 	public function contents(PageResolver $resolver, $encoding = null) {
-		if (!($path = $this->exists($resolver)))
+		if (!($path = $this->exists($resolver))) {
 			return null;
+		}
 
 		$data = $this->storage->get($path);
 		$data = @gzuncompress($data);
-		if (!$data)
+
+		if (!$data) {
 			return null;
+		}
 
 		return $this->wakeup($data, $resolver, $encoding);
 	}
@@ -74,12 +79,15 @@ class PageUtils extends CharsetEncoder {
 	public function putContents(PageResolver $resolver, $contents, $encoding = null) {
 		$path = $resolver->resolve();
 
-		if (!$this->storage->exists($directory = dirname($path)))
+		if (!$this->storage->exists($directory = dirname($path))) {
 			$this->storage->makeDirectory($directory);
+		}
 
 		$stored = $this->storedEncoding();
-		if ($stored != ($encoding = $encoding ?: $this->encoding()))
+
+		if ($stored != ($encoding = ($encoding ?: $this->encoding()))) {
 			$contents = $this->transform($contents, $encoding, $stored);
+		}
 
 		$data = @gzcompress($contents);
 
@@ -100,11 +108,13 @@ class PageUtils extends CharsetEncoder {
 					$stored = $this->transform($contents, $detectedEncoding, $storedEncoding);
 					$this->putContents($resolver, $stored);
 				}
-			} else
+			} else {
 				$detectedEncoding = $storedEncoding;
+			}
 
-			if ($detectedEncoding != $encoding)
+			if ($detectedEncoding != $encoding) {
 				$contents = $this->transform($contents, $detectedEncoding, $encoding);
+			}
 		}
 
 		return $this->clean($contents);

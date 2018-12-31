@@ -19,7 +19,10 @@ class Compare {
 	}
 
 	public function equals() {
-		return (strlen($this->comparable1) == strlen($this->comparable2)) && ($this->comparable1 == $this->comparable2);
+		return (
+			(strlen($this->comparable1) === strlen($this->comparable2)) &&
+			($this->comparable1 === $this->comparable2)
+		);
 	}
 
 	public function proclaimedSize() {

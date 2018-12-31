@@ -53,9 +53,11 @@ class Comparator {
 			return false;
 		}
 
-		if (!PageUtils::putContents($last, $result->comparable2)) {
-			error_handler(E_USER_ERROR, "Failed to save \"$last\"", basename(__FILE__), 28);
-			return false;
+		if (!$result->equals()) {
+			if (!PageUtils::putContents($last, $result->comparable2)) {
+				error_handler(E_USER_ERROR, "Failed to save \"$last\"", basename(__FILE__), 28);
+				return false;
+			}
 		}
 
 		return $result;

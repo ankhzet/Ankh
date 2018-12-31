@@ -54,7 +54,7 @@ class Comparator {
 		}
 
 		if (!$result->equals()) {
-			if (!PageUtils::putContents($last, $result->comparable2)) {
+			if (!PageUtils::putContents($last, $result->comparable2, PageUtils::encoding())) {
 				error_handler(E_USER_ERROR, "Failed to save \"$last\"", basename(__FILE__), 28);
 				return false;
 			}
@@ -64,8 +64,8 @@ class Comparator {
 	}
 
 	public function compare(PageResolver $r1, PageResolver $r2) {
-		$contents1 = PageUtils::contents($r1);
-		$contents2 = PageUtils::contents($r2);
+		$contents1 = PageUtils::contents($r1, $this->fetchedEncoding);
+		$contents2 = PageUtils::contents($r2, $this->fetchedEncoding);
 
 		if ($contents2 === null) {
 			$fetch = app(Fetch::class);
@@ -92,7 +92,7 @@ class Comparator {
 				return false;
 			}
 
-			$contents2 = PageUtils::contents($r2);
+			$contents2 = PageUtils::contents($r2, $this->fetchedEncoding);
 		} else
 			$size = null;
 

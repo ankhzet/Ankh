@@ -76,7 +76,7 @@ class PageUtils extends CharsetEncoder {
 	 * @param string $encoding - Encoding, in which contents are encoded.
 	 * @return bool
 	 */
-	public function putContents(PageResolver $resolver, $contents, $encoding = null) {
+	public function putContents(PageResolver $resolver, string $contents, string $encoding) {
 		$path = $resolver->resolve();
 
 		if (!$this->storage->exists($directory = dirname($path))) {
@@ -85,7 +85,7 @@ class PageUtils extends CharsetEncoder {
 
 		$stored = $this->storedEncoding();
 
-		if ($stored != ($encoding = ($encoding ?: $this->encoding()))) {
+		if ($stored !== $encoding) {
 			$contents = $this->transform($contents, $encoding, $stored);
 		}
 
@@ -106,7 +106,7 @@ class PageUtils extends CharsetEncoder {
 				// re-cache if needed
 				if ($detectedEncoding != $storedEncoding) {
 					$stored = $this->transform($contents, $detectedEncoding, $storedEncoding);
-					$this->putContents($resolver, $stored);
+					$this->putContents($resolver, $stored, $storedEncoding);
 				}
 			} else {
 				$detectedEncoding = $storedEncoding;
@@ -117,7 +117,7 @@ class PageUtils extends CharsetEncoder {
 			}
 		}
 
-		return $this->clean($contents);
+		return $contents;
 	}
 
 }

@@ -5,9 +5,6 @@ use \SebastianBergmann\Diff\Differ;
 class Diff {
 
 	public function diff($t1, $t2) {
-		$t1 = str_replace(['<dd>', '</dd>'], [PHP_EOL, ''], $t1);
-		$t2 = str_replace(['<dd>', '</dd>'], [PHP_EOL, ''], $t2);
-
 		$differ = new Differ();
 
 		$diffs = $differ->diffToArray($t1, $t2);

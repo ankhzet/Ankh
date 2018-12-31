@@ -7,7 +7,7 @@
 		<span style="color: #89a;">
 			SAMLIB: <a style="color: #89b;" href="http://samlib.ru{{ $link = $update->relatedPage()->absoluteLink() }}">http://samlib.ru{{ $link }}</a><br />
 			Все версии: <a style="color: #89b;" href="{{ $feed->url }}">{{ $feed->url }}</a><br />
-			Последняя версия полностью: <a style="color: #89b;" href="{{ $route = route('pages.show', $update->relatedPage()) }}">{{ $route }}</a><br />
+			Последняя версия полностью: <a style="color: #89b;" href="{{ $route = route('pages.read', $update->relatedPage()) }}">{{ $route }}</a><br />
 		</span>
 	</span>
 	<div style="font-size: 90%; color: #777">{{ \Illuminate\Support\Str::limit($update->relatedPage()->annotation, 250) }}</div>

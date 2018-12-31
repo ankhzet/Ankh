@@ -56,7 +56,7 @@ class UpdatesFeedChanel extends FeedChanel {
 				$feed->author = $author->fio;
 				$feed->created = $item->created_at;
 
-				$feed->url = route('pages.updates.index', $page) . '?highlite=' . $item->version()->encode();
+				$feed->url = route('pages.show', $page) . '?highlite=' . $item->version()->encode();
 
 				$feed->description = view('rss.diff-item', ['update' => $item, 'feed' => $feed]);
 

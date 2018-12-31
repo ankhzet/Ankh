@@ -2,7 +2,7 @@
 
 class BasicSamlibHtmlCleaner extends BasicHtmlCleaner {
 
-	const SAMLIB_DOMEN = 'http://samlib.ru/';
+	const SAMLIB_DOMAIN = 'http://samlib.ru/';
 
 	public function clean($html, $encoding = 'utf8') {
 		$html = $this->cleanHtml($html);
@@ -12,7 +12,7 @@ class BasicSamlibHtmlCleaner extends BasicHtmlCleaner {
 
 	public function resolveImages($html) {
 		return preg_replace_callback('|<img ([^>]*?)(src=(["\']?))/([^>\3]+\3[^>]*)>|i', function ($matches) {
-			return '<img ' . $matches[1] . $matches[2] . self::SAMLIB_DOMEN . $matches[4] . ' \>';
+			return '<img ' . $matches[1] . $matches[2] . self::SAMLIB_DOMAIN . $matches[4] . ' \>';
 		}, $html);
 	}
 

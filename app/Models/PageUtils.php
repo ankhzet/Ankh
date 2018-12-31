@@ -103,7 +103,7 @@ class PageUtils extends CharsetEncoder {
 			if (!$this->checkEncoding($contents, $storedEncoding)) {
 				$detectedEncoding = $this->detectEncoding($contents);
 
-				// recache if needed
+				// re-cache if needed
 				if ($detectedEncoding != $storedEncoding) {
 					$stored = $this->transform($contents, $detectedEncoding, $storedEncoding);
 					$this->putContents($resolver, $stored);

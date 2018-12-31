@@ -20,12 +20,16 @@ class ResourceResolver {
 
 	public function fragment($name) {
 		$fragment = @$this->fragments[$name];
-		if ($fragment)
-			if ((!is_string($fragment)) && is_callable($fragment))
+
+		if ($fragment) {
+			if ((!is_string($fragment)) && is_callable($fragment)) {
 				$fragment = $fragment($this);
-			else
-				if (strpos($fragment, '{:') !== false)
+			} else {
+				if (strpos($fragment, '{:') !== false) {
 					$fragment = $this->resolve($fragment);
+				}
+			}
+		}
 
 		return $fragment;
 	}

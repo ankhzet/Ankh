@@ -56,11 +56,13 @@ class CharsetEncoder implements Transformation {
 	 * @return bool
 	 */
 	public function checkEncoding($text, $encoding = null, $sample = 200) {
-		if ($encoding === null)
+		if ($encoding === null) {
 			$encoding = $this->encoding();
+		}
 
-		if (strlen($text) > $sample)
+		if (strlen($text) > $sample) {
 			$text = substr($text, 0, $sample);
+		}
 
 		return mb_check_encoding($text, $encoding);
 	}

@@ -11,8 +11,8 @@ class CharsetEncoder implements Transformation {
 	protected $map = ['cp1251' => 'win1251'];
 	protected $rmap = ['win1251' => 'cp1251'];
 
-	public function __construct() {
-		$this->used_enc = 'UTF-8';
+	public function __construct($used_enc = 'UTF-8') {
+		$this->used_enc = $used_enc;
 		mb_detect_order(['ASCII', 'CP1251', 'UTF-8']);
 	}
 

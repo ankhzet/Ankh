@@ -8,6 +8,7 @@ use Ankh\Downloadable\FileVersion;
 use PageUtils;
 
 class Version implements Resolvable {
+	static $DEF_ENCODING = 'UTF-8';
 
 	/**
 	 * @var Page
@@ -91,11 +92,13 @@ class Version implements Resolvable {
 	}
 
 	public function contents() {
-		return PageUtils::contents($this->resolver());
+		return PageUtils::clean(
+			PageUtils::contents($this->resolver(), self::$DEF_ENCODING)
+		);
 	}
 
 	public function setContents($data) {
-		return PageUtils::putContents($this->resolver(), $data);
+		return PageUtils::putContents($this->resolver(), $data, self::$DEF_ENCODING);
 	}
 
 	public function downloadable() {

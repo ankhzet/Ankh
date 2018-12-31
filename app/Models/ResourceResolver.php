@@ -34,7 +34,7 @@ class ResourceResolver {
 		return $fragment;
 	}
 
-	public function resolve($fragment = null) {
+	public function resolve($fragment = null): string {
 		$fragment = $fragment ?: $this->pattern;
 
 		$fragments = [];

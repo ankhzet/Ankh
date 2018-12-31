@@ -97,6 +97,14 @@ class Version implements Resolvable {
 		);
 	}
 
+	public function exists(): bool {
+		return PageUtils::exists($this->resolver());
+	}
+
+	public function delete(): bool {
+		return PageUtils::delete($this->resolver());
+	}
+
 	public function setContents($data) {
 		return PageUtils::putContents($this->resolver(), $data, self::$DEF_ENCODING);
 	}

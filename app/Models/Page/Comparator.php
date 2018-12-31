@@ -28,7 +28,6 @@ class Compare {
 	public function proclaimedSize() {
 		return $this->proclaimedSize ?: strlen($this->comparable1);
 	}
-
 }
 
 class EqualCompare extends Compare {
@@ -70,19 +69,22 @@ class Comparator {
 			$fetch = app(Fetch::class);
 
 			//todo: move this to Fetch constructor & make it configurable
-			if (method_exists($fetch, 'cached'))
+			if (method_exists($fetch, 'cached')) {
 				$fetch = $fetch->cached(false);
+			}
 
 			$contents2 = $fetch->pull($r2->page->absoluteLink());
 
-			if (!$fetch->isOk())
+			if (!$fetch->isOk()) {
 				if ($fetch->code() == 404) {
 					$r2->page->delete();
 					$contents1 = PageUtils::contents($r1, $this->fetchedEncoding);
 
 					return new EqualCompare($contents1, $this->size($contents1));
-				} else
+				} else {
 					throw new CompareFetchError($r2->page, $fetch->code());
+				}
+			}
 
 			$size = $this->size($contents2);
 

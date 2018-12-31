@@ -1,5 +1,7 @@
 <?php namespace Ankh\Http\Controllers;
 
+use Ankh\PageUpdate;
+use Ankh\Update;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Ankh\Http\Requests\PageRequest;
@@ -17,6 +19,7 @@ use Ankh\Downloadable\DownloadWorker;
 
 use Ankh\Page\Diff;
 use PageUtils;
+use Log;
 
 class PagesController extends RestfulController {
 	protected $m;
@@ -60,9 +63,9 @@ class PagesController extends RestfulController {
 		list($author, $group, $page) = pick_arg(Author::class, Group::class, Page::class);
 		$exclude = view_excludes(['author' => $author, 'group' => $group]);
 
-		$updates = \Ankh\PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
+		$updates = PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
 
-		$groupper = new UpdatesGroupper($updates);
+		$groupper = new UpdatesGroupper($page, $updates);
 
 		$versions = $groupper->flow();
 
@@ -144,8 +147,33 @@ class PagesController extends RestfulController {
 	}
 
 	public function getCheck(Page $page) {
+		$updates = PageUpdate::where('entity_id', $page->id)->diff()->orderBy('created_at', 'desc')->get()->all();
+		$ids = [];
+
+		/** @var PageUpdate $update */
+		foreach ($updates as $update) {
+			if (!$update->pageVersion()->exists()) {
+				$ids[] = $update->id;
+			}
+		}
+
+		if (count($ids)) {
+			Log::info("Dropping updates: " . join(', ', $ids));
+
+			Update::withTrashed()->whereIn('id', $ids)->forceDelete();
+		}
+
 		$version = (new Version(new Carbon()))->setEntity($page);
 		$result = (new Page\Comparator())->compareLast($version);
+
+		if ($result) {
+			if ($result->equals()) {
+				$version->delete();
+			}
+
+			$page->size = $result->proclaimedSize();
+			$page->save();
+		}
 
 		return json_encode([
 			'version' => $version->__toString(),
@@ -178,45 +206,81 @@ class UpdatesGroupper {
 
 	const MONTH_FORMAT = 'F, Y';
 
+	/**
+	 * @var PageUpdate[]
+	 */
 	protected $updates;
 
+	/**
+	 * @var PageUpdate[][]
+	 */
 	private $monthful = [];
+
 	private $versions = [];
 
-	function __construct($updates) {
+	/**
+	 * @var Page
+	 */
+	private $page;
+
+	/**
+	 * @param Page $page
+	 * @param PageUpdate[] $updates
+	 */
+	function __construct(Page $page, array $updates) {
+		$this->page = $page;
 		$this->updates = $updates;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	function months() {
 		foreach ($this->updates as $update) {
 			$version = $update->pageVersion();
-			if (PageUtils::exists($version->resolver())) {
-				$this->versions[] = [$version, $update];
 
-				$this->monthful[$this->month($update)][] = $update;
+			if (!PageUtils::exists($version->resolver())) {
+				continue;
 			}
+
+			$this->versions[] = [$version, $update];
+
+			$this->monthful[$this->month($update)][] = $update;
 		}
 
 		return array_keys($this->monthful);
 	}
 
-	function monthful($month) {
-		return $this->monthful[$month];
+	function monthful($month): array {
+		return $this->monthful[$month] ?? [];
 	}
 
-	function prior($version) {
+	/**
+	 * @param Version $version
+	 * @return Version[][]
+	 */
+	function prior(Version $version) {
 		$from = $version->timestamp();
 		$r = [];
 
+		/**
+		 * @var Version $ver
+		 * @var PageUpdate $upd
+		 */
 		foreach ($this->versions as [$ver, $upd]) {
-			if ($from > $ver->timestamp())
+			if ($from > $ver->timestamp()) {
 				$r[$this->month($upd)][] = $ver;
+			}
 		}
 
-		return ($r);
+		return $r;
 	}
 
-	function month($update) {
+	/**
+	 * @param PageUpdate $update
+	 * @return string
+	 */
+	function month(PageUpdate $update): string {
 		return title_case($update->created_at->format(static::MONTH_FORMAT));
 	}
 

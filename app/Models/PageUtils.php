@@ -34,16 +34,34 @@ class PageUtils extends CharsetEncoder {
 	 * @param string $html
 	 * @return string
 	 */
-	public function clean($html) {
+	public function clean(string $html): string {
 		return $this->cleaner->clean($html, $this->encoding());
 	}
 
+	/**
+	 * @param PageResolver $resolver
+	 * @return bool|string
+	 */
 	public function exists(PageResolver $resolver) {
 		$path = $resolver->resolve();
 
 		return $this->storage->exists($path) ? $path : false;
 	}
 
+	/**
+	 * @param PageResolver $resolver
+	 * @return bool
+	 */
+	public function delete(PageResolver $resolver) {
+		$path = $resolver->resolve();
+
+		return $path ? $this->storage->delete($path) : false;
+	}
+
+	/**
+	 * @param PageResolver $resolver
+	 * @return bool|int
+	 */
 	public function local(PageResolver $resolver) {
 		$path = $resolver->resolve();
 
@@ -53,9 +71,9 @@ class PageUtils extends CharsetEncoder {
 	/**
 	 * @param PageResolver $resolver
 	 * @param string $encoding - Encoding, in which contents should be returned.
-	 * @return string
+	 * @return string|null
 	 */
-	public function contents(PageResolver $resolver, $encoding = null) {
+	public function contents(PageResolver $resolver, string $encoding = null) {
 		if (!($path = $this->exists($resolver))) {
 			return null;
 		}
@@ -76,7 +94,7 @@ class PageUtils extends CharsetEncoder {
 	 * @param string $encoding - Encoding, in which contents are encoded.
 	 * @return bool
 	 */
-	public function putContents(PageResolver $resolver, string $contents, string $encoding) {
+	public function putContents(PageResolver $resolver, string $contents, string $encoding): bool {
 		$path = $resolver->resolve();
 
 		if (!$this->storage->exists($directory = dirname($path))) {
@@ -94,7 +112,13 @@ class PageUtils extends CharsetEncoder {
 		return $this->storage->put($path, $data);
 	}
 
-	public function wakeup($contents, PageResolver $resolver, $encoding = null) {
+	/**
+	 * @param string $contents
+	 * @param PageResolver $resolver
+	 * @param string|null $encoding
+	 * @return string
+	 */
+	public function wakeup(string $contents, PageResolver $resolver, string $encoding = null): string {
 		$encoding = $encoding ?: $this->encoding();
 
 		if (!$this->checkEncoding($contents, $encoding)) {

@@ -50,6 +50,9 @@ class CharsetEncoder implements Transformation {
 	}
 
 	/**
+	 * @param string $text
+	 * @param null $encoding
+	 * @param int $sample
 	 * @return bool
 	 */
 	public function checkEncoding($text, $encoding = null, $sample = 200) {
@@ -63,6 +66,8 @@ class CharsetEncoder implements Transformation {
 	}
 
 	/**
+	 * @param string $text
+	 * @param int $sample
 	 * @return string
 	 */
 	public function detectEncoding($text, $sample = 1024) {

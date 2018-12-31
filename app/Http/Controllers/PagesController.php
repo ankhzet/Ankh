@@ -1,5 +1,6 @@
 <?php namespace Ankh\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Ankh\Http\Requests\PageRequest;
 
@@ -138,6 +139,17 @@ class PagesController extends RestfulController {
 	 */
 	public function update(PageRequest $request) {
 		return $this->_update($request, pick_arg(Page::class));
+	}
+
+	public function getCheck(Page $page) {
+		$version = (new Version(new Carbon()))->setEntity($page);
+		$result = (new Page\Comparator())->compareLast($version);
+
+		return json_encode([
+			'version' => $version->__toString(),
+			'result' => $result ? 'ok' : 'Comparision failed',
+			'unchanged' => $result && $result->equals(),
+		]);
 	}
 
 	public function getVersions(Page $page) {

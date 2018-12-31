@@ -47,6 +47,7 @@ Route::group([], function() {
 	Route::resource('pages.updates', 'UpdatesController');
 
 	Route::group(['prefix' => 'pages/{pages}'], function () {
+		Route::get('check', ['uses' => 'PagesController@getCheck', 'as' => 'pages.check']);
 		Route::get('read/{version?}', ['uses' => 'PagesController@getRead', 'as' => 'pages.read']);
 		Route::get('{version?}', ['uses' => 'PagesController@show', 'as' => 'pages.show']);
 		Route::get('{version}/diff/{diff}', ['uses' => 'PagesController@getDiff', 'as' => 'pages.diff']);

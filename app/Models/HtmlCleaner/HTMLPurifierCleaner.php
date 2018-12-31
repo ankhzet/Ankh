@@ -19,9 +19,11 @@ class HTMLPurifierCleaner extends BasicSamlibHtmlCleaner {
 	public function cleanHtml($html, $encoding = 'utf8') {
 		require base_path('vendor/ezyang/htmlpurifier/library/') . 'HTMLPurifier.auto.php';
 
-		$html = str_replace(["\r", '<dd>'], '', $html);
+		$html = str_replace(["\r", "\n"], '', $html);
+		$html = str_replace('<dd>', "\n", $html);
 		$html = preg_replace("'\n\s*\n's", "\n", $html);
 		$html = str_replace("\n", '<br>', $html);
+		$html = str_replace([html_entity_decode('&nbsp;'), "\t", '&nbsp;'], ' ', $html);
 
 		$config = HTMLPurifier_Config::createDefault();
 		$config->loadArray($this->options());
@@ -30,8 +32,6 @@ class HTMLPurifierCleaner extends BasicSamlibHtmlCleaner {
 		$html = $purifier->purify($html);
 
 		$html = preg_replace('#<br[^>]*>#', chr(1), $html);
-		$html = str_replace(html_entity_decode('&nbsp;'), ' ', $html);
-		$html = str_replace("\t", " ", $html);
 		$html = preg_replace("# *" . chr(1) . " ++#m", chr(1), $html);
 		$html = str_replace(chr(1), "\n\u{2003}\u{2003}", $html);
 

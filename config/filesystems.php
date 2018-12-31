@@ -77,9 +77,10 @@ return [
 			'root'   => joinPaths($storage['root'], 'tvs'),
 		]),
 
-		'logs' => array_merge($storage, [
-			'root'   => joinPaths($storage['root'], 'logs'),
-		]),
+		'logs' => [
+			'driver' => 'local',
+			'root'   => storage_path('logs'),
+		],
 
 		'ftp' => [
 			'driver'   => 'ftp',

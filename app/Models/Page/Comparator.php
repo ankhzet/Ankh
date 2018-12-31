@@ -64,7 +64,6 @@ class Comparator {
 	}
 
 	public function compare(PageResolver $r1, PageResolver $r2) {
-		$contents1 = PageUtils::contents($r1, $this->fetchedEncoding);
 		$contents2 = PageUtils::contents($r2, $this->fetchedEncoding);
 
 		if ($contents2 === null) {
@@ -79,6 +78,8 @@ class Comparator {
 			if (!$fetch->isOk())
 				if ($fetch->code() == 404) {
 					$r2->page->delete();
+					$contents1 = PageUtils::contents($r1, $this->fetchedEncoding);
+
 					return new EqualCompare($contents1, $this->size($contents1));
 				} else
 					throw new CompareFetchError($r2->page, $fetch->code());
@@ -93,8 +94,11 @@ class Comparator {
 			}
 
 			$contents2 = PageUtils::contents($r2, $this->fetchedEncoding);
-		} else
+		} else {
 			$size = null;
+		}
+
+		$contents1 = PageUtils::contents($r1, $this->fetchedEncoding);
 
 		return new Compare($contents1, $contents2, $size);
 	}

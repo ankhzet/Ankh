@@ -13,8 +13,12 @@ body {
 	font: @common-font;
 	color: @common-font-color;
 	background: @background-color;
-}
 
+	&.night-mode {
+		color: @background-color;
+		background: darken(@common-font-color, 50%);
+	}
+}
 
 a {
 	color: @link-color;

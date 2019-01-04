@@ -18,6 +18,10 @@
 			$(this).animate({ height: '400px', 'overflow': 'auto' }, {duration:100}).addClass(expanded);
 		});
 
+		$('#night-mode-toggle').click(function () {
+			$('body').toggleClass('night-mode');
+		});
+
 		var laravel = {
 			initialize: function() {
 				this.methodLinks = $('a[data-method]');

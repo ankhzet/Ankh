@@ -11,6 +11,8 @@
 
 		{!! asset_link('less/style.less') !!}
 
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-147372727-1"></script>
+		<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-147372727-1');</script>
 	</head>
 	<body class="{{ uri_slug() }}-page">
 
@@ -77,7 +79,7 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 
 @if (($message = session('message')) || ($message = session('status')))
-	<script language="javascript">
+	<script>
 		$(function() {
 			show_message('@yield('title')', '{!! urlencode($message) !!}');
 		});

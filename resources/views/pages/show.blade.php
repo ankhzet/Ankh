@@ -1,5 +1,7 @@
 @extends('layouts.common')
-
+@section('additional-meta')
+        <meta name="robots" content="noindex, nofollow">
+@stop
 @section('title')
     @kept(author)<a href="{{ route('authors.show', $page->author) }}">{{$page->author->fio}}</a> - @endkept<a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>
     <span class="pull-right">

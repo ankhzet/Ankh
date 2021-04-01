@@ -1,5 +1,8 @@
 @extends('layouts.common')
 
+@section('additional-meta')
+        <meta name="robots" content="nofollow">
+@stop
 @section('title')@kept(author)<a href="{{ route('authors.show', $page->author) }}">{{$page->author->fio}}</a> - @endkept<a href="{{ route('pages.show', $page) }}">{{$page->title}}</a>@stop
 @section('title-plain'){{$page->author->fio}}. {{$page->group->title}}: {{$page->title}}@stop
 
@@ -45,7 +48,7 @@
 @endif
 @foreach ([false => null, true => 'zip'] as $zipped => $zip)
 				<td class="download">
-					<a href="{{ route('pages.download', array_filter([$page, $version, $zip, $encoding, $type])) }}">{{$encoding}}</a>
+					<a href="{{ route('pages.download', array_filter([$page, $version, $zip, $encoding, $type])) }}" rel="nofollow">{{$encoding}}</a>
 					<span class="size">{{ file_size($transform->probeSize($data, [$zip, $encoding, $type])) }}</span>
 				</td>
 @endforeach

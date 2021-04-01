@@ -177,7 +177,7 @@ class PagesController extends RestfulController {
 
 		return json_encode([
 			'version' => $version->__toString(),
-			'result' => $result ? 'ok' : 'Comparision failed',
+			'result' => $result ? 'ok' : 'Comparison failed',
 			'unchanged' => $result && $result->equals(),
 		]);
 	}

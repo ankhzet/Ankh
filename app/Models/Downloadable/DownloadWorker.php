@@ -73,21 +73,16 @@ class DownloadWorker extends Response {
 		$size = $this->length;
 		$data = substr($this->downloadable->getContents(), $this->offset, $size);
 
-		if (!$out = fopen('php://output', 'wb'))
-			return;
+        $chunk = min(max(intval($size / 10), 1024), min(32 * 1024, $size));
 
-		try {
-			$chunk = min(max(intval($size / 10), 1024), min(32 * 1024, $size));
+        $pos = 0;
+        while ($pos < $size) {
+            $buf = min($size - $pos, $chunk);
 
-			$pos = 0;
-			while ($pos < $size) {
-				$buf = min($size - $pos, $chunk);
-				fwrite($out, substr($data, $pos, $buf));
-				$pos += $buf;
-			}
-		} finally {
-			fclose($out);
-		}
+            echo substr($data, $pos, $buf);
+
+            $pos += $buf;
+        }
 
         return $this;
 	}

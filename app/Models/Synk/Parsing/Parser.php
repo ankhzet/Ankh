@@ -233,7 +233,7 @@ class Parser {
 
 		$link = $node->filter('li>a')->first();
 		$data['link'] = $link->attr('href');
-		$data['title'] = $link->text();
+		$data['title'] = str_replace(['//', '\\\\'], ['/', '\\'], $link->text());
 
 		$size = $node->filter('li>b')->first();
 

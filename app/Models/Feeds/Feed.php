@@ -6,8 +6,6 @@ use Lang;
 use Ankh\Contracts\Feeds\Feed as FeedContract;
 use Ankh\Contracts\Feeds\FeedChanel as FeedChanelContract;
 
-use Roumen\Feed\Facades\Feed as FeedEngine;
-
 class Feed implements FeedContract {
 
 	const DEF_LIMIT = 30;
@@ -15,8 +13,8 @@ class Feed implements FeedContract {
 	protected $feeder;
 	protected $limit = self::DEF_LIMIT;
 
-	public function __construct(FeedChanel $chanel = null) {
-		$this->feeder = FeedEngine::make();
+	public function __construct(FeedChanel $channel = null) {
+		$this->feeder = \App::make('FeedEngine');
 		$this->feeder->lang = Config::get('app.locale', 'en');
 		$this->feeder->logo = asset('assets/img/logo.png');
 		$this->feeder->setDateFormat('carbon');
@@ -29,12 +27,18 @@ class Feed implements FeedContract {
 		return $this;
 	}
 
-	public function make(FeedChanelContract $chanel) {
 		$this->feeder->title = Lang::get('common.site') . ' - ' . $chanel->title();
+	public function make(FeedChanelContract $channel) {
+		$this->feeder->setCache(10, $channel->url());
 
-		$this->feeder->link = $chanel->url();
+	    if (false && $this->feeder->isCached()) {
+	        return $this;
+        }
 
-		$this->feeder->pubdate = $chanel->feedItems(function ($item) {
+
+		$this->feeder->link = $channel->url();
+
+		$this->feeder->pubdate = $channel->feedItems(function ($item) {
 			$this->feeder->add(
 				$item->title,
 				$item->author,

@@ -221,6 +221,8 @@ return [
         'Crumbs'    => Ankh\Facades\BreadcrumbsFacade::class,
 
         'Date'      => Jenssegers\Date\Date::class,
+
+        'FeedEngine' => Roumen\Feed\Feed::class,
     ],
 
 ];

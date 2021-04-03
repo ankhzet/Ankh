@@ -18,7 +18,7 @@
         "filp/whoops": "^1.2@dev",
         "davejamesmiller/laravel-breadcrumbs": "~3.0.3",
         "jenssegers/date": "^3.0@dev",
-        "roumen/feed": "2.9.9",
+        "roumen/feed": "~2.9",
         "ezyang/htmlpurifier": "dev-master",
         "league/flysystem-aws-s3-v3": "^1.0",
         "sebastian/diff": "~1.2"

@@ -98,9 +98,9 @@ return array(
 		'description' => 'Ankh RSS фидер',
 
 		'updates' => 'Обновления',
-		'author' => 'Обновления у автора &amp;laquo;:param&amp;raquo;',
-		'group' => 'Обновления группы &amp;laquo;:param&amp;raquo;',
-		'page' => 'Обновления произведения &amp;laquo;:param&amp;raquo;',
+		'author' => 'Обновления у автора &laquo;:param&raquo;',
+		'group' => 'Обновления группы &laquo;:param&raquo;',
+		'page' => 'Обновления произведения &laquo;:param&raquo;',
 		),
 
 	);

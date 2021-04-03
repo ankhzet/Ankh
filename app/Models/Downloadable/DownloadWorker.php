@@ -17,10 +17,10 @@ class DownloadWorker extends Response {
 	public function __construct(Downloadable $downloadable, array $headers = [], $disposition = 'attachment', $addETag = true, $addLastModified = true) {
 		parent::__construct(null, 200, $headers);
 
-		if ($downloadable->extension != Zip::EXTENSION) {
-			$this->headers->set('Content-Encoding', 'gzip');
-			$downloadable->setContents(@gzcompress($downloadable->getContents()));
-		}
+		// if ($downloadable->extension != Zip::EXTENSION) {
+		//	$this->headers->set('Content-Encoding', 'gzip');
+		//	$downloadable->setContents(@gzencode($downloadable->getContents()));
+		// }
 
 		$this->downloadable = $downloadable;
 
@@ -84,11 +84,12 @@ class DownloadWorker extends Response {
 				$buf = min($size - $pos, $chunk);
 				fwrite($out, substr($data, $pos, $buf));
 				$pos += $buf;
-
 			}
 		} finally {
 			fclose($out);
 		}
+
+        return $this;
 	}
 
 	public function setDisposition($disposition) {

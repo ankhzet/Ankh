@@ -42,6 +42,9 @@ class Handler extends ExceptionHandler
 		 */
 		public function render($request, Exception $e)
 		{
+            if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                return response()->view('errors.404');
+            }
 
 			$debug = config("app.debug");
 			$debugbar = $debug && (config("debugbar.enabled") !== false) && !$request->ajax();

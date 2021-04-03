@@ -1,5 +1,6 @@
 <?php namespace Ankh;
 
+use Cache;
 use Storage;
 use Ankh\Contracts\HtmlCleaner;
 use Ankh\Downloadable\CharsetEncoder;
@@ -65,7 +66,9 @@ class PageUtils extends CharsetEncoder {
 	public function local(PageResolver $resolver) {
 		$path = $resolver->resolve();
 
-		return ($path && $this->storage->exists($path)) ? $this->storage->size($path) : false;
+        return Cache::rememberForever('sizes-' . $path, function() use ($path) {
+            return ($path && $this->storage->exists($path)) ? $this->storage->size($path) : false;
+        });
 	}
 
 	/**

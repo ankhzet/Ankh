@@ -194,7 +194,8 @@ class PagesController extends RestfulController {
 		if ($transforms) {
 			$downloadable = $transformer->apply($transforms, $version->downloadable());
 
-			return new DownloadWorker($downloadable);
+            return $downloadable->getContents();
+			// return new DownloadWorker($downloadable);
 		}
 
 		return $this->viewDownload(compact('page', 'version'));

@@ -27,7 +27,6 @@ class Feed implements FeedContract {
 		return $this;
 	}
 
-		$this->feeder->title = Lang::get('common.site') . ' - ' . $chanel->title();
 	public function make(FeedChanelContract $channel) {
 		$this->feeder->setCache(10, $channel->url());
 
@@ -35,6 +34,7 @@ class Feed implements FeedContract {
 	        return $this;
         }
 
+		$this->feeder->title = Lang::get('common.site') . ' - ' . preg_replace('"<"', '&lt;', html_entity_decode($channel->title()));
 
 		$this->feeder->link = $channel->url();
 

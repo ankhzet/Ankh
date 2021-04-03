@@ -14,7 +14,7 @@ class Htmlizer implements Transformation {
 		$file = \File::get(public_path('assets/img/borders.png'));
 		$img = base64_encode($file);
 
-		$data = str_ireplace(["\r", "\n"], '', $transformable->getContents());
+		$data = $transformable->getContents();
 
 		$data = preg_replace("~<(/?(br|p|dd))[^>]*?>~i", '<\1>', $data);
 

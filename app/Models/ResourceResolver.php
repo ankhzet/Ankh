@@ -46,7 +46,7 @@ class ResourceResolver {
 		}, $fragment);
 
 		if (count($fragments) && empty(array_filter($fragments)))
-			return null;
+			return '';
 
 		return $result;
 	}

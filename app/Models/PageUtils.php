@@ -45,7 +45,7 @@ class PageUtils extends CharsetEncoder {
 	public function exists(PageResolver $resolver) {
 		$path = $resolver->resolve();
 
-		return $this->storage->exists($path) ? $path : false;
+		return ($path && $this->storage->exists($path)) ? $path : false;
 	}
 
 	/**
@@ -65,7 +65,7 @@ class PageUtils extends CharsetEncoder {
 	public function local(PageResolver $resolver) {
 		$path = $resolver->resolve();
 
-		return $this->storage->exists($path) ? $this->storage->size($path) : false;
+		return ($path && $this->storage->exists($path)) ? $this->storage->size($path) : false;
 	}
 
 	/**

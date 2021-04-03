@@ -16,10 +16,9 @@
         "fzaninotto/faker": "~1.4",
         "barryvdh/laravel-debugbar": "^2.0@dev",
         "filp/whoops": "^1.2@dev",
-        "davejamesmiller/laravel-breadcrumbs": "dev-master",
+        "davejamesmiller/laravel-breadcrumbs": "~3.0.3",
         "jenssegers/date": "^3.0@dev",
         "roumen/feed": "~2.9",
-        "iron-io/iron_mq": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "league/flysystem-aws-s3-v3": "^1.0",
         "sebastian/diff": "~1.2"
@@ -29,7 +28,7 @@
         "barryvdh/laravel-ide-helper": "^2.0@dev",
         "mockery/mockery": "0.9.*",
         "phpspec/phpspec": "~2.1",
-        "laracasts/generators": "dev-master"
+        "laracasts/generators": "~1.0"
     },
     "autoload": {
         "classmap": [

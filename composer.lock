@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc45a1be10a84f21ad75ebc3f1ce51f9",
+    "content-hash": "a617ce16e5f0e4d92360fc45a734359e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2804,25 +2804,26 @@
         },
         {
             "name": "roumen/feed",
-            "version": "v2.10.5",
+            "version": "v2.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravelium/laravel-feed.git",
-                "reference": "ffbdb58f2ef41c7cb5d3bcd0aec2273e8eabc58b"
+                "reference": "f923473cfd7df2af73b1026c8f23a6f873f84027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravelium/laravel-feed/zipball/ffbdb58f2ef41c7cb5d3bcd0aec2273e8eabc58b",
-                "reference": "ffbdb58f2ef41c7cb5d3bcd0aec2273e8eabc58b",
+                "url": "https://api.github.com/repos/Laravelium/laravel-feed/zipball/f923473cfd7df2af73b1026c8f23a6f873f84027",
+                "reference": "f923473cfd7df2af73b1026c8f23a6f873f84027",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^5.0",
+                "illuminate/support": "~5",
+                "paragonie/random_compat": "~1",
                 "php": ">=5.5.9"
             },
             "require-dev": {
-                "orchestra/testbench": "^3.0",
-                "phpunit/phpunit": "^4.8"
+                "orchestra/testbench": "2.2.*",
+                "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
             "autoload": {
@@ -2837,7 +2838,7 @@
             "authors": [
                 {
                     "name": "Roumen Damianoff",
-                    "email": "roumen@crimsson.com",
+                    "email": "roumen@dawebs.com",
                     "homepage": "https://roumen.it",
                     "role": "Developer"
                 }
@@ -2853,10 +2854,10 @@
             ],
             "support": {
                 "issues": "https://github.com/Laravelium/laravel-feed/issues",
-                "source": "https://github.com/Laravelium/laravel-feed/tree/v2.10.5"
+                "source": "https://github.com/Laravelium/laravel-feed/tree/v2.9.9"
             },
             "abandoned": "laravelium/feed",
-            "time": "2017-03-22T17:31:36+00:00"
+            "time": "2015-12-27T15:38:43+00:00"
         },
         {
             "name": "sebastian/diff",

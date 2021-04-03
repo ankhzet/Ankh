@@ -34,8 +34,8 @@ class PageUtils extends CharsetEncoder {
 	 * @param string $html
 	 * @return string
 	 */
-	public function clean(string $html): string {
-		return $this->cleaner->clean($html, $this->encoding());
+	public function clean(?string $html): string {
+		return $html ? $this->cleaner->clean($html, $this->encoding()) : '';
 	}
 
 	/**

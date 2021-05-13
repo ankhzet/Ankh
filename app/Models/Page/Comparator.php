@@ -106,8 +106,8 @@ class Comparator {
 	}
 
 	function cleanup($html) {
-		$p1 = mb_convert_encoding('<!----------- Собственно произведение --------------->', $this->fetchedEncoding);
-		$p2 = '<!--------------------------------------------------->';
+		$p1 = mb_convert_encoding('<!-- --------- Собственно произведение ------------- -->', $this->fetchedEncoding);
+		$p2 = '<!-- ----------------------------------------------- -->';
 
 		$i1 = strpos($html, $p1) + strlen($p1);
 		$i2 = strpos($html, $p2, $i1);

@@ -30,8 +30,8 @@
 		{!! Form::submit() !!}
 @admin()
 		<span class="right" style="color: gray;">
-			{!! Form::checkbox('deleted', 1, $entity->deleted_at !== null, ['class' => 'field', 'id' => 'deleted']) !!}
-			{!! Form::label('deleted', \Lang::get('common.deleted')) !!}
+			{!! Form::checkbox('_deleted', 1, $entity->deleted_at !== null, ['class' => 'field', 'id' => '_deleted']) !!}
+			{!! Form::label('_deleted', \Lang::get('common.deleted')) !!}
 		</span>
 @endadmin
 	</div>

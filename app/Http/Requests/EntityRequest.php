@@ -13,12 +13,12 @@ class EntityRequest extends AdminRoleRequest {
 	public function data() {
 		$data = $this->all();
 		return array_except($data, array_filter(array_keys($data), function ($key) {
-			return starts_with($key, '_') || (strtolower($key) == 'deleted');
+			return starts_with($key, '_');
 		}));
 	}
 
 	public function deleted() {
-		return !!$this->get('deleted');
+		return !!$this->get('_deleted');
 	}
 
 	public function entityClass() {

@@ -1,0 +1,12 @@
+{
+  "name": "Ankh",
+  "description": "",
+  "scripts": {
+    "postdeploy": "php artisan optimize"
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-php"
+    }
+  ]
+}
